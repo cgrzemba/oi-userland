@@ -13,7 +13,7 @@ COMPONENT_REVISION = $(shell cd $(COMPONENT_SRC); git rev-list HEAD --count)
 COMPONENT_SUMMARY = Intel graphics driver debug tools
 COMPONENT_PROJECT_URL = http://xorg.freedesktop.org
 COMPONENT_ARCHIVE_URL = https://cgit.freedesktop.org/xorg/app/intel-gpu-tools/
-COMPONENT_FMRI = x11/diagnostic/$(COMPONENT_NAME)
+COMPONENT_FMRI = x11/diagnostics/$(COMPONENT_NAME)
 # COMPONENT_LICENSE = MIT
 COMPONENT_LICENSE_FILE = COPYING
 COMPONENT_CLASSIFICATION = Applications/System Utilities
@@ -23,7 +23,6 @@ GIT=git
 GIT_REPO=http://anongit.freedesktop.org/git/xorg/app/intel-gpu-tools
 GIT_BRANCH=master
 GIT_CHANGESET=HEAD
-
 
 include $(WS_TOP)/make-rules/prep.mk
 include $(WS_TOP)/make-rules/configure.mk
