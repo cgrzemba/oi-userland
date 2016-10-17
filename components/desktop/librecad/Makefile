@@ -23,15 +23,6 @@ COMPONENT_ARCHIVE =	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH =	\
 	sha256:74c4ede409b13d0365c65c0cd52dba04f1049530f6df706dc905443d5e60db06
 COMPONENT_ARCHIVE_URL =  https://github.com/LibreCAD/LibreCAD/archive/$(COMPONENT_VERSION).tar.gz
-# COMPONENT_LICENSE =	GPLv2
-# COMPONENT_LICENSE_FILE = LICENSE
-# COMPONENT_LICENSE_FILE += Apache2
-# COMPONENT_LICENSE_FILE += LICENSE_GPLv3.txt
-# COMPONENT_LICENSE_FILE += LICENSE_KST32B_v2.txt
-# COMPONENT_LICENSE_FILE += license-lc_opengost-fonts.txt
-# COMPONENT_LICENSE_FILE += LICENSE-MIT.txt
-# COMPONENT_LICENSE_FILE += gpl-2.0.txt
-# COMPONENT_LICENSE_FILE += gpl-2.0greater.txt
 
 COMPONENT_SUMMARY =	LibreCAD is a 2D CAD drawing tool based on the community edition of QCAD.
 COMPONENT_CLASSIFICATION = Applications/Graphics and Imaging
@@ -48,18 +39,18 @@ COMPONENT_INSTALL_ACTION = \
 	$(INSTALL) -Dpm 755 $(@D)/unix/ttf2lff $(PROTO_DIR)$(USRBINDIR)/ttf2lff; \
 	$(INSTALL) -d $(PROTO_DIR)$(USRLIBDIR)/$(COMPONENT_NAME_lc)/plugins/$(MACH64) ; \
 	$(INSTALL) -d $(PROTO_DIR)$(USRSHAREDIR)/$(COMPONENT_NAME_lc); \
-        $(CP) -rfL  $(@D)/unix/resources/plugins/* \
-                  $(PROTO_DIR)$(USRLIBDIR)/$(COMPONENT_NAME_lc)/plugins/$(MACH64)/; \
-        $(CP) -rfL  $(@D)/unix/resources/qm \
-                  $(PROTO_DIR)$(USRSHAREDIR)/$(COMPONENT_NAME_lc)/; \
-        $(CP) -rfL  $(@D)/librecad/support/* \
-                  $(PROTO_DIR)$(USRSHAREDIR)/$(COMPONENT_NAME_lc); \
+	$(CP) -rfL  $(@D)/unix/resources/plugins/* \
+		$(PROTO_DIR)$(USRLIBDIR)/$(COMPONENT_NAME_lc)/plugins/$(MACH64)/; \
+	$(CP) -rfL  $(@D)/unix/resources/qm \
+		$(PROTO_DIR)$(USRSHAREDIR)/$(COMPONENT_NAME_lc)/; \
+	$(CP) -rfL  $(@D)/librecad/support/* \
+		$(PROTO_DIR)$(USRSHAREDIR)/$(COMPONENT_NAME_lc); \
 	$(INSTALL) -Dpm 644 $(@D)/desktop/librecad.desktop $(PROTO_DIR)$(USRSHAREDIR)/applications/librecad.desktop ; \
 	$(INSTALL) -Dpm 644 $(@D)/librecad/res/main/librecad.png $(PROTO_DIR)$(USRSHAREDIR)/pixmaps/librecad.png ; \
 	$(INSTALL) -Dpm 644 $(@D)/desktop/librecad.sharedmimeinfo $(PROTO_DIR)$(USRSHAREDIR)/mime/packages/librecad.xml ; \
 	$(INSTALL) -Dpm 644 $(@D)/desktop/librecad.1 $(PROTO_DIR)$(USRSHAREMANDIR)/man1/librecad.1 ; \
 	$(INSTALL) -Dpm 644 $(SOURCE_DIR)/ttf2lff.1 $(PROTO_DIR)$(USRSHAREMANDIR)/man1/ttf2lff.1 ; \
-        $(INSTALL) -Dpm 644  $(SOURCE_DIR)/LICENSE* $(SOURCE_DIR)/gpl-* $(SOURCE_DIR)/license* \
+	$(INSTALL) -Dpm 644  $(SOURCE_DIR)/LICENSE* $(SOURCE_DIR)/gpl-* $(SOURCE_DIR)/license* \
 	  $(PROTO_DIR)$(USRSHAREDIR)/$(COMPONENT_NAME_lc)/doc
 	
 	
@@ -78,5 +69,4 @@ REQUIRED_PACKAGES += system/library/security/libgcrypt
 REQUIRED_PACKAGES += x11/library/libx11
 REQUIRED_PACKAGES += x11/library/libxi
 REQUIRED_PACKAGES += x11/library/libxtst
-REQUIRED_PACKAGES += library/boost
-REQUIRED_PACKAGES += library/muparser
+REQUIRED_PACKAGES += system/library/freetype-2
