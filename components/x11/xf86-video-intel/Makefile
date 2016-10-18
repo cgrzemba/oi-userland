@@ -17,16 +17,27 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= xf86-video-intel
-COMPONENT_VERSION= 2.99.917
-COMPONENT_REVISION= 3
+COMPONENT_VERSION= 20161016
+COMPONENT_REVISION= 4
 COMPONENT_SUMMARY= xf86-video-intel - Intel integrated graphics chipset driver for the Xorg X server
-COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
-COMPONENT_ARCHIVE_HASH= \
-  sha256:00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9
-COMPONENT_ARCHIVE_URL= \
-  http://xorg.freedesktop.org/archive/individual/driver/$(COMPONENT_ARCHIVE)
+COMPONENT_SRC= $(COMPONENT_NAME)
+# COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
+# COMPONENT_ARCHIVE= $(COMPONENT_NAME)-$(COMPONENT_VERSION).tar.bz2
+# COMPONENT_ARCHIVE_HASH= \
+  sha256:bbec15a9a6d152eb6ac15c1236830fdb081cd3e60fd69be4e066f9e0f924b37d
+#  sha256:00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9
+
+# COMPONENT_ARCHIVE_URL= \
+#   http://anduin.linuxfromscratch.org/BLFS/xf86-video-intel/$(COMPONENT_ARCHIVE)
+#   http://xorg.freedesktop.org/archive/individual/driver/$(COMPONENT_ARCHIVE)
+
 COMPONENT_PROJECT_URL = http://xorg.freedesktop.org
+
+GIT=git
+GIT_REPO=http://anongit.freedesktop.org/git/xorg/driver/xf86-video-intel.git
+GIT_BRANCH=master
+GIT_CHANGESET=HEAD
+COMPONENT_ARCHIVE_URL = $(GIT_REPO)
 
 include $(WS_TOP)/make-rules/prep.mk
 
@@ -39,11 +50,17 @@ PATCH_LEVEL=0
 
 LDFLAGS += -lm -lsocket
 
+$(SOURCE_DIR)/.downloaded: $(ARCHIVES:%=$(USERLAND_ARCHIVES)%)
+	@[ -d $(SOURCE_DIR) ] || \
+	$(GIT) clone -b $(GIT_BRANCH) --single-branch --depth 1 $(GIT_REPO) $(SOURCE_DIR) && \
+	cd $(SOURCE_DIR) && $(GIT) log -1 --format=%H > .downloaded
+
+
 COMPONENT_PREP_ACTION =        ( cd $(@D) && \
                                         libtoolize --automake --copy --force && \
                                         aclocal -Im4 && \
                                         autoheader && \
-                                        automake -a -f -c &&\
+                                        automake -a -f -c && \
                                         autoconf )
 
 # Paths to find libraries/modules to link with 
@@ -79,6 +96,7 @@ CPPFLAGS += -DXF86DRI
 
 CONFIGURE_OPTIONS += --bindir=$(CONFIGURE_BINDIR.$(BITS))
 CONFIGURE_OPTIONS += --enable-dri
+CONFIGURE_OPTIONS += --disable-dri3
 CONFIGURE_OPTIONS += --enable-xvmc
 CONFIGURE_OPTIONS += --libdir=$(X11_SERVERLIBS_DIR)$(SERVERMOD_SUBDIR)
 CONFIGURE_OPTIONS += --libexecdir=$(CONFIGURE_LIBDIR.$(BITS))
@@ -103,3 +121,5 @@ COMPONENT_INSTALL_ARGS += $(COMPONENT_COMMON_ARGS)
 build: $(BUILD_32_and_64)
 
 install: $(INSTALL_32_and_64)
+
+download:: $(SOURCE_DIR)/.downloaded
