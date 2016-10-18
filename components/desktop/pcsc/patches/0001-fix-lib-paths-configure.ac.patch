@@ -1,0 +1,14 @@
+diff --git a/configure.ac b/configure.ac
+index 626a942..2284823 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -22,8 +22,7 @@ case "$host" in
+ 	CPPFLAGS="$CPPFLAGS -D_HPUX_SOURCE -D_XOPEN_SOURCE_EXTENDED"
+ 	;;
+ *-*-solaris*)
+-	CPPFLAGS="$CPPFLAGS -I/usr/local/include"
+-	LDFLAGS="$LDFLAGS -L/usr/local/lib -R/usr/local/lib"
++	CPPFLAGS="$CPPFLAGS -I/usr/include"
+ 	need_dash_r=1
+ 	;;
+ *-*-sunos4*)
