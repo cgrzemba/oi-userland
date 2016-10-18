@@ -52,6 +52,7 @@ CONFIGURE_OPTIONS+=      --enable-freedreno
 CONFIGURE_OPTIONS+=      --enable-freedreno-kgsl
 CONFIGURE_OPTIONS+=      --enable-tegra-experimental-api
 CONFIGURE_OPTIONS+=      --enable-amdgpu
+CONFIGURE_OPTIONS+=      --enable-manpages
 
 CONFIGURE_ENV+= CPPFLAGS="$(CPPFLAGS)"
 CONFIGURE_ENV+= MISC_MAN_SUFFIX=7
@@ -65,3 +66,4 @@ test:           $(TEST_32_and_64)
 
 REQUIRED_PACKAGES += diagnostic/scanpci
 REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += data/docbook

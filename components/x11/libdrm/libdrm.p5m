@@ -139,7 +139,7 @@ file path=usr/lib/xorg/libdrm_intel.so.1.0.0
 link path=usr/lib/xorg/libdrm_nouveau.so target=libdrm_nouveau.so.2.0.0
 link path=usr/lib/xorg/libdrm_nouveau.so.2 target=libdrm_nouveau.so.2.0.0
 file path=usr/lib/xorg/libdrm_nouveau.so.2.0.0
-link path=usr/lib/xorg/libdrm_omap.so target=libdrm_omap.so.2.0.0
+link path=usr/lib/xorg/libdrm_omap.so target=libdrm_omap.so.1.0.0
 link path=usr/lib/xorg/libdrm_omap.so.1 target=libdrm_omap.so.1.0.0
 file path=usr/lib/xorg/libdrm_omap.so.1.0.0
 link path=usr/lib/xorg/libdrm_radeon.so target=libdrm_radeon.so.1.0.1
