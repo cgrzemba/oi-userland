@@ -17,13 +17,13 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= xf86-video-nouveau
 COMPONENT_FMRI= x11/server/xorg/driver/xorg-video-nouveau
-COMPONENT_VERSION= 1.0.12
+COMPONENT_VERSION= 1.0.13
 COMPONENT_REVISION= 1
 COMPONENT_SUMMARY= xf86-video-nouveau -  high-quality, free/libre software drivers for nVidia cards
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
 COMPONENT_ARCHIVE_HASH= \
-	sha256:8c3811efd5c6c20f1ca1253cf140f3d14f7976d576b379f5e9dc3205f175bcd5
+	sha256:6d9242ba139c3df7afefffb455573b52f4427920b978161c00483c64a6da47cb
 COMPONENT_ARCHIVE_URL= \
   http://xorg.freedesktop.org/archive/individual/driver/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://xorg.freedesktop.org
@@ -71,6 +71,7 @@ LD_OPTIONS+= \
 DRIVER_DIR=$(X11_SERVERMODS_DIR)/drivers$(SERVERMOD_SUBDIR)
 COMPONENT_COMMON_ARGS = nouveau_drv_ladir='$(DRIVER_DIR)' 
 
+CPPFLAGS += -std=gnu99
 CPPFLAGS += -DXF86DRI
 
 CONFIGURE_OPTIONS += --libdir=$(X11_SERVERLIBS_DIR)$(SERVERMOD_SUBDIR)
