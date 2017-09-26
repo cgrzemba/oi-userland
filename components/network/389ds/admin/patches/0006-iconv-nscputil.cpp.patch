@@ -1,0 +1,13 @@
+diff --git a/lib/base/nscputil.cpp b/lib/base/nscputil.cpp
+index bf39940..b27229c 100644
+--- a/lib/base/nscputil.cpp
++++ b/lib/base/nscputil.cpp
+@@ -1150,7 +1150,7 @@ convertor( const char *src, int fromUtf8 )
+      */
+     if ( (size_t)-1 == iconv( convdesc, NULL, NULL,
+         &curoutbuf, &outbytesleft ) /* initial shift seq. */
+-#ifdef LINUX
++#ifdef sun
+          || (size_t)-1 == iconv( convdesc, (char **)&src, &inbytesleft,
+         &curoutbuf, &outbytesleft )     /* convert our chars. */
+ #else
