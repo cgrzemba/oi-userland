@@ -1,0 +1,13 @@
+diff --git a/admserv/cfgstuff/httpd-2.4.conf.in b/admserv/cfgstuff/httpd-2.4.conf.in
+index 5946d3a..af49b67 100644
+--- a/admserv/cfgstuff/httpd-2.4.conf.in
++++ b/admserv/cfgstuff/httpd-2.4.conf.in
+@@ -134,7 +134,7 @@ LoadModule cgi_module @moddir@/mod_cgi.so
+ LoadModule restartd_module     @admmoddir@/mod_restartd.so
+ LoadModule nss_module         @nssmoddir@/libmodnss.so
+ LoadModule admserv_module     @admmoddir@/mod_admserv.so
+-LoadModule mpm_worker_module    @moddir@/mod_mpm_worker.so
++# LoadModule mpm_worker_module    @moddir@/mod_mpm_worker.so
+ LoadModule access_compat_module @moddir@/mod_access_compat.so 
+ LoadModule authn_core_module    @moddir@/mod_authn_core.so 
+ LoadModule authz_core_module    @moddir@/mod_authz_core.so 

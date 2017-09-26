@@ -1,0 +1,22 @@
+diff --git a/ldap/servers/slapd/dn.c b/ldap/servers/slapd/dn.c
+index 1a7c156..70b81d2 100644
+--- a/ldap/servers/slapd/dn.c
++++ b/ldap/servers/slapd/dn.c
+@@ -24,11 +24,17 @@
+ 
+ #include <inttypes.h>
+ #include <stddef.h> /* for size_t */
++#if defined(sun)
++# include <pthread.h>
++#endif
+ 
+ #if defined(HAVE_SYS_ENDIAN_H)
+ #include <sys/endian.h>
+ #elif defined(HAVE_ENDIAN_H)
+ #include <endian.h>
++#elif defined(sun)
++#  include <sys/byteorder.h>
++#  define le64toh(x) LE_IN64(x)
+ #else
+ #error platform header for endian detection not found.
+ #endif

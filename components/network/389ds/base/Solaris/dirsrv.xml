@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<!DOCTYPE service_bundle
+  SYSTEM '/usr/share/lib/xml/dtd/service_bundle.dtd.1'>
+<!--
+    Manifest created by svcbundle (2017-Sep-06 12:54:55+0200)
+-->
+<service_bundle type="manifest" name="network/ds/dirsrv">
+    <service version="1" type="service" name="network/ds/dirsrv">
+        <!--
+            The following dependency keeps us from starting until the
+            multi-user milestone is reached.
+        -->
+        <dependency restart_on="none" type="service"
+            name="multi_user_dependency" grouping="require_all">
+            <service_fmri value="svc:/milestone/multi-user"/>
+        </dependency>
+        <exec_method timeout_seconds="60" type="method" name="start"
+            exec="/usr/bin/start-dirsrv"/>
+        <exec_method timeout_seconds="60" type="method" name="stop"
+            exec="/usr/bin/stop-dirsrv"/>
+        <!--
+            The exec attribute below can be changed to a command that SMF
+            should execute when the service is refreshed.  Services are
+            typically refreshed when their properties are changed in the
+            SMF repository.  See smf_method(5) for more details.  It is
+            common to retain the value of :true which means that SMF will
+            take no action when the service is refreshed.  Alternatively,
+            you may wish to provide a method to reread the SMF repository
+            and act on any configuration changes.
+        -->
+        <exec_method timeout_seconds="60" type="method" name="refresh"
+            exec=":true"/>
+        <!--
+            We do not need a duration property group, because contract is
+            the default.  Search for duration in svc.startd(1M).
+        -->
+        <instance enabled="false" name="default"/>
+        <template>
+            <common_name>
+                <loctext xml:lang="C">
+                    <!--
+                        Replace this comment with a short name for the
+                        service.
+                    -->
+                </loctext>
+            </common_name>
+            <description>
+                <loctext xml:lang="C">
+                    <!--
+                        Replace this comment with a brief description of
+                        the service
+                    -->
+                </loctext>
+            </description>
+        </template>
+    </service>
+</service_bundle>

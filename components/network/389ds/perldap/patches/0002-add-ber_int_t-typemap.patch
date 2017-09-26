@@ -1,0 +1,12 @@
+diff --git a/perldap/typemap b/perldap/typemap
+index 418f298..a5d38ed 100644
+--- a/perldap/typemap
++++ b/perldap/typemap
+@@ -67,6 +67,7 @@ LDAPMod **		T_PTR
+ LDAP_CMP_CALLBACK *	T_PTR
+ LDAP_REBINDPROC_CALLBACK *	T_PTR
+ struct timeval		T_timeval
++ber_int_t		T_IV
+ 
+ #########
+ INPUT
