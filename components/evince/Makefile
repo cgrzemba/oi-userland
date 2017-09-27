@@ -19,7 +19,7 @@ include ../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		evince
 COMPONENT_VERSION=	2.32.0
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	3
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
 COMPONENT_ARCHIVE_HASH= \
@@ -44,6 +44,7 @@ CONFIGURE_ENV += PATH=/usr/gnu/bin:$(PATH)
 
 CONFIGURE_OPTIONS+= --libexecdir=/usr/lib
 CONFIGURE_OPTIONS+= --sysconfdir=/etc
+CONFIGURE_OPTIONS+= --disable-scrollkeeper
 
 build:		$(BUILD_32)
 
