@@ -45,6 +45,9 @@ COMPONENT_PREP_ACTION = \
 COMPONENT_PRE_CONFIGURE_ACTION = \
         ($(CLONEY) $(SOURCE_DIR) $(@D))
 
+CONFIGURE_ENV += LIBPCSCLITE_CFLAGS=-I/usr/include/smartcard
+CONFIGURE_ENV += LIBPCSCLITE_LIBS="-lpcsclite -lpthread"
+
 # Use OpenSSL, it allows more options on OI/Hipster that openconnect uses
 CONFIGURE_OPTIONS +=	--with-system-cafile=/etc/certs/ca-certificates.crt
 CONFIGURE_OPTIONS +=	--without-gnutls
