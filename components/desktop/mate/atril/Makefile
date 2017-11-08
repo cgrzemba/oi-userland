@@ -74,3 +74,5 @@ REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libice
 REQUIRED_PACKAGES += x11/library/libsm
 REQUIRED_PACKAGES += x11/library/libx11
+REQUIRED_PACKAGES += library/desktop/mate/mate-common
+REQUIRED_PACKAGES += text/itstool
