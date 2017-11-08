@@ -1,0 +1,47 @@
+diff --git a/configure.ac b/configure.ac
+index 45277d9..10f9b3e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -918,7 +918,7 @@ if test x$gmp = xtrue; then
+ 	if test x$mpz_powm_sec = xyes; then
+ 		AC_COMPILE_IFELSE(
+ 			[AC_LANG_PROGRAM(
+-				[[#include "gmp.h"]],
++				[[#include "gmp/gmp.h"]],
+ 				[[void *x = mpz_powm_sec;]])],
+ 			[AC_MSG_RESULT([yes]);
+ 			 AC_DEFINE([HAVE_MPZ_POWM_SEC], [], [have mpz_mown_sec()])],
+@@ -931,7 +931,7 @@ if test x$gmp = xtrue; then
+ 	AC_MSG_CHECKING([gmp.h version >= 4.1.4])
+ 	AC_COMPILE_IFELSE(
+ 		[AC_LANG_PROGRAM(
+-			[[#include "gmp.h"]],
++			[[#include "gmp/gmp.h"]],
+ 			[[
+ 				#if (__GNU_MP_VERSION*100 +  __GNU_MP_VERSION_MINOR*10 + __GNU_MP_VERSION_PATCHLEVEL) < 414
+ 					#error bad gmp
+diff --git a/src/libstrongswan/plugins/gmp/Makefile.am b/src/libstrongswan/plugins/gmp/Makefile.am
+index a2cfefd..a94c2d7 100644
+--- a/src/libstrongswan/plugins/gmp/Makefile.am
++++ b/src/libstrongswan/plugins/gmp/Makefile.am
+@@ -1,5 +1,5 @@
+ AM_CPPFLAGS = \
+-	-I$(top_srcdir)/src/libstrongswan
++	-I$(top_srcdir)/src/libstrongswan -I/usr/include/gmp
+ 
+ AM_CFLAGS = \
+ 	$(PLUGIN_CFLAGS)
+diff --git a/src/libcharon/plugins/eap_aka_3gpp2/Makefile.am b/src/libcharon/plugins/eap_aka_3gpp2/Makefile.am
+index d68bfc4..24d0fca 100644
+--- a/src/libcharon/plugins/eap_aka_3gpp2/Makefile.am
++++ b/src/libcharon/plugins/eap_aka_3gpp2/Makefile.am
+@@ -1,7 +1,8 @@
+ AM_CPPFLAGS = \
+ 	-I$(top_srcdir)/src/libstrongswan \
+ 	-I$(top_srcdir)/src/libcharon \
+-	-I$(top_srcdir)/src/libsimaka
++	-I$(top_srcdir)/src/libsimaka \
++	-I/usr/include/gmp
+ 
+ AM_CFLAGS = \
+ 	$(PLUGIN_CFLAGS)

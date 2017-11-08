@@ -1,0 +1,246 @@
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+
+#
+# Copyright 2017 cgrzemba@opencsw.org
+#
+
+set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+
+license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
+
+file path=usr/bin/$(MACH64)/pki
+file path=usr/bin/pki
+file path=usr/etc/ipsec.conf
+file path=usr/etc/ipsec.secrets
+file path=usr/etc/strongswan.conf
+file path=usr/etc/strongswan.d/charon-logging.conf
+file path=usr/etc/strongswan.d/charon.conf
+file path=usr/etc/strongswan.d/charon/aes.conf
+file path=usr/etc/strongswan.d/charon/attr.conf
+file path=usr/etc/strongswan.d/charon/cmac.conf
+file path=usr/etc/strongswan.d/charon/constraints.conf
+file path=usr/etc/strongswan.d/charon/curl.conf
+file path=usr/etc/strongswan.d/charon/curve25519.conf
+file path=usr/etc/strongswan.d/charon/des.conf
+file path=usr/etc/strongswan.d/charon/dnskey.conf
+file path=usr/etc/strongswan.d/charon/fips-prf.conf
+file path=usr/etc/strongswan.d/charon/gmp.conf
+file path=usr/etc/strongswan.d/charon/hmac.conf
+file path=usr/etc/strongswan.d/charon/ldap.conf
+file path=usr/etc/strongswan.d/charon/md5.conf
+file path=usr/etc/strongswan.d/charon/nonce.conf
+file path=usr/etc/strongswan.d/charon/pem.conf
+file path=usr/etc/strongswan.d/charon/pgp.conf
+file path=usr/etc/strongswan.d/charon/pkcs1.conf
+file path=usr/etc/strongswan.d/charon/pkcs12.conf
+file path=usr/etc/strongswan.d/charon/pkcs7.conf
+file path=usr/etc/strongswan.d/charon/pkcs8.conf
+file path=usr/etc/strongswan.d/charon/pubkey.conf
+file path=usr/etc/strongswan.d/charon/random.conf
+file path=usr/etc/strongswan.d/charon/rc2.conf
+file path=usr/etc/strongswan.d/charon/resolve.conf
+file path=usr/etc/strongswan.d/charon/revocation.conf
+file path=usr/etc/strongswan.d/charon/sha1.conf
+file path=usr/etc/strongswan.d/charon/sha2.conf
+file path=usr/etc/strongswan.d/charon/socket-default.conf
+file path=usr/etc/strongswan.d/charon/soup.conf
+file path=usr/etc/strongswan.d/charon/sqlite.conf
+file path=usr/etc/strongswan.d/charon/sshkey.conf
+file path=usr/etc/strongswan.d/charon/stroke.conf
+file path=usr/etc/strongswan.d/charon/updown.conf
+file path=usr/etc/strongswan.d/charon/vici.conf
+file path=usr/etc/strongswan.d/charon/x509.conf
+file path=usr/etc/strongswan.d/charon/xauth-generic.conf
+file path=usr/etc/strongswan.d/charon/xcbc.conf
+file path=usr/etc/strongswan.d/pki.conf
+file path=usr/etc/strongswan.d/scepclient.conf
+file path=usr/etc/strongswan.d/starter.conf
+file path=usr/etc/strongswan.d/swanctl.conf
+file path=usr/etc/swanctl/swanctl.conf
+link path=usr/lib/$(MACH64)/ipsec/libcharon.so target=libcharon.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libcharon.so.0 target=libcharon.so.0.0.0
+file path=usr/lib/$(MACH64)/ipsec/libcharon.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libstrongswan.so target=libstrongswan.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libstrongswan.so.0 \
+    target=libstrongswan.so.0.0.0
+file path=usr/lib/$(MACH64)/ipsec/libstrongswan.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libtpmtss.so target=libtpmtss.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libtpmtss.so.0 target=libtpmtss.so.0.0.0
+file path=usr/lib/$(MACH64)/ipsec/libtpmtss.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libvici.so target=libvici.so.0.0.0
+link path=usr/lib/$(MACH64)/ipsec/libvici.so.0 target=libvici.so.0.0.0
+file path=usr/lib/$(MACH64)/ipsec/libvici.so.0.0.0
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-aes.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-attr.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-cmac.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-constraints.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-curl.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-curve25519.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-des.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-dnskey.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-fips-prf.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-gmp.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-hmac.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-ldap.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-md5.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-nonce.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pem.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pgp.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pkcs1.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pkcs12.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pkcs7.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pkcs8.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-pubkey.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-random.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-rc2.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-resolve.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-revocation.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-sha1.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-sha2.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-socket-default.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-soup.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-sqlite.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-sshkey.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-stroke.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-updown.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-vici.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-x509.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-xauth-generic.so
+file path=usr/lib/$(MACH64)/ipsec/plugins/libstrongswan-xcbc.so
+link path=usr/lib/ipsec/libcharon.so target=libcharon.so.0.0.0
+link path=usr/lib/ipsec/libcharon.so.0 target=libcharon.so.0.0.0
+file path=usr/lib/ipsec/libcharon.so.0.0.0
+link path=usr/lib/ipsec/libstrongswan.so target=libstrongswan.so.0.0.0
+link path=usr/lib/ipsec/libstrongswan.so.0 target=libstrongswan.so.0.0.0
+file path=usr/lib/ipsec/libstrongswan.so.0.0.0
+link path=usr/lib/ipsec/libtpmtss.so target=libtpmtss.so.0.0.0
+link path=usr/lib/ipsec/libtpmtss.so.0 target=libtpmtss.so.0.0.0
+file path=usr/lib/ipsec/libtpmtss.so.0.0.0
+link path=usr/lib/ipsec/libvici.so target=libvici.so.0.0.0
+link path=usr/lib/ipsec/libvici.so.0 target=libvici.so.0.0.0
+file path=usr/lib/ipsec/libvici.so.0.0.0
+file path=usr/lib/ipsec/plugins/libstrongswan-aes.so
+file path=usr/lib/ipsec/plugins/libstrongswan-attr.so
+file path=usr/lib/ipsec/plugins/libstrongswan-cmac.so
+file path=usr/lib/ipsec/plugins/libstrongswan-constraints.so
+file path=usr/lib/ipsec/plugins/libstrongswan-curl.so
+file path=usr/lib/ipsec/plugins/libstrongswan-curve25519.so
+file path=usr/lib/ipsec/plugins/libstrongswan-des.so
+file path=usr/lib/ipsec/plugins/libstrongswan-dnskey.so
+file path=usr/lib/ipsec/plugins/libstrongswan-fips-prf.so
+file path=usr/lib/ipsec/plugins/libstrongswan-gmp.so
+file path=usr/lib/ipsec/plugins/libstrongswan-hmac.so
+file path=usr/lib/ipsec/plugins/libstrongswan-ldap.so
+file path=usr/lib/ipsec/plugins/libstrongswan-md5.so
+file path=usr/lib/ipsec/plugins/libstrongswan-nonce.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pem.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pgp.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pkcs1.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pkcs12.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pkcs7.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pkcs8.so
+file path=usr/lib/ipsec/plugins/libstrongswan-pubkey.so
+file path=usr/lib/ipsec/plugins/libstrongswan-random.so
+file path=usr/lib/ipsec/plugins/libstrongswan-rc2.so
+file path=usr/lib/ipsec/plugins/libstrongswan-resolve.so
+file path=usr/lib/ipsec/plugins/libstrongswan-revocation.so
+file path=usr/lib/ipsec/plugins/libstrongswan-sha1.so
+file path=usr/lib/ipsec/plugins/libstrongswan-sha2.so
+file path=usr/lib/ipsec/plugins/libstrongswan-socket-default.so
+file path=usr/lib/ipsec/plugins/libstrongswan-soup.so
+file path=usr/lib/ipsec/plugins/libstrongswan-sqlite.so
+file path=usr/lib/ipsec/plugins/libstrongswan-sshkey.so
+file path=usr/lib/ipsec/plugins/libstrongswan-stroke.so
+file path=usr/lib/ipsec/plugins/libstrongswan-updown.so
+file path=usr/lib/ipsec/plugins/libstrongswan-vici.so
+file path=usr/lib/ipsec/plugins/libstrongswan-x509.so
+file path=usr/lib/ipsec/plugins/libstrongswan-xauth-generic.so
+file path=usr/lib/ipsec/plugins/libstrongswan-xcbc.so
+file path=usr/libexec/ipsec/_copyright
+file path=usr/libexec/ipsec/_updown
+file path=usr/libexec/ipsec/charon
+file path=usr/libexec/ipsec/scepclient
+file path=usr/libexec/ipsec/starter
+file path=usr/libexec/ipsec/stroke
+file path=usr/sbin/$(MACH64)/ipsec
+file path=usr/sbin/$(MACH64)/swanctl
+file path=usr/sbin/ipsec
+file path=usr/sbin/swanctl
+file path=usr/share/man/man1/pki---acert.1
+file path=usr/share/man/man1/pki---dn.1
+file path=usr/share/man/man1/pki---gen.1
+file path=usr/share/man/man1/pki---issue.1
+file path=usr/share/man/man1/pki---keyid.1
+file path=usr/share/man/man1/pki---pkcs7.1
+file path=usr/share/man/man1/pki---print.1
+file path=usr/share/man/man1/pki---pub.1
+file path=usr/share/man/man1/pki---req.1
+file path=usr/share/man/man1/pki---self.1
+file path=usr/share/man/man1/pki---signcrl.1
+file path=usr/share/man/man1/pki---verify.1
+file path=usr/share/man/man1/pki.1
+file path=usr/share/man/man5/ipsec.conf.5
+file path=usr/share/man/man5/ipsec.secrets.5
+file path=usr/share/man/man5/strongswan.conf.5
+file path=usr/share/man/man5/swanctl.conf.5
+file path=usr/share/man/man8/ipsec.8
+file path=usr/share/man/man8/scepclient.8
+file path=usr/share/man/man8/swanctl.8
+file path=usr/share/strongswan/templates/config/plugins/aes.conf
+file path=usr/share/strongswan/templates/config/plugins/attr.conf
+file path=usr/share/strongswan/templates/config/plugins/cmac.conf
+file path=usr/share/strongswan/templates/config/plugins/constraints.conf
+file path=usr/share/strongswan/templates/config/plugins/curl.conf
+file path=usr/share/strongswan/templates/config/plugins/curve25519.conf
+file path=usr/share/strongswan/templates/config/plugins/des.conf
+file path=usr/share/strongswan/templates/config/plugins/dnskey.conf
+file path=usr/share/strongswan/templates/config/plugins/fips-prf.conf
+file path=usr/share/strongswan/templates/config/plugins/gmp.conf
+file path=usr/share/strongswan/templates/config/plugins/hmac.conf
+file path=usr/share/strongswan/templates/config/plugins/ldap.conf
+file path=usr/share/strongswan/templates/config/plugins/md5.conf
+file path=usr/share/strongswan/templates/config/plugins/nonce.conf
+file path=usr/share/strongswan/templates/config/plugins/pem.conf
+file path=usr/share/strongswan/templates/config/plugins/pgp.conf
+file path=usr/share/strongswan/templates/config/plugins/pkcs1.conf
+file path=usr/share/strongswan/templates/config/plugins/pkcs12.conf
+file path=usr/share/strongswan/templates/config/plugins/pkcs7.conf
+file path=usr/share/strongswan/templates/config/plugins/pkcs8.conf
+file path=usr/share/strongswan/templates/config/plugins/pubkey.conf
+file path=usr/share/strongswan/templates/config/plugins/random.conf
+file path=usr/share/strongswan/templates/config/plugins/rc2.conf
+file path=usr/share/strongswan/templates/config/plugins/resolve.conf
+file path=usr/share/strongswan/templates/config/plugins/revocation.conf
+file path=usr/share/strongswan/templates/config/plugins/sha1.conf
+file path=usr/share/strongswan/templates/config/plugins/sha2.conf
+file path=usr/share/strongswan/templates/config/plugins/socket-default.conf
+file path=usr/share/strongswan/templates/config/plugins/soup.conf
+file path=usr/share/strongswan/templates/config/plugins/sqlite.conf
+file path=usr/share/strongswan/templates/config/plugins/sshkey.conf
+file path=usr/share/strongswan/templates/config/plugins/stroke.conf
+file path=usr/share/strongswan/templates/config/plugins/updown.conf
+file path=usr/share/strongswan/templates/config/plugins/vici.conf
+file path=usr/share/strongswan/templates/config/plugins/x509.conf
+file path=usr/share/strongswan/templates/config/plugins/xauth-generic.conf
+file path=usr/share/strongswan/templates/config/plugins/xcbc.conf
+file path=usr/share/strongswan/templates/config/strongswan.conf
+file path=usr/share/strongswan/templates/config/strongswan.d/charon-logging.conf
+file path=usr/share/strongswan/templates/config/strongswan.d/charon.conf
+file path=usr/share/strongswan/templates/config/strongswan.d/pki.conf
+file path=usr/share/strongswan/templates/config/strongswan.d/scepclient.conf
+file path=usr/share/strongswan/templates/config/strongswan.d/starter.conf
+file path=usr/share/strongswan/templates/config/strongswan.d/swanctl.conf

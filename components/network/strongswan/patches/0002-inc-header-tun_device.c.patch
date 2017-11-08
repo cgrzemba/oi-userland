@@ -1,0 +1,13 @@
+diff --git a/src/libstrongswan/networking/tun_device.c b/src/libstrongswan/networking/tun_device.c
+index 86951f1..01aed0c 100644
+--- a/src/libstrongswan/networking/tun_device.c
++++ b/src/libstrongswan/networking/tun_device.c
+@@ -62,6 +62,8 @@ tun_device_t *tun_device_create(const char *name_tmpl)
+ #include <net/if_tun.h>
+ #include <net/if_var.h>
+ #include <netinet/in_var.h>
++#elif __sun__ 
++#include <sys/sockio.h>
+ #else
+ #include <net/if_tun.h>
+ #endif

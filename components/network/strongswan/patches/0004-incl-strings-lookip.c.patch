@@ -1,0 +1,12 @@
+diff --git a/src/libcharon/plugins/lookip/lookip.c b/src/libcharon/plugins/lookip/lookip.c
+index d473c70..3e31265 100644
+--- a/src/libcharon/plugins/lookip/lookip.c
++++ b/src/libcharon/plugins/lookip/lookip.c
+@@ -24,6 +24,7 @@
+ #include <errno.h>
+ #include <getopt.h>
+ #include <arpa/inet.h>
++#include <strings.h>
+ 
+ /**
+  * Connect to the daemon, return FD
