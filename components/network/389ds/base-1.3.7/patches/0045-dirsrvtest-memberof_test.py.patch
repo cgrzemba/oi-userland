@@ -1,0 +1,32 @@
+diff --git a/dirsrvtests/tests/perf/memberof_test.py b/dirsrvtests/tests/perf/memberof_test.py
+index b87e8c0..3e39fea 100755
+--- a/dirsrvtests/tests/perf/memberof_test.py
++++ b/dirsrvtests/tests/perf/memberof_test.py
+@@ -22,7 +22,7 @@ MEMOF_PLUGIN = ('cn=' + PLUGIN_MEMBER_OF + ',cn=plugins,cn=c
+onfig')
+ MAN_ENTRY_PLUGIN = ('cn=' + PLUGIN_MANAGED_ENTRY + ',cn=plugins,cn=config')
+ AUTO_MEM_PLUGIN = ('cn=' + PLUGIN_AUTOMEMBER + ',cn=plugins,cn=config')
+ DOMAIN = 'redhat.com'
+-LDAP_MOD = '/usr/bin/ldapmodify'
++LDAP_MOD = '/usr/lib/openldap/bin/ldapmodify'
+ FILTER = 'objectClass=*'
+ USER_FILTER = '(|(uid=user*)(cn=group*))'
+ MEMBEROF_ATTR = 'memberOf'
+@@ -70,7 +70,7 @@ def memberof_setup(topo, request):
+             log.error(
+                 'Failed to replace values of nsslapd-db-locks and nsslapd-dbcachesize {}'.format(e.message['desc']))
+             raise e
+-        topo.standalone.restart(timeout=10)
++        topo.standalone.restart(timeout=20)
+ 
+     def fin():
+         log.info('Disabling plugins {}, {}, {}'.format(PLUGIN_MEMBER_OF, PLUGIN_MANAGED_ENTRY, PLUGIN_AUTOMEMBER))
+@@ -82,7 +82,7 @@ def memberof_setup(topo, request):
+         except ldap.LDAPError as e:
+             log.error('Failed to disable plugins, {}'.format(e.message['desc']))
+             assert False
+-        topo.standalone.restart(timeout=10)
++        topo.standalone.restart(timeout=20)
+ 
+     request.addfinalizer(fin)
+ 

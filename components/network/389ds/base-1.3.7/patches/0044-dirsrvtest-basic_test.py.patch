@@ -1,0 +1,15 @@
+diff --git a/dirsrvtests/tests/suites/basic/basic_test.py b/dirsrvtests/tests/suites/basic/basic_test.py
+index 544f1b7..ae056fe 100644
+--- a/dirsrvtests/tests/suites/basic/basic_test.py
++++ b/dirsrvtests/tests/suites/basic/basic_test.py
+@@ -799,8 +799,8 @@ def test_basic_dse(topology_st, import_example_ldif):
+     log.info('Running test_basic_dse...')
+ 
+     dse_file = topology_st.standalone.confdir + '/dse.ldif'
+-    pid = check_output(['pidof', '-s', 'ns-slapd']).strip()
+-    check_output(['sudo', 'kill', '-9', ensure_str(pid)])
++    pid = check_output(['pgrep', 'ns-slapd'])
++    check_output(['sudo', 'kill', '-9', ensure_str(pid.split()[-1])])
+     if os.path.getsize(dse_file) == 0:
+         log.fatal('test_basic_dse: dse.ldif\'s content was incorrectly removed!')
+         assert False
