@@ -54,6 +54,9 @@ REQUIRED_PACKAGES += library/desktop/gtk2
 REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += library/libnotify
 REQUIRED_PACKAGES += library/libsecret
+REQUIRED_PACKAGES += library/gnome/gnome-keyring
+REQUIRED_PACKAGES += library/libnotify
+>>>>>>> gnome-mount: revert removal, update to 0.8
 REQUIRED_PACKAGES += service/hal
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/libdbus
