@@ -29,14 +29,14 @@ PARFAIT_BUILD=no
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         ghostscript
-COMPONENT_VERSION=      9.00
-COMPONENT_REVISION=	7
+COMPONENT_VERSION=      9.22
+COMPONENT_REVISION=	0
 COMPONENT_PROJECT_URL=	http://ghostscript.com/
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-    sha256:9e754c315d68d91a65ef208b9a8bda1fb57e45a7be18aa9397acfcc5ff59de16
-COMPONENT_ARCHIVE_URL=  $(COMPONENT_PROJECT_URL)releases/$(COMPONENT_ARCHIVE)
+    sha256:7f5f4487c0df9dce37481e4c8f192c0322e4c69f5a2ba900a7833c992331bcf4
+COMPONENT_ARCHIVE_URL=  https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/ghostscript
 
 include $(WS_MAKE_RULES)/prep.mk
