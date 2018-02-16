@@ -16,12 +16,12 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= pulseaudio
-COMPONENT_VERSION= 10.0
+COMPONENT_VERSION= 11.1
 COMPONENT_SUMMARY= Sample Rate Converter for audio
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:60154d4d2b3d9eabae5b1f26b057be4e6cbe0d0e2753cf210c2dcd38fd712f0b
+  sha256:0a26ff354ee9aa84ef3fda21b704e05bdf933dce2a7ac46b76c9951c33870ecf
 COMPONENT_ARCHIVE_URL= \
   http://freedesktop.org/software/pulseaudio/releases/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://www.freedesktop.org/wiki/Software/PulseAudio/
@@ -34,7 +34,7 @@ include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
-PATH=/usr/gnu/bin:/usr/bin
+PATH=$(PATH.gnu)
 
 LDFLAGS += -lnsl -lsocket -lgobject-2.0
 
@@ -86,10 +86,11 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
+# Auto-generated dependencies
 REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += library/audio/soxr
 REQUIRED_PACKAGES += library/database/gdbm
 REQUIRED_PACKAGES += library/glib2
-REQUIRED_PACKAGES += library/json-c
 REQUIRED_PACKAGES += library/libsndfile
 REQUIRED_PACKAGES += library/libtool/libltdl
 REQUIRED_PACKAGES += library/security/openssl

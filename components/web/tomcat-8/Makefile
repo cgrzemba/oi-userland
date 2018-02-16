@@ -26,22 +26,21 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		tomcat
-COMPONENT_VERSION=	8.0.41
-COMPONENT_REVISION=	1
+COMPONENT_VERSION=	8.0.48
 COMPONENT_PROJECT_URL=	http://tomcat.apache.org/
 COMPONENT_SRC_NAME=	apache-tomcat
 COMPONENT_SRC=		$(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)-src
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:2bbaf50e9c9ffe8d79369c0c16cad04ea256cccde85658d15a011c8f8d1c2b77
+    sha256:b727af330323058b3c2e6a84ae1161fabebb9ab060143e1c7f01e463329b4c4c
 COMPONENT_ARCHIVE_URL=	http://archive.apache.org/dist/tomcat/tomcat-8/v$(COMPONENT_VERSION)/src/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/tomcat
 
 # Tomcat subcomponents
-COMPONENT_ARCHIVE_1= ecjsrc-4.5.1.jar
+COMPONENT_ARCHIVE_1= ecjsrc-4.6.3.jar
 COMPONENT_ARCHIVE_HASH_1= \
-    sha256:101a31ee0474282a287b16c46fa6e793ede43ceecaecabbd382f6e0b1b67ef72
-COMPONENT_ARCHIVE_URL_1= http://archive.eclipse.org/eclipse/downloads/drops4/R-4.5.1-201509040015/$(COMPONENT_ARCHIVE_1)
+    sha256:f4be12aeaa50d54e883e75ee524c69ec9ed6a7c74bce4ef70d4adaff9a7e8e85
+COMPONENT_ARCHIVE_URL_1= http://archive.eclipse.org/eclipse/downloads/drops4/R-4.6.3-201703010400/$(COMPONENT_ARCHIVE_1)
 
 TPNO=			26981
 
@@ -68,9 +67,8 @@ COMPONENT_PRE_BUILD_ACTION= \
 COMPONENT_PRE_BUILD_ACTION+= \
 	($(MKDIR) $(@D)/ECJ/scripts/binary/META-INF; cd $(@D)/ECJ ; \
 	    $(JAVA_HOME)/bin/jar xf $(ARCHIVES_LOCATION)/$(COMPONENT_ARCHIVE_1); \
-	    $(GPATCH) $(GPATCH_FLAGS) < $(COMPONENT_DIR)/patches/ECJ.ecj-patch; \
 	    $(CP) META-INF/MANIFEST.MF scripts/binary/META-INF/; \
-	    JAVA_HOME="$(JAVA_HOME)" LC_ALL="en_US.UTF-8" $(ANT) )
+	    JAVA_HOME="$(JAVA_HOME)" LC_ALL="en_US.UTF-8" JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" $(ANT) )
 
 # Create configuration backup archive for custom user's deployments.
 COMPONENT_POST_BUILD_ACTION= \
@@ -85,5 +83,9 @@ install: build
 
 test:	$(NO_TESTS)
 
-REQUIRED_PACKAGES += SUNWcs
-REQUIRED_PACKAGES += runtime/java/openjdk7
+# Build dependencies
+REQUIRED_PACKAGES += developer/build/ant
+REQUIRED_PACKAGES += developer/java/openjdk8
+
+# Auto-generated dependencies
+REQUIRED_PACKAGES += runtime/java/openjdk8

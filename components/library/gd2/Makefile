@@ -26,7 +26,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gd2
 COMPONENT_VERSION=	2.2.4
-COMPONENT_REVISION=	3
+COMPONENT_REVISION=	4
 COMPONENT_FMRI=	library/gd
 COMPONENT_SUMMARY=	The Graphics Draw Library
 COMPONENT_CLASSIFICATION=	System/Libraries
@@ -122,6 +122,6 @@ REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/fontconfig
 REQUIRED_PACKAGES += system/library/freetype-2
-REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libxpm

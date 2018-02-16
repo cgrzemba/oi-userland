@@ -14,10 +14,10 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		php
-COMPONENT_VERSION=	7.0.22
+COMPONENT_VERSION=	7.0.27
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	sha256:408c3fbc235ec940433bfac1f3ed4bf797f61b4a1693b9fb0b6a04b2c1832501
+COMPONENT_ARCHIVE_HASH=	sha256:4b2bc823e806dbf7b62fe0b92b0d14b0c6e03f88c3fc5d96278416c54ce11f6c
 COMPONENT_ARCHIVE_URL=	http://uk1.php.net/get/$(COMPONENT_ARCHIVE)/from/this/mirror
 COMPONENT_SIG_URL=	http://uk1.php.net/get/$(COMPONENT_ARCHIVE).asc/from/this/mirror
 
@@ -39,6 +39,12 @@ CPPFLAGS		+= -I/usr/include/openldap
 CPPFLAGS		+=      -I$(MYSQL_INCDIR)
 CFLAGS			+=	-I$(MYSQL_INCDIR)
 LDFLAGS		+=	-L$(MYSQL_LIBDIR) -R$(MYSQL_LIBDIR)
+
+# build with the system default libjpeg
+CFLAGS		+=	$(JPEG_CPPFLAGS) $(JPEG_CFLAGS)
+CXXFLAGS	+=	$(JPEG_CPPFLAGS) $(JPEG_CXXFLAGS)
+CPPFLAGS	+=	$(JPEG_CPPFLAGS)
+LDFLAGS		+=	$(JPEG_LDFLAGS)
 
 COMPONENT_PREP_ACTION =        ( cd $(@D) && autoconf )
 
@@ -190,12 +196,15 @@ build:		$(BUILD_32_and_64)
 
 install:	$(INSTALL_32_and_64)
 
+# Build dependencies
+REQUIRED_PACKAGES += web/server/apache-24
+
+# Auto-generated dependencies
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += compress/bzip2
 REQUIRED_PACKAGES += database/mariadb-101/library
-REQUIRED_PACKAGES += database/postgres-93/library
-REQUIRED_PACKAGES += image/library/libjpeg6
-REQUIRED_PACKAGES += image/library/libjpeg6-ijg
+REQUIRED_PACKAGES += database/postgres-94/library
+REQUIRED_PACKAGES += image/library/libjpeg8-turbo
 REQUIRED_PACKAGES += image/library/libpng16
 REQUIRED_PACKAGES += library/icu
 REQUIRED_PACKAGES += library/libxml2
@@ -206,11 +215,11 @@ REQUIRED_PACKAGES += library/security/openssl
 REQUIRED_PACKAGES += library/uw-imap
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/security/libmcrypt
 REQUIRED_PACKAGES += text/aspell
 REQUIRED_PACKAGES += text/tidy
 REQUIRED_PACKAGES += web/curl
 REQUIRED_PACKAGES += web/php-70/php-cli
-REQUIRED_PACKAGES += web/server/apache-24

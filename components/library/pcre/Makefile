@@ -26,6 +26,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		pcre
 COMPONENT_VERSION=	8.41
+COMPONENT_REVISION=	2
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
@@ -39,9 +40,9 @@ COMPONENT_CLASSIFICATION=	Development/C
 COMPONENT_LICENSE=	BSD
 COMPONENT_LICENSE_FILE=	LICENCE
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/configure.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/configure.mk
+include $(WS_MAKE_RULES)/ips.mk
 
 # pick up -std=c99 in CFLAGS
 CFLAGS+=	-std=c99
@@ -56,9 +57,6 @@ CXXFLAGS+=	$(CC_PIC)
 CXXFLAGS+=	$(CPP_LARGEFILES)
 
 #CXXFLAGS+=	$(XPG5MODE)
-
-# We need to do this because libtool adds wrong paths to RPATH.
-LDFLAGS += -L$(CONFIGURE_LIBDIR.$(BITS)) -R$(CONFIGURE_LIBDIR.$(BITS))
 
 LINTFLAGS+=	-I. $(studio_XBITS) $(CPP_LARGEFILES)
 
@@ -76,6 +74,7 @@ CONFIGURE_OPTIONS+=	--includedir=$(CONFIGURE_INCLUDEDIR)/pcre
 CONFIGURE_OPTIONS+=	--localstatedir=/var
 CONFIGURE_OPTIONS+=	--disable-static
 CONFIGURE_OPTIONS+=	--enable-cpp
+CONFIGURE_OPTIONS+=	--enable-jit
 CONFIGURE_OPTIONS+=	--enable-rebuild-chartables
 CONFIGURE_OPTIONS+=	--enable-utf8
 CONFIGURE_OPTIONS+=	--enable-unicode-properties
@@ -89,6 +88,9 @@ CONFIGURE_OPTIONS+=	--with-match-limit=10000000
 CONFIGURE_OPTIONS+=	--with-pic
 
 CONFIGURE_OPTIONS.64+=	--libexecdir=$(CONFIGURE_PREFIX)/libexec/$(MACH64)
+
+# Without this 64-bit libraries get /usr/lib/$(MACH64) RPATH
+CONFIGURE_ENV.64 += LT_SYS_LIBRARY_PATH="/lib/$(MACH64):/usr/lib/$(MACH64)"
 
 COMPONENT_BUILD_ENV+=	"LDFLAGS=$(LDFLAGS)"
 COMPONENT_BUILD_ENV+=	"INSTALL=$(INSTALL)"
@@ -120,5 +122,5 @@ REQUIRED_PACKAGES += compress/bzip2
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime

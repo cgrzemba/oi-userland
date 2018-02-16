@@ -17,6 +17,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		openvpn
 COMPONENT_VERSION=	2.4.3
+COMPONENT_REVISION=	1
 COMPONENT_SUMMARY=	OpenVPN is a full-featured open source SSL VPN solution
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
@@ -46,8 +47,12 @@ install:	$(INSTALL_32)
 
 test:		$(TEST_32)
 
+# Build dependencies
 REQUIRED_PACKAGES += driver/network/header-tun
+
+# Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += library/lz4
 REQUIRED_PACKAGES += library/lzo
 REQUIRED_PACKAGES += library/security/openssl
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library

@@ -17,12 +17,12 @@ include ../../../make-rules/shared-macros.mk
 CMAKE= cmake
 
 COMPONENT_NAME=		percona-server
-COMPONENT_VERSION=	5.6.36-82.0
-IPS_COMPONENT_VERSION=	5.6.36.82.0
+COMPONENT_VERSION=	5.6.38-83.0
+IPS_COMPONENT_VERSION=	5.6.38.83.0
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_PROJECT_URL=	http://www.percona.com/
-COMPONENT_ARCHIVE_HASH=	sha256:4304ac45de79053128fb78f13527f483ec9cf1c9592498deeacbbe541216fc9d
+COMPONENT_ARCHIVE_HASH=	sha256:9152489f41e3371fe920eae7530dd587beec55c0ef909b33f47278916e963782
 COMPONENT_ARCHIVE_URL=	http://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-$(COMPONENT_VERSION)/source/tarball/$(COMPONENT_ARCHIVE)
 
 include $(WS_MAKE_RULES)/prep.mk
@@ -95,6 +95,6 @@ REQUIRED_PACKAGES += runtime/perl-522
 REQUIRED_PACKAGES += shell/bash
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math

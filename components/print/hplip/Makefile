@@ -25,7 +25,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         hplip
 COMPONENT_VERSION=      3.15.9
-COMPONENT_REVISION=     2
+COMPONENT_REVISION=     3
 COMPONENT_PROJECT_URL=	http://hplipopensource.com/hplip-web/index.html
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.gz
@@ -141,8 +141,8 @@ REQUIRED_PACKAGES += image/scanner/xsane/sane-backends
 REQUIRED_PACKAGES += library/print/cups-libs
 REQUIRED_PACKAGES += runtime/python-27
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/libdbus
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/usb/libusb

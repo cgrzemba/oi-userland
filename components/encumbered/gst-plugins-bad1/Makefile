@@ -16,8 +16,7 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= gst-plugins-bad1
-COMPONENT_VERSION= 1.12.0
-COMPONENT_REVISION= 2
+COMPONENT_VERSION= 1.12.4
 COMPONENT_SUMMARY= GNOME streaming media framework plugins
 COMPONENT_CLASSIFICATION= System/Multimedia Libraries
 COMPONENT_FMRI= library/audio/gstreamer1/plugin/bad
@@ -25,7 +24,7 @@ COMPONENT_SRC_NAME= gst-plugins-bad
 COMPONENT_SRC= $(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:11b73cfff1b315a8e9be1756435ea84937e7cb90afbab0e8e6975367dbfb8534
+  sha256:0c7857be16686d5c1ba6e34bd338664d3d4599d32714a8eca5c8a41a101e2d08
 COMPONENT_ARCHIVE_URL= \
   http://gstreamer.freedesktop.org/src/$(COMPONENT_SRC_NAME)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://gstreamer.freedesktop.org/
@@ -79,6 +78,10 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
+# Build dependencies
+REQUIRED_PACKAGES += system/header/header-drm
+
+# Auto-generated dependencies
 REQUIRED_PACKAGES += audio/faac
 REQUIRED_PACKAGES += audio/faad2
 REQUIRED_PACKAGES += compress/bzip2
@@ -94,8 +97,10 @@ REQUIRED_PACKAGES += library/audio/libmpcdec
 REQUIRED_PACKAGES += library/audio/openal
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gtk3
+REQUIRED_PACKAGES += library/desktop/pango
 REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += library/graphics/libvdpau
+REQUIRED_PACKAGES += library/ilmbase
 REQUIRED_PACKAGES += library/libofa
 REQUIRED_PACKAGES += library/libsndfile
 REQUIRED_PACKAGES += library/libwebp
@@ -111,9 +116,12 @@ REQUIRED_PACKAGES += library/video/libdvdread
 REQUIRED_PACKAGES += library/video/libmms
 REQUIRED_PACKAGES += library/video/libschroedinger
 REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/orc
 REQUIRED_PACKAGES += video/rtmpdump
 REQUIRED_PACKAGES += web/curl
 REQUIRED_PACKAGES += x11/library/libdrm
 REQUIRED_PACKAGES += x11/library/libx11
+REQUIRED_PACKAGES += x11/library/libxcb

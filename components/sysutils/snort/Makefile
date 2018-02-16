@@ -33,7 +33,7 @@ COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
     sha256:71b147125e96390a12f3d55796ed5073df77206bd3563d84d3e5a1f19e7d7a56
 COMPONENT_PROJECT_URL=	http://www.snort.org/
-COMPONENT_ARCHIVE_URL=	https://snort.org/downloads/snort/$(COMPONENT_ARCHIVE)
+COMPONENT_ARCHIVE_URL=	https://snort.org/downloads/archive/snort/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI=	diagnostic/snort
 COMPONENT_CLASSIFICATION=	Applications/Internet
 COMPONENT_LICENSE=	GPLv2, BSD, LGPLv2.1
@@ -66,3 +66,15 @@ build:		$(BUILD_32)
 install:	$(INSTALL_32)
 
 test:		$(NO_TESTS)
+
+# Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += compress/xz
+REQUIRED_PACKAGES += library/pcre
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/libdaq
+REQUIRED_PACKAGES += system/library/libdnet
+REQUIRED_PACKAGES += system/library/libpcap
+REQUIRED_PACKAGES += system/library/math

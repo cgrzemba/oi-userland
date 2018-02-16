@@ -16,7 +16,7 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= gst-plugins-good1
-COMPONENT_VERSION= 1.12.0
+COMPONENT_VERSION= 1.12.4
 COMPONENT_SUMMARY= GNOME streaming media framework plugins
 COMPONENT_CLASSIFICATION= System/Multimedia Libraries
 COMPONENT_FMRI= library/audio/gstreamer1/plugin/good
@@ -24,7 +24,7 @@ COMPONENT_SRC_NAME= gst-plugins-good
 COMPONENT_SRC= $(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:8a1d734db7338e00c28b794a7f0a5a9e67d1c5c8b0074075b50638207d372ebc
+  sha256:649f49bec60892d47ee6731b92266974c723554da1c6649f21296097715eb957
 COMPONENT_ARCHIVE_URL= \
   http://gstreamer.freedesktop.org/src/$(COMPONENT_SRC_NAME)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://gstreamer.freedesktop.org/
@@ -43,6 +43,11 @@ gcc_OPT = -O2
 PATH = $(PATH.gnu)
 
 CFLAGS += -I/usr/X11/include
+
+# build with the distribution preferred libjpeg implementation
+CFLAGS   += $(JPEG_CPPFLAGS) $(JPEG_CFLAGS)
+CXXFLAGS += $(JPEG_CPPFLAGS) $(JPEG_CXXFLAGS)
+LDFLAGS  += $(JPEG_LDFLAGS)
 
 CONFIGURE_OPTIONS += --sysconfdir=/etc
 CONFIGURE_OPTIONS.32 += --libexecdir=/usr/lib
@@ -66,11 +71,11 @@ install: $(INSTALL_32_and_64)
 
 test: $(TEST_32_and_64)
 
+# Auto-generated dependencies
 REQUIRED_PACKAGES += codec/flac
 REQUIRED_PACKAGES += codec/speex
 REQUIRED_PACKAGES += compress/bzip2
-REQUIRED_PACKAGES += image/library/libjpeg6
-REQUIRED_PACKAGES += image/library/libjpeg6-ijg
+REQUIRED_PACKAGES += image/library/libjpeg8-turbo
 REQUIRED_PACKAGES += image/library/libpng16
 REQUIRED_PACKAGES += library/aalib
 REQUIRED_PACKAGES += library/audio/gstreamer1

@@ -15,16 +15,25 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		driver-graphics-nvidia
-COMPONENT_VERSION=	340.102
+COMPONENT_VERSION=	340.104
+COMPONENT_REVISION=	1
 IPS_COMPONENT_VERSION=	0.$(COMPONENT_VERSION)
 COMPONENT_SRC=		NVIDIA-Solaris-x86-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).run
 COMPONENT_ARCHIVE_HASH= \
-	sha256:8d6acb83651df2a566c3eb10aebf03e752ab9dac988c5af750b5f0a211ae5936
+	sha256:1fb837b7047e6b08df2a5eb973ae70ea07e5194570b24b966d3f97572cb6a450
 COMPONENT_ARCHIVE_URL=	http://us.download.nvidia.com/solaris/$(COMPONENT_VERSION)/NVIDIA-Solaris-x86-$(COMPONENT_VERSION).run
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/ips.mk
+
+COMPONENT_POST_INSTALL_ACTION = ( \
+	$(CHMOD) u+w $(PROTO_DIR)/usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so.1 ; \
+	$(CHMOD) u+w $(PROTO_DIR)/usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so.1 ; \
+	/usr/bin/elfedit -e "dyn:rpath $(GCC_ROOT)/lib:/lib:/usr/lib" \
+		$(PROTO_DIR)/usr/X11/lib/modules/NVIDIA/libnvidia-wfb.so.1 ; \
+	/usr/bin/elfedit -e "dyn:rpath $(GCC_ROOT)/lib/$(MACH64):/lib/$(MACH64):/usr/lib/$(MACH64)"\
+		$(PROTO_DIR)/usr/X11/lib/modules/NVIDIA/$(MACH64)/libnvidia-wfb.so.1 ; )
 
 $(SOURCE_DIR)/.unpacked: download Makefile $(PATCHES)
 	$(RM) -r $(SOURCE_DIR)
@@ -41,6 +50,7 @@ $(INSTALL_32): 	$(BUILD_32)
 	    cp $(SOURCE_DIR)/NVDAgraphicsr/reloc/$$i $(PROTO_DIR)/$$i; done
 	rm -fr $(PROTO_DIR)/usr
 	cp -a $(SOURCE_DIR)/NVDAgraphics/reloc $(PROTO_DIR)/usr
+	$(COMPONENT_POST_INSTALL_ACTION)
 	$(TOUCH) $@
 
 build: $(BUILD_32)
@@ -59,7 +69,7 @@ REQUIRED_PACKAGES += library/desktop/gtk2
 REQUIRED_PACKAGES += library/desktop/pango
 REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/compatibility/links-xorg
 REQUIRED_PACKAGES += x11/library/libx11

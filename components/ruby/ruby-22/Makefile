@@ -26,13 +26,14 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		ruby
-COMPONENT_VERSION=	2.2.7
+COMPONENT_VERSION=	2.2.9
+COMPONENT_REVISION=     1
 COMPONENT_PROJECT_URL=	http://www.ruby-lang.org/
 COMPONENT_SRC=	\
 	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:234c8aee6543da9efd67008e6e7ee740d41ed57a52e797f65043c3b5ec3bcb53
+    sha256:313b44b1105589d00bb30b9cccf7da44d263fe20a2d8d269ada536d4a7ef285c
 COMPONENT_ARCHIVE_URL=	\
 	https://cache.ruby-lang.org/pub/ruby/2.2/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/ruby
@@ -69,10 +70,14 @@ COMPONENT_POST_INSTALL_ACTION += \
 	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" Solaris/gem.1-generic \
 	    > Solaris/gem.1 ; \
 	$(GSED) -e "s/RUBY_VER/$(RUBY_VER)/" \
-	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" Solaris/ruby.1.sedscript \
+	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" \
+	    Solaris/ruby.1.sedscript \
 	    > Solaris/ruby.1.sedscript.mod ; \
 	$(GSED) -e  "s/RUBY_VER/$(RUBY_VER)/" \
-	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" Solaris/rbconfig.sedscript \
+	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" \
+	    -e "s,%%CC%%,$(CC)," \
+	    -e "s,%%CXX%%,$(CXX)," \
+	    Solaris/rbconfig.sedscript \
 	    > Solaris/rbconfig.sedscript.mod ; \
 	$(GSED) -i -f Solaris/ruby.1.sedscript.mod \
 	    $(PROTORUBYDIR)/share/man/man1/ruby.1 ; \
@@ -120,8 +125,8 @@ build:		$(BUILD_32)
 
 install:	$(INSTALL_32)
 
-# 16208 tests, 2551501 assertions, 26 failures, 0 errors, 44 skips
-# Failed: FTPTest#test_abort, FTPTest#test_status, TestSprintfComb#test_format_float*
+# 16220 tests, 2553102 assertions, 27 failures, 0 errors, 44 skips
+# Failed: FTPTest#test_abort, FTPTest#test_status, TestSprintfComb#test_format_float*, TestException#test_machine_stackoverflow_by_define_method
 test:	$(TEST_32)
 
 REQUIRED_PACKAGES += library/database/gdbm
@@ -138,6 +143,6 @@ REQUIRED_PACKAGES += runtime/tcl-8
 REQUIRED_PACKAGES += runtime/tk-8
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libx11

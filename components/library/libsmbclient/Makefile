@@ -36,6 +36,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		samba
 COMPONENT_VERSION=	4.4.16
+COMPONENT_REVISION=	1
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_SUMMARY=	A library that permits GPLv2 applications to manipulate CIFS/SMB network resources
 COMPONENT_PROJECT_URL=	http://www.samba.org/
@@ -163,10 +164,9 @@ test:		$(NO_TESTS)
 clean::
 	$(RM) -r $(BUILD_DIR)
 
-REQUIRED_PACKAGES += library/gnu-libiconv
 REQUIRED_PACKAGES += library/gnutls-3
 REQUIRED_PACKAGES += library/openldap
 REQUIRED_PACKAGES += library/print/cups-libs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
 REQUIRED_PACKAGES += system/library/security/libgcrypt

@@ -27,6 +27,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= service-hacluster
 COMPONENT_VERSION= 1.0
+COMPONENT_REVISION= 1
 COMPONENT_FMRI= service/cluster/$(COMPONENT_NAME)
 COMPONENT_CLASSIFICATION= System/Services
 COMPONENT_PROJECT_URL= http://www.linux-ha.org/doc/dev-guides/ra-dev-guide.html
@@ -47,3 +48,7 @@ clean:
 
 REQUIRED_PACKAGES += application/cluster/corosync
 REQUIRED_PACKAGES += application/cluster/pacemaker
+
+# Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += shell/bash

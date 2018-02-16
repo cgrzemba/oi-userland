@@ -17,7 +17,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=	tntdb
 COMPONENT_VERSION=	1.3
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	2
 COMPONENT_SUMMARY=	C++ library to access SQL databases, easy and robust
 COMPONENT_SRC=	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
@@ -76,6 +76,6 @@ REQUIRED_PACKAGES += $(PG_BASEPKG)/developer
 REQUIRED_PACKAGES += database/sqlite-3
 REQUIRED_PACKAGES += library/cxxtools
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math

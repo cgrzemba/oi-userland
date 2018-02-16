@@ -23,13 +23,13 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		apache2
-COMPONENT_VERSION=	2.4.27
+COMPONENT_VERSION=	2.4.29
 COMPONENT_PROJECT_URL=	http://httpd.apache.org/
 COMPONENT_SRC_NAME=	httpd
 COMPONENT_SRC=		$(COMPONENT_SRC_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	\
-   sha256:346dd3d016ae5d7101016e68805150bdce9040a8d246c289aa70e68a7cd86b66
+   sha256:948e4a11278a5954698b880b30f401b1e9ab743713ee2c7280a54dd4ddd87085
 COMPONENT_ARCHIVE_URL=	http://archive.apache.org/dist/httpd/$(COMPONENT_ARCHIVE)
 COMPONENT_BUGDB=	utility/apache
 
@@ -120,6 +120,8 @@ install: $(INSTALL_32_and_64)
 
 test: $(NO_TESTS)
 
+# Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += library/apr
 REQUIRED_PACKAGES += library/apr-util
 REQUIRED_PACKAGES += library/apr-util/apr-ldap
@@ -132,9 +134,9 @@ REQUIRED_PACKAGES += library/openldap
 REQUIRED_PACKAGES += library/pcre
 REQUIRED_PACKAGES += library/security/openssl
 REQUIRED_PACKAGES += library/zlib
-REQUIRED_PACKAGES += runtime/lua
+REQUIRED_PACKAGES += runtime/lua-53
 REQUIRED_PACKAGES += runtime/perl-522
-REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += runtime/perl-524
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/security/gss

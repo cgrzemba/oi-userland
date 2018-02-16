@@ -24,16 +24,18 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		Python
-COMPONENT_VERSION=	2.7.13
-COMPONENT_REVISION=	2
+COMPONENT_VERSION=	2.7.14
+COMPONENT_REVISION=	1
 COMPONENT_PROJECT_URL=	http://python.org/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:35d543986882f78261f97787fd3e06274bfa6df29fac9b4a94f73930ff98f731
+    sha256:71ffb26e09e78650e424929b2b457b9c912ac216576e6bd9e7d204ed03296a66
 COMPONENT_ARCHIVE_URL=	$(COMPONENT_PROJECT_URL)ftp/python/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_SIG_URL=	$(COMPONENT_ARCHIVE_URL).asc
 COMPONENT_BUGDB=	utility/python
+
+CONFIGURE_FIX_LIBTOOL_RPATH = no
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -128,14 +130,15 @@ COMPONENT_TEST_TARGETS = test
 test:				$(TEST_32_and_64)
 
 # Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += compress/bzip2
 REQUIRED_PACKAGES += database/sqlite-3
 REQUIRED_PACKAGES += library/database/gdbm
 REQUIRED_PACKAGES += library/expat
 REQUIRED_PACKAGES += library/libffi
 REQUIRED_PACKAGES += library/ncurses
-REQUIRED_PACKAGES += library/python-2/pip-27
 REQUIRED_PACKAGES += library/python-2/tkinter-27
+REQUIRED_PACKAGES += library/python/pip-27
 REQUIRED_PACKAGES += library/readline
 REQUIRED_PACKAGES += library/security/openssl
 REQUIRED_PACKAGES += library/zlib
@@ -143,6 +146,5 @@ REQUIRED_PACKAGES += runtime/python-27
 REQUIRED_PACKAGES += runtime/python-27/tests
 REQUIRED_PACKAGES += runtime/tcl-8
 REQUIRED_PACKAGES += runtime/tk-8
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math

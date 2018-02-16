@@ -15,7 +15,7 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		stardict
-COMPONENT_VERSION=	3.0.3
+COMPONENT_VERSION=	3.0.4
 COMPONENT_REVISION=	1
 COMPONENT_PROJECT_URL=	http://www.stardict.org/
 COMPONENT_SUMMARY=	A powerful dictionary platform written in GTK+2
@@ -24,14 +24,14 @@ COMPONENT_CLASSIFICATION=	Applications/Accessories
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:9ba10a5b3dcdd02b81c7a138dac15903a6bc2355856f60338f3775e371472b73
+    sha256:c38b9d953fe0b2380a8aed4c98cb121ad83aff91a32af3c665198d8268b1dce8
 COMPONENT_ARCHIVE_URL=	ftp://tux.rainside.sk/gentoo/distfiles/$(COMPONENT_ARCHIVE)
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/configure.mk
-include $(WS_TOP)/make-rules/ips.mk
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/configure.mk
+include $(WS_MAKE_RULES)/ips.mk
 
-PATH=/usr/mariadb/5.5/bin:$(PATH.gnu)
+PATH=$(MYSQL_BINDIR):$(PATH.gnu)
 
 COMPONENT_PREP_ACTION =        ( cd $(@D)  && \
                                         autoreconf  -f -i )
@@ -41,10 +41,12 @@ CONFIGURE_OPTIONS+=	--enable-deprecations
 CONFIGURE_OPTIONS+=	--disable-festival
 CONFIGURE_OPTIONS+=	--disable-advertisement
 CONFIGURE_OPTIONS+=	--disable-gucharmap
+CONFIGURE_OPTIONS+=	--disable-gnome-support
 
-CPPFLAGS += -I/usr/mariadb/5.5/include
-LDFLAGS.32 += -L/usr/mariadb/5.5/lib -R/usr/mariadb/5.5/lib
-LDFLAGS += $(LDFLAGS.$(BITS))
+CPPFLAGS += -I$(MYSQL_INCDIR)
+LDFLAGS += -L$(MYSQL_LIBDIR) -R$(MYSQL_LIBDIR)
+
+CXXFLAGS += -std=c++11
 
 LDFLAGS += -lnsl -lsocket
 
@@ -57,22 +59,20 @@ install:	$(INSTALL_32)
 
 test:		$(NO_TESTS)
 
-REQUIRED_PACKAGES += gnome/config/gconf
+REQUIRED_PACKAGES += developer/gnome/gnome-doc-utils
+REQUIRED_PACKAGES += $(MYSQL_BASEPKG)/library
+
 REQUIRED_PACKAGES += library/c++/sigcpp
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
 REQUIRED_PACKAGES += library/desktop/gtk2
-REQUIRED_PACKAGES += library/desktop/libgnome
-REQUIRED_PACKAGES += library/desktop/libgnomeui
 REQUIRED_PACKAGES += library/desktop/pango
 REQUIRED_PACKAGES += library/glib2
-REQUIRED_PACKAGES += library/libbonobo
 REQUIRED_PACKAGES += library/libxml2
-REQUIRED_PACKAGES += library/orbit2
 REQUIRED_PACKAGES += library/speech/espeak
 REQUIRED_PACKAGES += library/spell-checking/enchant
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libx11

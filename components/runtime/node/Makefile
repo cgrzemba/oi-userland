@@ -21,7 +21,7 @@ COMPONENT_SUMMARY=	Evented I/O for V8 JavaScript.
 COMPONENT_CLASSIFICATION=	Development/Other Languages
 COMPONENT_PROJECT_URL=	http://nodejs.org
 COMPONENT_VERSION=	0.12.18
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	2
 COMPONENT_LICENSE=	BSD-like, MIT, Apache
 COMPONENT_LICENSE_FILE=	node.license	
 COMPONENT_SRC=		$(COMPONENT_NAME)-v$(COMPONENT_VERSION)
@@ -40,6 +40,8 @@ CONFIG_SHELL =	$(PYTHON)
 
 COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D))
 
+CXX += -std=c++98
+
 CONFIGURE_SCRIPT =	$(@D)/configure
 
 CONFIGURE_OPTIONS= --prefix=/usr/node/0.12
@@ -52,5 +54,5 @@ test:		$(NO_TESTS)
 
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
 REQUIRED_PACKAGES += system/library/math

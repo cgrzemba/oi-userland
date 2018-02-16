@@ -21,11 +21,11 @@ COMPONENT_FMRI=		runtime/nodejs-8
 COMPONENT_SUMMARY=	Evented I/O for V8 JavaScript.
 COMPONENT_CLASSIFICATION=	Development/Other Languages
 COMPONENT_PROJECT_URL=	http://nodejs.org
-COMPONENT_VERSION=	8.5.0
+COMPONENT_VERSION=	8.9.4
 COMPONENT_LICENSE=	BSD-like, MIT, Apache
 COMPONENT_SRC=		$(COMPONENT_NAME)-v$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	sha256:e1cde5d8e5049e7e1b61aef128f26162059d885dc8cab5014bf5cbf693f75c3c
+COMPONENT_ARCHIVE_HASH=	sha256:6cdcde9c9c1ca9f450a0b24eafa229ca759e576daa0fae892ce74d541ecdc86f
 COMPONENT_ARCHIVE_URL=	http://nodejs.org/dist/v$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 
 include $(WS_MAKE_RULES)/prep.mk
@@ -49,7 +49,8 @@ install:	$(INSTALL_32)
 
 test:       $(NO_TESTS)
 
+# Auto-generated dependencies:
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
 REQUIRED_PACKAGES += system/library/math

@@ -18,7 +18,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= gcc
 COMPONENT_VERSION= 5.4.0
-COMPONENT_REVISION= 6
+COMPONENT_REVISION= 7
 THIS_GCC_PKGVERSION= $(COMPONENT_VERSION)-OI-$(COMPONENT_REVISION)
 COMPONENT_MAJOR_VERSION=	$(shell echo $(COMPONENT_VERSION) | $(GSED) -e 's/\([0-9]\+\)\.[0-9]\+.*/\1/')
 COMPONENT_FMRI= developer/gcc-5
@@ -83,6 +83,8 @@ PATH=/usr/gnu/bin:/usr/bin:/usr/perl5/bin
 PARCH = $(MACH:i386=i386-pc)
 GNU_ARCH = $(PARCH:sparc=sparc-sun)-solaris$(SOLARIS_VERSION)
 PKG_MACROS += GNU_ARCH="$(GNU_ARCH)"
+
+COMPONENT_PREP_ACTION = ( cd $(SOURCE_DIR_1) && autoreconf -vif )
 
 # Build recipe borrowed from OmniOS
 COMMON_ENV=  LD_OPTIONS="-zignore -zcombreloc -i"

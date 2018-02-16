@@ -18,7 +18,7 @@ include ../../../make-rules/shared-macros.mk
 COMPONENT_NAME= icu
 COMPONENT_VERSION= 55.1
 COMPONENT_UVERSION= 55_1
-COMPONENT_REVISION= 3
+COMPONENT_REVISION= 4
 COMPONENT_SUMMARY= International Components for Unicode
 COMPONENT_SRC= $(COMPONENT_NAME)
 COMPONENT_ARCHIVE= icu4c-$(COMPONENT_UVERSION)-src.tgz
@@ -54,6 +54,6 @@ test: $(NO_TESTS)
 
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
-REQUIRED_PACKAGES += system/library/gcc-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
+REQUIRED_PACKAGES += system/library/gcc-6-runtime
 REQUIRED_PACKAGES += system/library/math

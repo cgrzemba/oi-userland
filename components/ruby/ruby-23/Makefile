@@ -26,13 +26,14 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		ruby
-COMPONENT_VERSION=	2.3.4
+COMPONENT_VERSION=	2.3.6
+COMPONENT_REVISION=     1
 COMPONENT_PROJECT_URL=	http://www.ruby-lang.org/
 COMPONENT_SRC=	\
 	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:341cd9032e9fd17c452ed8562a8d43f7e45bfe05e411d0d7d627751dd82c578c
+    sha256:e0d969ac22d4a403c1204868bb9c0d068aa35045bb3934cf50b17b7f66059f56
 
 COMPONENT_ARCHIVE_URL=	\
 	https://cache.ruby-lang.org/pub/ruby/2.3/$(COMPONENT_ARCHIVE)
@@ -73,7 +74,10 @@ COMPONENT_POST_INSTALL_ACTION += \
 	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" Solaris/ruby.1.sedscript \
 	    > Solaris/ruby.1.sedscript.mod ; \
 	$(GSED) -e  "s/RUBY_VER/$(RUBY_VER)/" \
-	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" Solaris/rbconfig.sedscript \
+	    -e "s/RUBY_LIB_VER/$(RUBY_LIB_VER)/" \
+	    -e "s,%%CC%%,$(CC)," \
+	    -e "s,%%CXX%%,$(CXX)," \
+	    Solaris/rbconfig.sedscript \
 	    > Solaris/rbconfig.sedscript.mod ; \
 	$(GSED) -i -f Solaris/ruby.1.sedscript.mod \
 	    $(PROTORUBYDIR)/share/man/man1/ruby.1 ; \
@@ -89,6 +93,10 @@ LD_B_DIRECT=
 # don't use LD_Z_IGNORE: causes ruby linker problems with
 # unreferenced symbol tgetent in libreadline, similar to bug #15617172
 LD_Z_IGNORE=
+
+# Set the locale to generate documentation correctly
+COMPONENT_BUILD_ENV += LC_ALL=en_US.UTF-8
+COMPONENT_INSTALL_ENV += LC_ALL=en_US.UTF-8
 
 CONFIGURE_PREFIX =	$(USRDIR)/$(COMPONENT_NAME)/$(RUBY_VER)
 
@@ -121,10 +129,12 @@ build:		$(BUILD_32)
 
 install:	$(INSTALL_32)
 
-# 15975 tests, 2239039 assertions, 0 failures, 1 errors, 46 skips
+# 16026 tests, 2239031 assertions, 0 failures, 1 errors, 47 skips
 # RuntimeError: Error in TestGem#test_self_install_in_rescue
 test:	$(TEST_32)
 
+# Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += library/database/gdbm
 REQUIRED_PACKAGES += library/libffi
 REQUIRED_PACKAGES += library/libyaml
@@ -137,8 +147,7 @@ REQUIRED_PACKAGES += runtime/ruby-23/ruby-tk
 REQUIRED_PACKAGES += runtime/tcl-8
 REQUIRED_PACKAGES += runtime/tk-8
 REQUIRED_PACKAGES += shell/bash
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/g++-4-runtime
+REQUIRED_PACKAGES += system/library/g++-6-runtime
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libx11

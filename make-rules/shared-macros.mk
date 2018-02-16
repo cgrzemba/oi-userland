@@ -44,10 +44,15 @@ PATH = $(PATH.illumos)
 #EXTERNAL_ARCHIVE_MIRROR = \
 #	http://static.opensolaris.org/action/browse/userland/tarball/userland
 
+DLC_ARCHIVE_MIRROR = http://dlc.openindiana.org/oi-userland/source-archives
+
 # Default to looking for source archives on the internal mirror and the external
 # mirror before we hammer on the community source archive repositories.
 #export DOWNLOAD_SEARCH_PATH +=	$(INTERNAL_ARCHIVE_MIRROR)
 #export DOWNLOAD_SEARCH_PATH +=	$(EXTERNAL_ARCHIVE_MIRROR)
+
+# Look for file at DLC server as last resort
+export DOWNLOAD_FALLBACK_PATH =  $(DLC_ARCHIVE_MIRROR)
 
 # The workspace starts at the mercurial root
 ifeq ($(origin WS_TOP), undefined)
@@ -507,7 +512,7 @@ export CCACHE := $(shell \
         fi; \
     fi)
 
-GCC_VERSION =	4.9
+GCC_VERSION =	6
 GCC_ROOT =	/usr/gcc/$(GCC_VERSION)
 
 CC.studio.32 =	$(SPRO_VROOT)/bin/cc
@@ -660,7 +665,7 @@ PKG_MACROS +=   PERL_VERSION=$(PERL_VERSION)
 
 # Config magic for Postgres/EnterpriseDB/...
 # Default DB version is the oldest one, for hopefully best built complatibility
-PG_VERSION ?=   9.3
+PG_VERSION ?=   9.4
 PG_IMPLEM ?=    postgres
 PG_VERNUM =     $(subst .,,$(PG_VERSION))
 # For dependencies, including REQUIRED_PACKAGES if needed
@@ -737,11 +742,11 @@ JPEG_LDFLAGS =     $(JPEG_LDFLAGS.$(BITS))
 
 # This is the default BUILD version of tcl
 # Not necessarily the system's default version, i.e. /usr/bin/tclsh
-TCL_VERSION =  8.5
-TCLSH.8.5.i386.32 =	/usr/bin/i86/tclsh8.5
-TCLSH.8.5.i386.64 =	/usr/bin/amd64/tclsh8.5
-TCLSH.8.5.sparc.32 =	/usr/bin/sparcv7/tclsh8.5
-TCLSH.8.5.sparc.64 =	/usr/bin/sparcv9/tclsh8.5
+TCL_VERSION =  8.6
+TCLSH.8.6.i386.32 =	/usr/bin/i86/tclsh8.6
+TCLSH.8.6.i386.64 =	/usr/bin/amd64/tclsh8.6
+TCLSH.8.6.sparc.32 =	/usr/bin/sparcv7/tclsh8.6
+TCLSH.8.6.sparc.64 =	/usr/bin/sparcv9/tclsh8.6
 TCLSH =		$(TCLSH.$(TCL_VERSION).$(MACH).$(BITS))
 
 CCSMAKE =	/usr/ccs/bin/make
@@ -824,6 +829,9 @@ CPP_LARGEFILES =		$(CPP_LARGEFILES.$(BITS))
 # functions. Also avoids the component's #define _POSIX_C_SOURCE to some value
 # we currently do not support.
 CPP_POSIX =	-D_POSIX_C_SOURCE=200112L -D_POSIX_PTHREAD_SEMANTICS
+
+# XPG7 mode.  This option enables XPG7 conformance, plus extensions.
+CPP_XPG7MODE=	-D_XOPEN_SOURCE=700 -D__EXTENSIONS__=1 -D_XPG7
 
 # XPG6 mode.  This option enables XPG6 conformance, plus extensions.
 # Amongst other things, this option will cause system calls like
@@ -1182,6 +1190,9 @@ COMPONENT_HOOK ?=	echo $(COMPONENT_NAME) $(COMPONENT_VERSION)
 
 component-hook:
 	@$(COMPONENT_HOOK)
+
+# Add default dependency to SUNWcs
+REQUIRED_PACKAGES += SUNWcs
 
 #
 # Packages with tools that are required to build Userland components
