@@ -19,7 +19,7 @@ include ../../../make-rules/shared-macros.mk
 COMPONENT_NAME=		boost
 COMPONENT_VERSION=	1.64.0
 COMPONENT_SRC_VERSION=	1_64_0
-COMPONENT_REVISION=     1
+COMPONENT_REVISION=     2
 COMPONENT_FMRI=		system/library/boost
 COMPONENT_CLASSIFICATION=System/Libraries
 COMPONENT_SUMMARY=	boost - free peer-reviewed portable C++ source libraries
@@ -38,22 +38,50 @@ include $(WS_MAKE_RULES)/modules.mk
 
 PATH=$(GCC_ROOT)/bin:$(PATH.illumos)
 
-LIBDIR.32= $(USRLIBDIR)
-LIBDIR.64= $(USRLIBDIR64)
+LIBDIR.32= $(LIBDIR)
+LIBDIR.64= $(LIBDIR)/$(MACH64)
 LIBDIR= $(LIBDIR.$(BITS))
+
+MPI_LIBDIR.32 = /usr/lib/mpich/gcc/lib
+MPI_LIBDIR.64 = /usr/lib/$(MACH64)/mpich/gcc/lib
+MPI_LIBDIR = $(MPI_LIBDIR.$(BITS))
 
 DOCDIR=$(USRSHAREDOCDIR)/$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 
-GTAR=$(GNUBIN)/tar
-BJAM=./bjam --v2 -d+2 -q address-model=$(BITS) \
-	cflags="$(CFLAGS)" cxxflags="$(CXXFLAGS)" \
-	-sBUILD="release <threading>single/multi" \
-	--prefix=$(PROTO_DIR)$(USRDIR) \
-	--libdir=$(PROTO_DIR)$(LIBDIR) \
-	-sGCC_ROOT_DIRECTORY=$(GCC_ROOT) -sGCC=gcc -sGXX=g++ \
-	--user-config=./user-config.jam --without-fiber
+CXXFLAGS += -std=c++11
+CXXFLAGS += -D_PTHREADS
+CXXFLAGS += -D_POSIX_THREADS
+LDFLAGS += -stdlib=libc++
 
-COMPONENT_BUILD_ENV += PATH="$(PATH)" CC="$(CC)" CXX="$(CXX)" LDFLAGS="$(LDFLAGS)"
+GTAR=$(GNUBIN)/tar
+
+BJAM_BUILD+=		variant=release
+BJAM_BUILD+=		threading=multi
+BJAM_BUILD+=		link=shared,static
+BJAM_BUILD+=		linkflags=$(LDFLAGS)
+BJAM_BUILD+=		library-path=/usr/gcc/$(GCC_VERSION_MAJOR)/lib/$(MACH64)
+BJAM_BUILD+=		dll-path=/usr/gcc/$(GCC_VERSION_MAJOR)/lib/$(MACH64)
+BJAM_BUILD+=		library-path=$(MPI_LIBDIR)
+BJAM_BUILD+=		dll-path=$(MPI_LIBDIR)
+BJAM_BUILD+=		address-model=$(BITS)
+
+BJAM_ARGS+=		--v2
+BJAM_ARGS+=		-d+2
+BJAM_ARGS+=		-q
+BJAM_ARGS+=		--toolset=clang
+BJAM_ARGS+=		${BJAM_BUILD}
+BJAM_ARGS+=		cxxflags=-std=c++11
+BJAM_ARGS+=		--prefix=$(PROTO_DIR)$(USRDIR)
+BJAM_ARGS+=		--libdir=$(PROTO_DIR)$(USRLIBDIR.$(BITS))
+BJAM_ARGS+=		--user-config=./user-config.jam
+BJAM_ARGS+=		--without-fiber
+
+
+BJAM=./bjam $(BJAM_ARGS)
+
+CC=/usr/bin/clang
+CXX=/usr/bin/clang++
+COMPONENT_BUILD_ENV += PATH="$(PATH)" CC="$(CC)" CXX="$(CXX)" CXXFLAGS="$(CXXFLAGS)" LDFLAGS="$(LDFLAGS)"
 
 # Force CPU detection to workaround failure in some virtual environments
 COMPONENT_BUILD_ENV += OPENBLAS_CORETYPE=Prescott
@@ -65,9 +93,11 @@ COMPONENT_PRE_BUILD_ACTION = \
 BJAM_BUILD_ARGS:= $(filter -j%,$(COMPONENT_BUILD_ARGS))
 
 COMPONENT_BUILD_ACTION = \
-	    		./bootstrap.sh --prefix=$(USRDIR) --libdir=$(LIBDIR) \
-				--with-toolset=gcc --with-icu=$(USRDIR); \
-			echo 'using mpi ;' > ./user-config.jam; \
+	    		./bootstrap.sh --prefix=$(USRDIR) --libdir=$(USRLIBDIR.$(BITS)) \
+				--with-toolset=clang \
+				--with-icu=$(USRDIR); \
+			echo 'using clang ;' > ./user-config.jam; \
+			echo 'using mpi ;' >> ./user-config.jam; \
 			$(BJAM) $(BJAM_BUILD_ARGS) release stage
 
 COMPONENT_POST_BUILD_ACTION = \
