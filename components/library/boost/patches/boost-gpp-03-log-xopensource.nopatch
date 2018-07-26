@@ -1,0 +1,76 @@
+--- boost_1_63_0/libs/log/build/Jamfile.v2.orig	2017-04-09 06:21:11.924221737 +0200
++++ boost_1_63_0/libs/log/build/Jamfile.v2	2017-04-09 06:22:17.784445352 +0200
+@@ -253,7 +253,7 @@
+         <target-os>linux:<define>_XOPEN_SOURCE=600
+         <target-os>linux:<library>rt
+ 
+-        <target-os>solaris:<define>_XOPEN_SOURCE=500 # Solaris headers are broken and cannot be included in C++ when _XOPEN_SOURCE=600
++        <target-os>solaris:<define>_XOPEN_SOURCE=600 # If it were true why would we need to patch your ass all over again...
+         <target-os>solaris:<define>__EXTENSIONS__
+         <target-os>solaris:<library>socket
+         <target-os>solaris:<library>nsl
+diff --git a/boost/python/detail/python22_fixed.h b/boost/python/detail/python22_fixed.h
+index 32bf941..fd76446 100644
+--- a/boost/python/detail/python22_fixed.h
++++ b/boost/python/detail/python22_fixed.h
+@@ -28,7 +28,7 @@
+    define is switched off. */
+ #if 0
+ #ifndef _XOPEN_SOURCE
+-# define _XOPEN_SOURCE  500
++# define _XOPEN_SOURCE  600
+ #endif
+ #endif
+ 
+diff --git a/libs/asio/test/Jamfile.v2 b/libs/asio/test/Jamfile.v2
+index 8cd33b9..14be194 100644
+--- a/libs/asio/test/Jamfile.v2
++++ b/libs/asio/test/Jamfile.v2
+@@ -47,7 +47,7 @@ project
+     <threading>multi
+     <os>LINUX:<define>_XOPEN_SOURCE=600
+     <os>LINUX:<define>_GNU_SOURCE=1
+-    <os>SOLARIS:<define>_XOPEN_SOURCE=500
++    <os>SOLARIS:<define>_XOPEN_SOURCE=600
+     <os>SOLARIS:<define>__EXTENSIONS__
+     <os>SOLARIS:<library>socket
+     <os>SOLARIS:<library>nsl
+diff --git a/libs/log/config/atomic-int32/Jamfile.jam b/libs/log/config/atomic-int32/Jamfile.jam
+index 24b4536..7a48407 100644
+--- a/libs/log/config/atomic-int32/Jamfile.jam
++++ b/libs/log/config/atomic-int32/Jamfile.jam
+@@ -14,7 +14,7 @@ project /boost/log/atomic-int32
+         <target-os>linux:<define>_XOPEN_SOURCE=600
+         <target-os>linux:<define>_GNU_SOURCE=1
+ 
+-        <target-os>solaris:<define>_XOPEN_SOURCE=500
++        <target-os>solaris:<define>_XOPEN_SOURCE=600
+         <target-os>solaris:<define>__EXTENSIONS__
+ 
+         <target-os>hpux,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
+diff --git a/libs/log/config/native-syslog/Jamfile.jam b/libs/log/config/native-syslog/Jamfile.jam
+index 7be949a..198cf8f 100644
+--- a/libs/log/config/native-syslog/Jamfile.jam
++++ b/libs/log/config/native-syslog/Jamfile.jam
+@@ -14,7 +14,7 @@ project /boost/log/native-syslog
+         <target-os>linux:<define>_XOPEN_SOURCE=600
+         <target-os>linux:<define>_GNU_SOURCE=1
+ 
+-        <target-os>solaris:<define>_XOPEN_SOURCE=500
++        <target-os>solaris:<define>_XOPEN_SOURCE=600
+         <target-os>solaris:<define>__EXTENSIONS__
+ 
+         <target-os>hpux,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
+diff --git a/libs/log/config/pthread-mutex-robust/Jamfile.jam b/libs/log/config/pthread-mutex-robust/Jamfile.jam
+index 42efeff..2ca35fc 100644
+--- a/libs/log/config/pthread-mutex-robust/Jamfile.jam
++++ b/libs/log/config/pthread-mutex-robust/Jamfile.jam
+@@ -14,7 +14,7 @@ project /boost/log/pthread-mutex-robust
+         <target-os>linux:<define>_XOPEN_SOURCE=600
+         <target-os>linux:<define>_GNU_SOURCE=1
+ 
+-        <target-os>solaris:<define>_XOPEN_SOURCE=500
++        <target-os>solaris:<define>_XOPEN_SOURCE=600
+         <target-os>solaris:<define>__EXTENSIONS__
+ 
+         <target-os>hpux,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED

@@ -1,0 +1,17 @@
+diff --git a/boost/config/platform/solaris.hpp b/boost/config/platform/solaris.hpp
+index 6e4efc9..de26299 100644
+--- a/boost/config/platform/solaris.hpp
++++ b/boost/config/platform/solaris.hpp
+@@ -19,9 +19,9 @@
+ //
+ // pthreads don't actually work with gcc unless _PTHREADS is defined:
+ //
+-#if defined(__GNUC__) && defined(_POSIX_THREADS) && !defined(_PTHREADS)
+-# undef BOOST_HAS_PTHREADS
+-#endif
++// #if defined(__GNUC__) && defined(_POSIX_THREADS) && !defined(_PTHREADS)
++// # undef BOOST_HAS_PTHREADS
++// #endif
+ 
+ #define BOOST_HAS_STDINT_H 
+ #define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE 
