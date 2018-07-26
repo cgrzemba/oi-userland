@@ -1,0 +1,45 @@
+diff --git a/plugins/api/CMakeLists.txt b/plugins/api/CMakeLists.txt
+index 036ed06..b53752e 100644
+--- a/plugins/api/CMakeLists.txt
++++ b/plugins/api/CMakeLists.txt
+@@ -54,7 +54,7 @@ foreach(PLUGIN ${IRODS_API_PLUGINS})
+     ${CMAKE_SOURCE_DIR}/server/icat/include
+     ${CMAKE_SOURCE_DIR}/server/re/include
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+     ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/include
+     )
+ 
+diff --git a/plugins/api/CMakeLists.txt b/plugins/api/CMakeLists.txt
+index b53752e..e35a863 100644
+--- a/plugins/api/CMakeLists.txt
++++ b/plugins/api/CMakeLists.txt
+@@ -64,10 +64,12 @@ foreach(PLUGIN ${IRODS_API_PLUGINS})
+     ${IRODS_API_PLUGIN_LINK_LIBRARIES_${PLUGIN}}
+     irods_plugin_dependencies
+     irods_common
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib/libarchive.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib/${LIB_SUFFIX}/libarchive.so
+     ${OPENSSL_CRYPTO_LIBRARY}
++    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    m c++abi
+     )
+ 
+   target_compile_definitions(${PLUGIN} PRIVATE ${IRODS_API_PLUGIN_COMPILE_DEFINITIONS_${PLUGIN}} ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+diff --git a/plugins/api/CMakeLists.txt b/plugins/api/CMakeLists.txt
+index e35a863..30eb355 100644
+--- a/plugins/api/CMakeLists.txt
++++ b/plugins/api/CMakeLists.txt
+@@ -75,6 +75,7 @@ foreach(PLUGIN ${IRODS_API_PLUGINS})
+   target_compile_definitions(${PLUGIN} PRIVATE ${IRODS_API_PLUGIN_COMPILE_DEFINITIONS_${PLUGIN}} ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+   target_compile_options(${PLUGIN} PRIVATE -Wno-write-strings)
+   set_property(TARGET ${PLUGIN} PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
++  set_target_properties(${PLUGIN} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH_USE_LINK_PATH TRUE INSTALL_RPATH "/usr/gcc/6/lib${LIB_SUFFIX}")
+ endforeach()
+ 
+ install(

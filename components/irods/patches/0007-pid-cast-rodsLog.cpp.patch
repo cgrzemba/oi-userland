@@ -1,0 +1,22 @@
+diff --git a/lib/core/src/rodsLog.cpp b/lib/core/src/rodsLog.cpp
+index d2b99d7..6eed146 100644
+--- a/lib/core/src/rodsLog.cpp
++++ b/lib/core/src/rodsLog.cpp
+@@ -133,7 +133,7 @@ rodsLog( int level, const char *formatStr, ... ) {
+         rstrcpy( timeBuf, ctime( &timeValue ), 90 );
+         timeBuf[19] = '\0';
+         myPid = getpid();
+-        snprintf( extraInfo, 100 - 1, "%s pid:%d ", timeBuf + 4, myPid );
++        snprintf( extraInfo, 100 - 1, "%s pid:%d ", timeBuf + 4, int(myPid) );
+     }
+     else {
+ #ifndef windows_platform
+@@ -267,7 +267,7 @@ rodsLogAndErrorMsg( int level, rError_t *myError, int status,
+         rstrcpy( timeBuf, ctime( &timeValue ), 90 );
+         timeBuf[19] = '\0';
+         myPid = getpid();
+-        snprintf( extraInfo, 100 - 1, "%s pid:%d ", timeBuf + 4, myPid );
++        snprintf( extraInfo, 100 - 1, "%s pid:%d ", timeBuf + 4, int(myPid) );
+     }
+     else {
+         if ( level <= LOG_ERROR || level == LOG_SQL ) {

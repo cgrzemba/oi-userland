@@ -1,0 +1,13 @@
+diff --git a/server/auth/src/irodsPamAuthCheck.cpp b/server/auth/src/irodsPamAuthCheck.cpp
+index e151888..7c1eaa5 100644
+--- a/server/auth/src/irodsPamAuthCheck.cpp
++++ b/server/auth/src/irodsPamAuthCheck.cpp
+@@ -45,7 +45,7 @@ namespace {
+     };
+ 
+     int
+-    null_conv( int num_msg, const struct pam_message **msg,
++    null_conv( int num_msg, struct pam_message **msg,
+                struct pam_response **resp, void *appdata_ptr ) {
+ 
+         const AppData &appdata = *static_cast<AppData*>( appdata_ptr );

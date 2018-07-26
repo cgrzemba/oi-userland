@@ -1,0 +1,45 @@
+diff --git a/plugins/microservices/administration/CMakeLists.txt b/plugins/microservices/administration/CMakeLists.txt
+index 353691e..93475ca 100644
+--- a/plugins/microservices/administration/CMakeLists.txt
++++ b/plugins/microservices/administration/CMakeLists.txt
+@@ -32,10 +32,12 @@ foreach(PLUGIN ${IRODS_MICROSERVICE_ADMINISTRATION_PLUGINS})
+     PRIVATE
+     irods_server
+     irods_common
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib${LIB_SUFFIX}/libjansson.so
+     ${CURL_LIBRARIES}
++    /usr/gcc/6/lib${LIB_SUFFIX}/libstdc++.so
++    m c++abi
+     )
+ 
+   target_compile_definitions(${PLUGIN} PRIVATE ENABLE_RE ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+diff --git a/plugins/microservices/administration/CMakeLists.txt b/plugins/microservices/administration/CMakeLists.txt
+index 93475ca..adb3e92 100644
+--- a/plugins/microservices/administration/CMakeLists.txt
++++ b/plugins/microservices/administration/CMakeLists.txt
+@@ -23,7 +23,7 @@ foreach(PLUGIN ${IRODS_MICROSERVICE_ADMINISTRATION_PLUGINS})
+     ${CMAKE_SOURCE_DIR}/server/icat/include
+     ${CMAKE_SOURCE_DIR}/server/re/include
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+     ${CURL_INCLUDE_DIRS}
+     )
+ 
+diff --git a/plugins/microservices/administration/CMakeLists.txt b/plugins/microservices/administration/CMakeLists.txt
+index adb3e92..15b09ad 100644
+--- a/plugins/microservices/administration/CMakeLists.txt
++++ b/plugins/microservices/administration/CMakeLists.txt
+@@ -32,6 +32,7 @@ foreach(PLUGIN ${IRODS_MICROSERVICE_ADMINISTRATION_PLUGINS})
+     PRIVATE
+     irods_server
+     irods_common
++    irods_plugin_dependencies
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
+     ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib${LIB_SUFFIX}/libjansson.so

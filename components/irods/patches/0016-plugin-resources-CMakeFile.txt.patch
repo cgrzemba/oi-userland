@@ -1,0 +1,45 @@
+diff --git a/plugins/resources/CMakeLists.txt b/plugins/resources/CMakeLists.txt
+index 946cd41..4cdbd69 100644
+--- a/plugins/resources/CMakeLists.txt
++++ b/plugins/resources/CMakeLists.txt
+@@ -99,10 +99,12 @@ foreach(PLUGIN ${IRODS_RESOURCE_PLUGINS})
+     PRIVATE
+     irods_server
+     irods_common
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib/libarchive.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib${LIB_SUFFIX}/libarchive.so
+     ${OPENSSL_CRYPTO_LIBRARY}
++    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    m c++abi
+     )
+ 
+   target_compile_definitions(${PLUGIN} PRIVATE ENABLE_RE ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+diff --git a/plugins/resources/CMakeLists.txt b/plugins/resources/CMakeLists.txt
+index 4cdbd69..bc5b4cf 100644
+--- a/plugins/resources/CMakeLists.txt
++++ b/plugins/resources/CMakeLists.txt
+@@ -91,7 +91,7 @@ foreach(PLUGIN ${IRODS_RESOURCE_PLUGINS})
+     ${CMAKE_SOURCE_DIR}/server/re/include
+     ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/include
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+     )
+ 
+   target_link_libraries(
+diff --git a/plugins/resources/CMakeLists.txt b/plugins/resources/CMakeLists.txt
+index 98afed1..d9b2b5f 100644
+--- a/plugins/resources/CMakeLists.txt
++++ b/plugins/resources/CMakeLists.txt
+@@ -99,6 +99,7 @@ foreach(PLUGIN ${IRODS_RESOURCE_PLUGINS})
+     PRIVATE
+     irods_server
+     irods_common
++    irods_plugin_dependencies
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
+     ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib${LIB_SUFFIX}/libarchive.so

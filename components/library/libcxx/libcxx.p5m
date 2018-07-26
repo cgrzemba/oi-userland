@@ -1,0 +1,204 @@
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+
+#
+# Copyright 2017 <contributor>
+#
+
+set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+
+license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
+
+
+file path=usr/lib/$(MACH64)/libc++.so
+file path=usr/lib/$(MACH64)/libc++abi.so
+file path=usr/lib/libc++.so pkg.depend.bypass-generate=lib/libgcc_s\.so\.1
+file path=usr/lib/libc++abi.so pkg.depend.bypass-generate=lib/libgcc_s\.so\.1
+file path=usr/include/c++/v1/__bit_reference
+file path=usr/include/c++/v1/__bsd_locale_defaults.h
+file path=usr/include/c++/v1/__bsd_locale_fallbacks.h
+file path=usr/include/c++/v1/__config
+file path=usr/include/c++/v1/__cxxabi_config.h
+file path=usr/include/c++/v1/__debug
+file path=usr/include/c++/v1/__functional_03
+file path=usr/include/c++/v1/__functional_base
+file path=usr/include/c++/v1/__functional_base_03
+file path=usr/include/c++/v1/__hash_table
+file path=usr/include/c++/v1/__libcpp_version
+file path=usr/include/c++/v1/__locale
+file path=usr/include/c++/v1/__mutex_base
+file path=usr/include/c++/v1/__nullptr
+file path=usr/include/c++/v1/__refstring
+file path=usr/include/c++/v1/__split_buffer
+file path=usr/include/c++/v1/__sso_allocator
+file path=usr/include/c++/v1/__std_stream
+file path=usr/include/c++/v1/__string
+file path=usr/include/c++/v1/__threading_support
+file path=usr/include/c++/v1/__tree
+file path=usr/include/c++/v1/__tuple
+file path=usr/include/c++/v1/__undef_min_max
+file path=usr/include/c++/v1/algorithm
+file path=usr/include/c++/v1/any
+file path=usr/include/c++/v1/array
+file path=usr/include/c++/v1/atomic
+file path=usr/include/c++/v1/bitset
+file path=usr/include/c++/v1/cassert
+file path=usr/include/c++/v1/ccomplex
+file path=usr/include/c++/v1/cctype
+file path=usr/include/c++/v1/cerrno
+file path=usr/include/c++/v1/cfenv
+file path=usr/include/c++/v1/cfloat
+file path=usr/include/c++/v1/chrono
+file path=usr/include/c++/v1/cinttypes
+file path=usr/include/c++/v1/ciso646
+file path=usr/include/c++/v1/climits
+file path=usr/include/c++/v1/clocale
+file path=usr/include/c++/v1/cmath
+file path=usr/include/c++/v1/codecvt
+file path=usr/include/c++/v1/complex
+file path=usr/include/c++/v1/complex.h
+file path=usr/include/c++/v1/condition_variable
+file path=usr/include/c++/v1/csetjmp
+file path=usr/include/c++/v1/csignal
+file path=usr/include/c++/v1/cstdarg
+file path=usr/include/c++/v1/cstdbool
+file path=usr/include/c++/v1/cstddef
+file path=usr/include/c++/v1/cstdint
+file path=usr/include/c++/v1/cstdio
+file path=usr/include/c++/v1/cstdlib
+file path=usr/include/c++/v1/cstring
+file path=usr/include/c++/v1/ctgmath
+file path=usr/include/c++/v1/ctime
+file path=usr/include/c++/v1/ctype.h
+file path=usr/include/c++/v1/cwchar
+file path=usr/include/c++/v1/cwctype
+file path=usr/include/c++/v1/cxxabi.h
+file path=usr/include/c++/v1/deque
+file path=usr/include/c++/v1/errno.h
+file path=usr/include/c++/v1/exception
+file path=usr/include/c++/v1/experimental/__config
+file path=usr/include/c++/v1/experimental/__memory
+file path=usr/include/c++/v1/experimental/algorithm
+file path=usr/include/c++/v1/experimental/any
+file path=usr/include/c++/v1/experimental/chrono
+file path=usr/include/c++/v1/experimental/deque
+file path=usr/include/c++/v1/experimental/dynarray
+file path=usr/include/c++/v1/experimental/filesystem
+file path=usr/include/c++/v1/experimental/forward_list
+file path=usr/include/c++/v1/experimental/functional
+file path=usr/include/c++/v1/experimental/iterator
+file path=usr/include/c++/v1/experimental/list
+file path=usr/include/c++/v1/experimental/map
+file path=usr/include/c++/v1/experimental/memory_resource
+file path=usr/include/c++/v1/experimental/numeric
+file path=usr/include/c++/v1/experimental/optional
+file path=usr/include/c++/v1/experimental/propagate_const
+file path=usr/include/c++/v1/experimental/ratio
+file path=usr/include/c++/v1/experimental/regex
+file path=usr/include/c++/v1/experimental/set
+file path=usr/include/c++/v1/experimental/string
+file path=usr/include/c++/v1/experimental/string_view
+file path=usr/include/c++/v1/experimental/system_error
+file path=usr/include/c++/v1/experimental/tuple
+file path=usr/include/c++/v1/experimental/type_traits
+file path=usr/include/c++/v1/experimental/unordered_map
+file path=usr/include/c++/v1/experimental/unordered_set
+file path=usr/include/c++/v1/experimental/utility
+file path=usr/include/c++/v1/experimental/vector
+file path=usr/include/c++/v1/ext/__hash
+file path=usr/include/c++/v1/ext/hash_map
+file path=usr/include/c++/v1/ext/hash_set
+file path=usr/include/c++/v1/float.h
+file path=usr/include/c++/v1/forward_list
+file path=usr/include/c++/v1/fstream
+file path=usr/include/c++/v1/functional
+file path=usr/include/c++/v1/future
+file path=usr/include/c++/v1/initializer_list
+file path=usr/include/c++/v1/inttypes.h
+file path=usr/include/c++/v1/iomanip
+file path=usr/include/c++/v1/ios
+file path=usr/include/c++/v1/iosfwd
+file path=usr/include/c++/v1/iostream
+file path=usr/include/c++/v1/istream
+file path=usr/include/c++/v1/iterator
+file path=usr/include/c++/v1/limits
+file path=usr/include/c++/v1/limits.h
+file path=usr/include/c++/v1/list
+file path=usr/include/c++/v1/locale
+file path=usr/include/c++/v1/locale.h
+file path=usr/include/c++/v1/map
+file path=usr/include/c++/v1/math.h
+file path=usr/include/c++/v1/memory
+file path=usr/include/c++/v1/module.modulemap
+file path=usr/include/c++/v1/mutex
+file path=usr/include/c++/v1/new
+file path=usr/include/c++/v1/numeric
+file path=usr/include/c++/v1/optional
+file path=usr/include/c++/v1/ostream
+file path=usr/include/c++/v1/queue
+file path=usr/include/c++/v1/random
+file path=usr/include/c++/v1/ratio
+file path=usr/include/c++/v1/regex
+file path=usr/include/c++/v1/scoped_allocator
+file path=usr/include/c++/v1/set
+file path=usr/include/c++/v1/setjmp.h
+file path=usr/include/c++/v1/shared_mutex
+file path=usr/include/c++/v1/sstream
+file path=usr/include/c++/v1/stack
+file path=usr/include/c++/v1/stdbool.h
+file path=usr/include/c++/v1/stddef.h
+file path=usr/include/c++/v1/stdexcept
+file path=usr/include/c++/v1/stdint.h
+file path=usr/include/c++/v1/stdio.h
+file path=usr/include/c++/v1/stdlib.h
+file path=usr/include/c++/v1/streambuf
+file path=usr/include/c++/v1/string
+file path=usr/include/c++/v1/string.h
+file path=usr/include/c++/v1/string_view
+file path=usr/include/c++/v1/strstream
+file path=usr/include/c++/v1/support/android/locale_bionic.h
+file path=usr/include/c++/v1/support/ibm/limits.h
+file path=usr/include/c++/v1/support/ibm/locale_mgmt_aix.h
+file path=usr/include/c++/v1/support/ibm/support.h
+file path=usr/include/c++/v1/support/ibm/xlocale.h
+file path=usr/include/c++/v1/support/musl/xlocale.h
+file path=usr/include/c++/v1/support/newlib/xlocale.h
+file path=usr/include/c++/v1/support/solaris/floatingpoint.h
+file path=usr/include/c++/v1/support/solaris/wchar.h
+file path=usr/include/c++/v1/support/solaris/xlocale.h
+file path=usr/include/c++/v1/support/win32/limits_win32.h
+file path=usr/include/c++/v1/support/win32/locale_mgmt_win32.h
+file path=usr/include/c++/v1/support/win32/locale_win32.h
+file path=usr/include/c++/v1/support/win32/support.h
+file path=usr/include/c++/v1/support/xlocale/__nop_locale_mgmt.h
+file path=usr/include/c++/v1/support/xlocale/__posix_l_fallback.h
+file path=usr/include/c++/v1/support/xlocale/__strtonum_fallback.h
+file path=usr/include/c++/v1/support/xlocale/xlocale.h
+file path=usr/include/c++/v1/system_error
+file path=usr/include/c++/v1/tgmath.h
+file path=usr/include/c++/v1/thread
+file path=usr/include/c++/v1/tuple
+file path=usr/include/c++/v1/type_traits
+file path=usr/include/c++/v1/typeindex
+file path=usr/include/c++/v1/typeinfo
+file path=usr/include/c++/v1/unordered_map
+file path=usr/include/c++/v1/unordered_set
+file path=usr/include/c++/v1/utility
+file path=usr/include/c++/v1/valarray
+file path=usr/include/c++/v1/variant
+file path=usr/include/c++/v1/vector
+file path=usr/include/c++/v1/wchar.h
+file path=usr/include/c++/v1/wctype.h

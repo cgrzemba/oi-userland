@@ -1,0 +1,34 @@
+diff --git a/plugins/network/CMakeLists.txt b/plugins/network/CMakeLists.txt
+index f47ea66..b5e2c74 100644
+--- a/plugins/network/CMakeLists.txt
++++ b/plugins/network/CMakeLists.txt
+@@ -73,11 +73,13 @@ foreach(PLUGIN ${IRODS_NETWORK_PLUGINS})
+       ${IRODS_NETWORK_LINK_LIBRARIES_${TYPE}}
+       irods_plugin_dependencies
+       irods_common
+-      ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-      ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-      ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib/libarchive.so
++      ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
++      ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
++      ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib${LIB_SUFFIX}/libarchive.so
+       ${OPENSSL_CRYPTO_LIBRARY}
+       ${OPENSSL_SSL_LIBRARY}
++      /usr/gcc/6/lib${LIB_SUFFIX}/libstdc++.so
++      m c++abi
+       )
+ 
+     target_compile_definitions(${IRODS_CURRENT_PLUGIN_TARGET} PRIVATE ${IRODS_NETWORK_COMPILE_DEFINTIONS_${TYPE}} ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+diff --git a/plugins/network/CMakeLists.txt b/plugins/network/CMakeLists.txt
+index b5e2c74..5049001 100644
+--- a/plugins/network/CMakeLists.txt
++++ b/plugins/network/CMakeLists.txt
+@@ -62,7 +62,7 @@ foreach(PLUGIN ${IRODS_NETWORK_PLUGINS})
+       ${CMAKE_SOURCE_DIR}/server/icat/include
+       ${CMAKE_SOURCE_DIR}/server/re/include
+       ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-      ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++      ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+       ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/include
+       ${OPENSSL_INCLUDE_DIR}
+       )

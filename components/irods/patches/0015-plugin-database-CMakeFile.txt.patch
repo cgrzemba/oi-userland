@@ -1,0 +1,45 @@
+diff --git a/plugins/database/CMakeLists.txt b/plugins/database/CMakeLists.txt
+index 1626489..ce04abe 100644
+--- a/plugins/database/CMakeLists.txt
++++ b/plugins/database/CMakeLists.txt
+@@ -89,9 +89,11 @@ foreach(PLUGIN ${IRODS_DATABASE_PLUGINS})
+     irods_server
+     irods_plugin_dependencies
+     irods_common
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_regex.so
+     ${ODBC_LIBRARY}
++    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    m socket nsl c++abi
+     )
+ 
+   target_compile_definitions(${PLUGIN} PRIVATE ENABLE_RE ${IRODS_DATABASE_PLUGIN_COMPILE_DEFINITIONS_${PLUGIN}} ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+diff --git a/plugins/database/CMakeLists.txt b/plugins/database/CMakeLists.txt
+index ce04abe..502d180 100644
+--- a/plugins/database/CMakeLists.txt
++++ b/plugins/database/CMakeLists.txt
+@@ -80,7 +80,8 @@ foreach(PLUGIN ${IRODS_DATABASE_PLUGINS})
+     ${CMAKE_SOURCE_DIR}/server/re/include
+     ${CMAKE_SOURCE_DIR}/plugins/database/include
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
++    /usr/include/odbc
+     )
+ 
+   target_link_libraries(
+diff --git a/plugins/database/CMakeLists.txt b/plugins/database/CMakeLists.txt
+index b8a1209..7b7aed5 100644
+--- a/plugins/database/CMakeLists.txt
++++ b/plugins/database/CMakeLists.txt
+@@ -50,7 +50,7 @@ foreach(PLUGIN ${IRODS_DATABASE_PLUGINS})
+ 
+   add_custom_command(
+     OUTPUT ${CMAKE_BINARY_DIR}/icatSysTables_${PLUGIN}.sql
+-    COMMAND cpp -E -P -D${PLUGIN} ${CMAKE_BINARY_DIR}/plugins/database/src/icatSysTables.sql.pp ${CMAKE_BINARY_DIR}/icatSysTables_${PLUGIN}.sql
++    COMMAND ${CMAKE_CPP_COMPILER} -E -P -D${PLUGIN} ${CMAKE_BINARY_DIR}/plugins/database/src/icatSysTables.sql.pp ${CMAKE_BINARY_DIR}/icatSysTables_${PLUGIN}.sql
+     MAIN_DEPENDENCY ${CMAKE_BINARY_DIR}/plugins/database/src/icatSysTables.sql.pp
+     )
+   add_custom_target(IRODS_PHONY_TARGET_icatSysTables_${PLUGIN}.sql ALL DEPENDS ${CMAKE_BINARY_DIR}/icatSysTables_${PLUGIN}.sql) # Forces execution of custom_command

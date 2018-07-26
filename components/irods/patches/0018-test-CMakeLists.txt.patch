@@ -1,0 +1,10 @@
+diff --git a/test/c_api_test/CMakeLists.txt b/test/c_api_test/CMakeLists.txt
+index f2f8811..6add698 100644
+--- a/test/c_api_test/CMakeLists.txt
++++ b/test/c_api_test/CMakeLists.txt
+@@ -16,4 +16,5 @@ target_link_libraries(
+   PRIVATE
+   RodsAPIs
+   ${CMAKE_THREAD_LIBS_INIT}
++  c++abi socket nsl
+   )

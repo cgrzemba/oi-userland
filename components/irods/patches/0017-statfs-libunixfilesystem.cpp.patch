@@ -1,0 +1,29 @@
+diff --git a/plugins/resources/unixfilesystem/libunixfilesystem.cpp b/plugins/resources/unixfilesystem/libunixfilesystem.cpp
+index cd93f0f..aaae7ca 100644
+--- a/plugins/resources/unixfilesystem/libunixfilesystem.cpp
++++ b/plugins/resources/unixfilesystem/libunixfilesystem.cpp
+@@ -415,7 +415,12 @@ defined(linux_platform)
+ 
+ irods::error stat_vault_path(
+     const std::string& _path,
++#if defined(solaris_platform)
++    struct statvfs&     _sb ) {
++#else
+     struct statfs&     _sb ) {
++#endif
++
+     namespace bfs = boost::filesystem;
+ 
+     bfs::path vp( _path );
+@@ -434,7 +439,11 @@ irods::error stat_vault_path(
+                     msg );
+     }
+ 
++#if defined(solaris_platform)
++    int err = statvfs( vp.string().c_str(), &_sb );
++#else
+     int err = statfs( vp.string().c_str(), &_sb );
++#endif
+     if( err < 0 ) {
+         std::stringstream msg;
+         msg << "statfs failed for ["

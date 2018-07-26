@@ -1,0 +1,45 @@
+diff --git a/plugins/rule_engines/CMakeLists.txt b/plugins/rule_engines/CMakeLists.txt
+index 37b16be..d326acf 100644
+--- a/plugins/rule_engines/CMakeLists.txt
++++ b/plugins/rule_engines/CMakeLists.txt
+@@ -67,10 +67,12 @@ foreach(PLUGIN ${IRODS_RULE_ENGINE_PLUGINS})
+     PRIVATE
+     irods_server
+     irods_common
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_regex.so
+     dl
++    /usr/gcc/6/lib${LIB_SUFFIX}/libstdc++.so
++    m c++abi
+     )
+ 
+   target_compile_definitions(${PLUGIN} PRIVATE ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+diff --git a/plugins/rule_engines/CMakeLists.txt b/plugins/rule_engines/CMakeLists.txt
+index d326acf..3b12335 100644
+--- a/plugins/rule_engines/CMakeLists.txt
++++ b/plugins/rule_engines/CMakeLists.txt
+@@ -58,7 +58,7 @@ foreach(PLUGIN ${IRODS_RULE_ENGINE_PLUGINS})
+     ${CMAKE_SOURCE_DIR}/server/icat/include
+     ${CMAKE_SOURCE_DIR}/server/re/include
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+     ${OPENSSL_INCLUDE_DIR}
+     )
+ 
+diff --git a/plugins/rule_engines/CMakeLists.txt b/plugins/rule_engines/CMakeLists.txt
+index 3b12335..25d0ba3 100644
+--- a/plugins/rule_engines/CMakeLists.txt
++++ b/plugins/rule_engines/CMakeLists.txt
+@@ -67,6 +67,7 @@ foreach(PLUGIN ${IRODS_RULE_ENGINE_PLUGINS})
+     PRIVATE
+     irods_server
+     irods_common
++    irods_plugin_dependencies
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_regex.so

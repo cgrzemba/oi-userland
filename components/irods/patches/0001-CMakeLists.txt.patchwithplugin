@@ -1,0 +1,661 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index dcc6b47..41b5f82 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -27,14 +27,14 @@ macro(IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIE
+   list(APPEND IRODS_PACKAGE_DEPENDENCIES_LIST irods-externals-${DEPENDENCY_SUBDIRECTORY})
+ endmacro()
+ 
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH(CLANG clang3.8-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH(CPPZMQ cppzmq4.1-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(ARCHIVE libarchive3.3.2-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(AVRO avro1.7.7-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(BOOST boost1.60.0-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(CLANG_RUNTIME clang-runtime3.8-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(JANSSON jansson2.7-0)
+-IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(ZMQ zeromq4-14.1.3-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(ARCHIVE libarchive3.3.2-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(AVRO avro1.7.7-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(BOOST boost1.60.0-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(CLANG_RUNTIME clang-runtime3.8-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(JANSSON jansson2.7-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH_ADD_TO_IRODS_PACKAGE_DEPENDENCIES_LIST(ZMQ zeromq4-14.1.3-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH(CLANG clang3.8-0)
++# IRODS_MACRO_CHECK_DEPENDENCY_SET_FULLPATH(CPPZMQ cppzmq4.1-0)
+ 
+ string(REPLACE ";" ", " IRODS_PACKAGE_DEPENDENCIES_STRING "${IRODS_PACKAGE_DEPENDENCIES_LIST}")
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 41b5f82..07f408b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -55,7 +55,7 @@ endif()
+ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ set(CMAKE_INSTALL_RPATH ${IRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME}/lib)
+ 
+-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -Wl,--export-dynamic") # export-dynamic so stacktrace entries from executables have function names
++set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
+ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
+ add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 07f408b..7a54bc2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -216,8 +216,8 @@ configure_file(
+   )
+ 
+ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+-include(GetGitRevisionDescription)
+-get_git_head_revision(IRODS_GIT_REFSPEC IRODS_GIT_SHA1)
++# include(GetGitRevisionDescription)
++# get_git_head_revision(IRODS_GIT_REFSPEC IRODS_GIT_SHA1)
+ configure_file(
+   ${CMAKE_SOURCE_DIR}/VERSION.json.dist.in
+   ${CMAKE_BINARY_DIR}/VERSION.json.dist
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7a54bc2..c78b337 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -426,8 +426,8 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/server/icat/include
+   ${CMAKE_SOURCE_DIR}/server/re/include
+   ${CMAKE_SOURCE_DIR}/server/drivers/include
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+   ${OPENSSL_INCLUDE_DIR}
+   )
+ set_property(TARGET irods_client PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+@@ -683,9 +683,9 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/server/drivers/include
+   ${CMAKE_SOURCE_DIR}/server/icat/include
+   ${CMAKE_SOURCE_DIR}/server/re/include
+-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++  ${IRODS_EXTERNALS_FULLPATH_AVRO}/include/avro
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+   ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
+   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
+   ${OPENSSL_INCLUDE_DIR}
+@@ -776,8 +776,8 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/server/icat/include
+   ${CMAKE_SOURCE_DIR}/server/re/include
+   ${CMAKE_SOURCE_DIR}/server/drivers/include
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
+   )
+ set_property(TARGET irods_common PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ set_property(TARGET irods_common PROPERTY VERSION ${IRODS_VERSION})
+@@ -830,8 +830,8 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/server/icat/include
+   ${CMAKE_SOURCE_DIR}/server/re/include
+   ${CMAKE_SOURCE_DIR}/server/drivers/include
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+   )
+ set_property(TARGET irods_plugin_dependencies PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ set_property(TARGET irods_plugin_dependencies PROPERTY VERSION ${IRODS_VERSION})
+@@ -1120,8 +1120,8 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/server/icat/include
+   ${CMAKE_SOURCE_DIR}/server/re/include
+   ${CMAKE_SOURCE_DIR}/server/drivers/include
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+   ${OPENSSL_INCLUDE_DIR}
+   )
+ set_property(TARGET RodsAPIs PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+@@ -1191,9 +1191,9 @@ foreach(EXECUTABLE ${IRODS_MAIN_EXECUTABLES})
+     ${CMAKE_SOURCE_DIR}/lib/hasher/include
+     ${CMAKE_SOURCE_DIR}/lib/api/include
+     ${CMAKE_SOURCE_DIR}/lib/rbudp/include
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
+-    ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
++    ${IRODS_EXTERNALS_FULLPATH_AVRO}/include/avro
+     ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
+     ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
+     ${OPENSSL_INCLUDE_DIR}
+@@ -1246,9 +1246,9 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/lib/hasher/include
+   ${CMAKE_SOURCE_DIR}/lib/api/include
+   ${CMAKE_SOURCE_DIR}/lib/rbudp/include
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
+-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
++  ${IRODS_EXTERNALS_FULLPATH_AVRO}/include/avro
+   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
+   ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
+   ${OPENSSL_INCLUDE_DIR}
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c78b337..f548ea5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -80,7 +80,7 @@ set(IRODS_VERSION "${IRODS_VERSION_MAJOR}.${IRODS_VERSION_MINOR}.${IRODS_VERSION
+ 
+ set(IRODS_CXX_STANDARD 14)
+ 
+-set(IRODS_PLATFORM_STRING linux_platform)
++set(IRODS_PLATFORM_STRING solaris_platform)
+ set(IRODS_COMPILE_DEFINITIONS ${IRODS_PLATFORM_STRING} _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 _LARGE_FILES _LARGEFILE64_SOURCE BOOST_SYSTEM_NO_DEPRECATED)
+ 
+ if (NOT IRODS_LINUX_DISTRIBUTION_NAME)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f548ea5..be5762e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -754,6 +754,7 @@ add_library(
+ target_link_libraries(
+   irods_common
+   PRIVATE
++  -L/usr/gcc/6/lib
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_program_options.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_random.so
+@@ -763,6 +764,7 @@ target_link_libraries(
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_DL_LIBS}
++  m nsl socket
+   )
+ target_include_directories(
+   irods_common
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index be5762e..de04f16 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -65,7 +65,7 @@ include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
+ find_package(Threads REQUIRED)
+ find_package(OpenSSL REQUIRED)
+ if (NOT PAM_LIBRARY)
+-  find_library(PAM_LIBRARY pam)
++  find_library(PAM_LIBRARY pam )
+   if (PAM_LIBRARY)
+     message(STATUS "Found pam: ${PAM_LIBRARY}")
+   else()
+@@ -73,6 +73,8 @@ if (NOT PAM_LIBRARY)
+   endif()
+ endif()
+ 
++find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib NO_DEFAULT_PATH )
++
+ set(IRODS_VERSION_MAJOR "4")
+ set(IRODS_VERSION_MINOR "2")
+ set(IRODS_VERSION_PATCH "3")
+@@ -754,7 +756,7 @@ add_library(
+ target_link_libraries(
+   irods_common
+   PRIVATE
+-  -L/usr/gcc/6/lib
++  ${STDC++_LIBRARY}  
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_program_options.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_random.so
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index de04f16..7a67e25 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,7 +59,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
+ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
+ add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
+-link_libraries(c++abi)
++# link_libraries(c++abi)
+ include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
+ 
+ find_package(Threads REQUIRED)
+@@ -405,13 +405,13 @@ target_link_libraries(
+   PRIVATE
+   irods_plugin_dependencies
+   irods_common
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_chrono.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_thread.so
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
+-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_THREAD_LIBS_INIT}
+@@ -658,14 +658,14 @@ target_link_libraries(
+   PRIVATE
+   irods_common
+   irods_plugin_dependencies
+-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_chrono.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_thread.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
+-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
++  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_DL_LIBS}
+@@ -757,12 +757,12 @@ target_link_libraries(
+   irods_common
+   PRIVATE
+   ${STDC++_LIBRARY}  
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_program_options.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_random.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_program_options.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_random.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_DL_LIBS}
+@@ -817,9 +817,9 @@ target_link_libraries(
+   irods_plugin_dependencies
+   PRIVATE
+   irods_common
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_random.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_random.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
+   ${CMAKE_DL_LIBS}
+   )
+ target_include_directories(
+@@ -1102,12 +1102,12 @@ add_library(
+ target_link_libraries(
+   RodsAPIs
+   PRIVATE
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_chrono.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_thread.so
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_DL_LIBS}
+@@ -1168,14 +1168,14 @@ foreach(EXECUTABLE ${IRODS_MAIN_EXECUTABLES})
+     irods_common
+     irods_plugin_dependencies
+     irods_server
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_thread.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_chrono.so
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
+-    ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
+-    ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++    ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
++    ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+     ${OPENSSL_CRYPTO_LIBRARY}
+     ${OPENSSL_SSL_LIBRARY}
+     rt
+@@ -1223,14 +1223,14 @@ target_link_libraries(
+   irods_client
+   irods_common
+   irods_plugin_dependencies
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_thread.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_chrono.so
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
+-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
+-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
++  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${OPENSSL_SSL_LIBRARY}
+   rt
+@@ -1291,19 +1291,19 @@ target_link_libraries(
+   irods_client
+   irods_plugin_dependencies
+   irods_common
+-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_thread.so
+-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
+-  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
+-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
++  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
++  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
++  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   )
+ set_property(TARGET genOSAuth PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ target_compile_definitions(genOSAuth PRIVATE ${IRODS_COMPILE_DEFINITIONS})
+ target_compile_options(genOSAuth PRIVATE -Wno-write-strings)
+ 
+ set(IRODS_HOME_DIRECTORY var/lib/irods)
+-set(IRODS_PLUGINS_DIRECTORY usr/lib/irods/plugins)
++set(IRODS_PLUGINS_DIRECTORY usr/lib/irods/${LIB_SUFFIX}/plugins)
+ 
+ add_subdirectory(plugins/api)
+ add_subdirectory(plugins/auth)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 73daa65..330296e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -73,7 +73,8 @@ if (NOT PAM_LIBRARY)
+   endif()
+ endif()
+ 
+-find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib NO_DEFAULT_PATH )
++# find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
++find_library(STDC++_LIBRARY c++ PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
+ 
+ set(IRODS_VERSION_MAJOR "4")
+ set(IRODS_VERSION_MINOR "2")
+@@ -411,7 +412,7 @@ target_link_libraries(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
+-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
++  -lzmq
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_THREAD_LIBS_INIT}
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 330296e..e6bd9fd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -59,7 +59,6 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
+ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
+ add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
+-# link_libraries(c++abi)
+ include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
+ 
+ find_package(Threads REQUIRED)
+@@ -74,7 +73,8 @@ if (NOT PAM_LIBRARY)
+ endif()
+ 
+ # find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
+-find_library(STDC++_LIBRARY c++ PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
++find_library(STDC++_LIBRARY NAMES c++ c++abi PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
++# link_libraries(c++abi)
+ 
+ set(IRODS_VERSION_MAJOR "4")
+ set(IRODS_VERSION_MINOR "2")
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e6bd9fd..855d45f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -74,7 +74,7 @@ endif()
+ 
+ # find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
+ find_library(STDC++_LIBRARY NAMES c++ c++abi PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
+-# link_libraries(c++abi)
++find_library(STDC++ABI_LIBRARY NAMES c++abi PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
+ 
+ set(IRODS_VERSION_MAJOR "4")
+ set(IRODS_VERSION_MINOR "2")
+@@ -412,7 +412,7 @@ target_link_libraries(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
+-  -lzmq
++  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_THREAD_LIBS_INIT}
+@@ -758,6 +758,7 @@ target_link_libraries(
+   irods_common
+   PRIVATE
+   ${STDC++_LIBRARY}  
++  ${STDC++ABI_LIBRARY}  
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_program_options.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_random.so
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 855d45f..0bac8ad 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -838,6 +838,7 @@ target_include_directories(
+   ${CMAKE_SOURCE_DIR}/server/drivers/include
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
++  /usr/include/gssapi
+   )
+ set_property(TARGET irods_plugin_dependencies PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ set_property(TARGET irods_plugin_dependencies PROPERTY VERSION ${IRODS_VERSION})
+@@ -1129,6 +1130,7 @@ target_include_directories(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/include/boost
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+   ${OPENSSL_INCLUDE_DIR}
++  /usr/include/gssapi
+   )
+ set_property(TARGET RodsAPIs PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ target_compile_definitions(RodsAPIs PRIVATE ${IRODS_COMPILE_DEFINITIONS})
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0bac8ad..de46be7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -436,7 +436,7 @@ target_include_directories(
+ set_property(TARGET irods_client PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ set_property(TARGET irods_client PROPERTY VERSION ${IRODS_VERSION})
+ set_property(TARGET irods_client PROPERTY SOVERSION ${IRODS_VERSION})
+-target_compile_options(irods_client PRIVATE -Wno-write-strings)
++target_compile_options(irods_client PRIVATE -Wno-write-strings -D_PTHREADS)
+ target_compile_definitions(irods_client PRIVATE ${IRODS_COMPILE_DEFINITIONS})
+ 
+ 
+@@ -823,6 +823,7 @@ target_link_libraries(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_random.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
+   ${CMAKE_DL_LIBS}
++  m c++abi
+   )
+ target_include_directories(
+   irods_plugin_dependencies
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index de46be7..03c16f5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -416,6 +416,7 @@ target_link_libraries(
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_THREAD_LIBS_INIT}
++  m c++abi
+   )
+ target_include_directories(
+   irods_client
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 03c16f5..e278e5f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -412,11 +412,12 @@ target_link_libraries(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
+   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_THREAD_LIBS_INIT}
+-  m c++abi
++  m c++abi socket nsl
+   )
+ target_include_directories(
+   irods_client
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e278e5f..50e4805 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1298,6 +1298,7 @@ target_link_libraries(
+   irods_client
+   irods_plugin_dependencies
+   irods_common
++  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
+   ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e278e5f..bb39458 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -699,7 +699,7 @@ set_property(TARGET irods_server PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ set_property(TARGET irods_server PROPERTY VERSION ${IRODS_VERSION})
+ set_property(TARGET irods_server PROPERTY SOVERSION ${IRODS_VERSION})
+ target_compile_definitions(irods_server PRIVATE ENABLE_RE RODS_CLERVER ${IRODS_COMPILE_DEFINITIONS})
+-target_compile_options(irods_server PRIVATE -Wno-write-strings)
++target_compile_options(irods_server PRIVATE -Wno-write-strings -D_PTHREADS)
+ 
+ 
+ set(
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e278e5f..290ec27 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -668,6 +668,7 @@ target_link_libraries(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
++  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
+   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_SSL_LIBRARY}
+   ${OPENSSL_CRYPTO_LIBRARY}
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 59c6b5e..c8a53c6 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -674,6 +674,7 @@ target_link_libraries(
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${CMAKE_DL_LIBS}
+   rt
++  m socket nsl c++abi
+   ${CMAKE_THREAD_LIBS_INIT}
+   )
+ target_include_directories(
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 46abef0..ee2f10a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1139,7 +1139,7 @@ target_include_directories(
+   )
+ set_property(TARGET RodsAPIs PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ target_compile_definitions(RodsAPIs PRIVATE ${IRODS_COMPILE_DEFINITIONS})
+-target_compile_options(RodsAPIs PRIVATE -Wno-write-strings)
++target_compile_options(RodsAPIs PRIVATE -Wno-write-strings -D_PTHREADS)
+ 
+ set(
+   IRODS_MAIN_EXECUTABLE_IRODSSERVER_SOURCES
+@@ -1184,13 +1184,14 @@ foreach(EXECUTABLE ${IRODS_MAIN_EXECUTABLES})
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
+     ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
+     ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
++    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
+     ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+     ${OPENSSL_CRYPTO_LIBRARY}
+     ${OPENSSL_SSL_LIBRARY}
+     rt
+     ${CMAKE_THREAD_LIBS_INIT}
+     ${CMAKE_DL_LIBS}
+-    m
++    m socket nsl c++abi
+     )
+   target_include_directories(
+     ${EXECUTABLE}
+@@ -1218,7 +1219,7 @@ foreach(EXECUTABLE ${IRODS_MAIN_EXECUTABLES})
+     ENABLE_RE
+     ${IRODS_COMPILE_DEFINITIONS}
+     )
+-  target_compile_options(${EXECUTABLE} PRIVATE -Wno-write-strings)
++  target_compile_options(${EXECUTABLE} PRIVATE -Wno-write-strings -D_PTHREADS)
+ endforeach()
+ 
+ add_executable(
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 669bb29..5225ac0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1279,6 +1279,7 @@ target_link_libraries(
+   irodsPamAuthCheck
+   PRIVATE
+   ${PAM_LIBRARY}
++  c++abi
+   )
+ set_property(TARGET irodsPamAuthCheck PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5225ac0..4fd00f5 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1240,13 +1240,14 @@ target_link_libraries(
+   ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
+   ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
+   ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
++  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
+   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
+   ${OPENSSL_CRYPTO_LIBRARY}
+   ${OPENSSL_SSL_LIBRARY}
+   rt
+   ${CMAKE_THREAD_LIBS_INIT}
+   ${CMAKE_DL_LIBS}
+-  m
++  m socket nsl c++abi
+   )
+ target_include_directories(
+   irodsReServer
+@@ -1269,7 +1270,7 @@ target_include_directories(
+   )
+ set_property(TARGET irodsReServer PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
+ target_compile_definitions(irodsReServer PRIVATE ${IRODS_COMPILE_DEFINITIONS})
+-target_compile_options(irodsReServer PRIVATE -Wno-write-strings)
++target_compile_options(irodsReServer PRIVATE -Wno-write-strings  -D_PTHREADS)
+ 
+ add_executable(
+   irodsPamAuthCheck
