@@ -1,0 +1,48 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b605e9a..f207226 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,8 +1,6 @@
+ cmake_minimum_required(VERSION 3.5.0 FATAL_ERROR) #CPACK_DEBIAN_<COMPONENT>_PACKAGE_NAME
+ include(${CMAKE_SOURCE_DIR}/cmake/RequireOutOfSourceBuild.cmake)
+ 
+-find_package(IRODS 4.2.3 EXACT REQUIRED CONFIG)
+-
+ set(CMAKE_C_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang)
+ set(CMAKE_CXX_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang++)
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f207226..778a4cb 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -98,12 +98,12 @@ foreach(EXECUTABLE ${IRODS_CLIENT_ICOMMANDS_EXECUTABLES})
+     irods_client
+     irods_plugin_dependencies
+     irods_common
+-    ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_program_options.so
+-    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
+-    ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
++    ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib${LIB_SUFFIX}/libavrocpp.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_program_options.so
++    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib${LIB_SUFFIX}/libjansson.so
++    ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib${LIB_SUFFIX}/libzmq.so
+     )
+   target_include_directories(
+     ${EXECUTABLE}
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 778a4cb..3d01460 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -31,6 +31,7 @@ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++")
+ set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++")
+ add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-parameter)
+ link_libraries(c++abi)
++link_directories(/usr/gcc/6/lib${LIB_SUFFIX})
+ include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
+ 
+ set(
