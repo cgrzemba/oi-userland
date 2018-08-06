@@ -1,0 +1,13 @@
+diff --git a/src/ips.cpp b/src/ips.cpp
+index 9aadbad..1b0fe30 100644
+--- a/src/ips.cpp
++++ b/src/ips.cpp
+@@ -245,7 +245,7 @@ initCondForProcStat( rodsArguments_t *rodsArgs, procStatInp_t *procStatInp ) {
+         return USER__NULL_INPUT_ERR;
+     }
+ 
+-    bzero( procStatInp, sizeof( procStatInp_t ) );
++    memset( procStatInp, 0, sizeof( procStatInp_t ) );
+ 
+     if ( rodsArgs == NULL ) {
+         return 0;

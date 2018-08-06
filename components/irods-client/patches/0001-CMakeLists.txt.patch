@@ -46,3 +46,125 @@ index 778a4cb..3d01460 100644
  include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
  
  set(
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d3a4140..fe00394 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,10 +1,10 @@
+ cmake_minimum_required(VERSION 3.5.0 FATAL_ERROR) #CPACK_DEBIAN_<COMPONENT>_PACKAGE_NAME
+ include(${CMAKE_SOURCE_DIR}/cmake/RequireOutOfSourceBuild.cmake)
+ 
+-set(CMAKE_C_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang)
+-set(CMAKE_CXX_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang++)
++# set(CMAKE_C_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang)
++# set(CMAKE_CXX_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang++)
+ 
+-set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
++set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
+ 
+ project(icommands C CXX)
+ 
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b18c217..87d55d8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,13 +26,11 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ set(CMAKE_INSTALL_RPATH ${IRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME}/lib)
+ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+ 
+-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
+-set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++")
+-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++")
++set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
++set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libstdc++")
++set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libstdc++")
+ add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-parameter)
+-link_libraries(c++abi)
+ link_directories(/usr/gcc/6/lib${LIB_SUFFIX})
+-include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
+ 
+ set(
+   IRODS_CLIENT_ICOMMANDS_EXECUTABLES
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 87d55d8..be40d19 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,7 +4,9 @@ include(${CMAKE_SOURCE_DIR}/cmake/RequireOutOfSourceBuild.cmake)
+ # set(CMAKE_C_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang)
+ # set(CMAKE_CXX_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang++)
+ 
+-set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
++if (get_filename_component(barename ${CMAKE_CXX_COMPILER} NAME) STREQUAL clang++)
++  set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
++endif()
+ 
+ project(icommands C CXX)
+ 
+@@ -26,10 +28,13 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+ set(CMAKE_INSTALL_RPATH ${IRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME}/lib)
+ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+ 
+-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
+-set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libstdc++")
+-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libstdc++")
+-add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-parameter)
++add_compile_options(-Wall -Wextra -Werror -Wno-unused-parameter)
++if (get_filename_component(barename ${CMAKE_CXX_COMPILER} NAME) STREQUAL clang++)
++  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
++  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libstdc++")
++  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libstdc++")
++  add_compile_options(-nostdinc++)
++endif()
+ link_directories(/usr/gcc/6/lib${LIB_SUFFIX})
+ 
+ set(
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4c82b26..c1c36be 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,8 +3,9 @@ include(${CMAKE_SOURCE_DIR}/cmake/RequireOutOfSourceBuild.cmake)
+ 
+ # set(CMAKE_C_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang)
+ # set(CMAKE_CXX_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang++)
++get_filename_component(compiler++ ${CMAKE_CXX_COMPILER} NAME)
+ 
+-if (get_filename_component(barename ${CMAKE_CXX_COMPILER} NAME) STREQUAL clang++)
++if (${compiler++} STREQUAL clang++)
+   set(CMAKE_EXE_LINKER_FLAGS_INIT "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
+ endif()
+ 
+@@ -29,7 +30,7 @@ set(CMAKE_INSTALL_RPATH ${IRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME}/lib)
+ set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+ 
+ add_compile_options(-Wall -Wextra -Werror -Wno-unused-parameter)
+-if (get_filename_component(barename ${CMAKE_CXX_COMPILER} NAME) STREQUAL clang++)
++if (${compiler++} STREQUAL clang++)
+   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++")
+   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libstdc++")
+   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libstdc++")
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c1c36be..3d6eeb4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -35,6 +35,8 @@ if (${compiler++} STREQUAL clang++)
+   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libstdc++")
+   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libstdc++")
+   add_compile_options(-nostdinc++)
++else()
++  add_compile_options(-Wno-unknown-pragmas)
+ endif()
+ link_directories(/usr/gcc/6/lib${LIB_SUFFIX})
+ 
+@@ -116,10 +118,11 @@ foreach(EXECUTABLE ${IRODS_CLIENT_ICOMMANDS_EXECUTABLES})
+     ${IRODS_INCLUDE_DIRS}
+     ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
+     ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
+-    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include
++    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/include/jansson
+     ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/include
+     ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
+     ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
++    /usr/include/gssapi
+     )
+   target_compile_definitions(${EXECUTABLE} PRIVATE RODS_SERVER ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
+   target_compile_options(${EXECUTABLE} PRIVATE -Wno-write-strings)

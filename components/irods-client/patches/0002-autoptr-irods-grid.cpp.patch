@@ -1,0 +1,13 @@
+diff --git a/src/irods-grid.cpp b/src/irods-grid.cpp
+index 6d05f54..929d16f 100644
+--- a/src/irods-grid.cpp
++++ b/src/irods-grid.cpp
+@@ -208,7 +208,7 @@ irods::error prepare_command_for_transport(
+         _env.irodsCtrlPlaneEncryptionAlgorithm );
+ 
+     // serialize using the generated avro class
+-    std::auto_ptr< avro::OutputStream > out = avro::memoryOutputStream();
++    std::unique_ptr< avro::OutputStream > out = avro::memoryOutputStream();
+     avro::EncoderPtr e = avro::binaryEncoder();
+     e->init( *out );
+     avro::encode( *e, _cmd );

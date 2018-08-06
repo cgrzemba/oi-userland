@@ -1,0 +1,13 @@
+diff --git a/src/irule.cpp b/src/irule.cpp
+index 545e8be..9f5bca1 100644
+--- a/src/irule.cpp
++++ b/src/irule.cpp
+@@ -145,7 +145,7 @@ main( int argc, char **argv ) {
+     execMyRuleInp_t execMyRuleInp;
+     msParamArray_t *outParamArray = NULL;
+     msParamArray_t msParamArray;
+-    int rulegen;
++    int rulegen = 0;
+ 
+     int connFlag = 0;
+     char saveFile[MAX_NAME_LEN];

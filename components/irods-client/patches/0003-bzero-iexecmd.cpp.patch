@@ -1,0 +1,13 @@
+diff --git a/src/iexecmd.cpp b/src/iexecmd.cpp
+index 85bf18d..33906df 100644
+--- a/src/iexecmd.cpp
++++ b/src/iexecmd.cpp
+@@ -151,7 +151,7 @@ main( int argc, char **argv ) {
+         }
+         if ( execCmdOut->status > 0 ) {
+             /* (execCmdOut->status is a stream descriptor */
+-            bzero( &streamReadInp, sizeof( streamReadInp ) );
++            memset( &streamReadInp, 0, sizeof( streamReadInp ) );
+             streamReadOutBBuf = &execCmdOut->stdoutBuf;
+             if ( streamReadOutBBuf->len < MAX_SZ_FOR_EXECMD_BUF ) {
+                 if ( streamReadOutBBuf->buf != NULL ) {

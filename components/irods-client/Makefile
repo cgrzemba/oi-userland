@@ -27,7 +27,7 @@ COMPONENT_SUBNAME=	irods_client_icommands
 COMPONENT_VERSION=	4.2.3
 COMPONENT_VERSION_REV=	0
 COMPONENT_VERSION_TAG=	1966ca3
-COMPONENT_FMRI=     	service/irods
+COMPONENT_FMRI=     	service/irods-icommands
 COMPONENT_CLASSIFICATION=Applications/System Utilities
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_SUBNAME)-$(COMPONENT_VERSION_TAG)
 COMPONENT_PROJECT_URL=	http://www.irods.org
@@ -45,11 +45,11 @@ include $(WS_MAKE_RULES)/ips.mk
 
 PATH=$(PATH.gnu)
 
-CC=/usr/bin/clang
-CXX=/usr/bin/clang++
+# CC=/usr/bin/clang
+# CXX=/usr/bin/clang++
 # CXXFLAGS: -DBOOST_SYSTEM_NO_DEPRECATED -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_LARGE_FILES -Dirods_rule_engine_plugin_go_EXPORTS -Dlinux_platform -fPIC -O3 -DNDEBUG -stdlib=libc++ -Wl,-z,defs -shared -nostdinc++ -std=c++11 -std=gnu++11
-IRODS_CXX_STANDARD = 11
-CXXFLAGS += -std=c++$(IRODS_CXX_STANDARD)
+IRODS_CXX_STANDARD = 14
+CXXFLAGS += -std=c++$(IRODS_CXX_STANDARD) -D_PTHREADS
 # CXXFLAGS += -Wno-unknown-pragmas
 
 FLAVOUR = OPT
@@ -64,8 +64,8 @@ CMAKE_OPTIONS.DBG += --trace-expand
 CMAKE_OPTIONS.DBG += --debug-output
 CMAKE_OPTIONS.DBG += --debug-trycompile
 CMAKE_OPTIONS.DBG += -DCMAKE_BUILD_TYPE=Debug
-CMAKE_OPTIONS += -DIRODS_CXX_STANDARD=$(IRODS_CXX_STANDARD)
-CMAKE_OPTIONS += -DCMAKE_CXX_FLAGS="$(CXXFLAGS)"
+# CMAKE_OPTIONS += -DIRODS_CXX_STANDARD=$(IRODS_CXX_STANDARD)
+# CMAKE_OPTIONS += -DCMAKE_CXX_FLAGS="$(CXXFLAGS)"
 CMAKE_OPTIONS += -DCMAKE_SOURCE_DIR=$(SOURCE_DIR)
 CMAKE_OPTIONS += -DCMAKE_BINARY_DIR=$(@D)
 CMAKE_OPTIONS += -DIRODS_VERSION=$(COMPONENT_VERSION)
@@ -96,10 +96,11 @@ CMAKE_OPTIONS.32 += -DCMAKE_INSTALL_RPATH=/usr/gcc/6/lib:/usr/zeromq-4.2/lib
 CMAKE_OPTIONS += $(CMAKE_OPTIONS.$(FLAVOUR))
 CMAKE_OPTIONS += $(CMAKE_OPTIONS.$(BITS))
 
+COMPONENT_BUILD_GMAKE_ARGS = -j12
 
-# no runpath in bins
-COMPONENT_POST_INSTALL_ACTION =  \
-	( cd  $(PROTOSBINDIR) && find . -type x | xargs /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib/64:/usr/zeromq-4.2/lib/64' )
+# no runpath in bins in clang linking
+# COMPONENT_POST_INSTALL_ACTION =  \
+# 	( cd  $(PROTOBINDIR) && find . | xargs file | grep ELF | cut -d: -f1 | xargs /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib/64:/usr/zeromq-4.2/lib/64' )
 
 build: $(BUILD_64)
 
@@ -108,10 +109,14 @@ install: $(INSTALL_64)
 # test: $(NO_TESTS)
 
 REQUIRED_PACKAGES += library/libcxx
-REQUIRED_PACKAGES += library/avro
+REQUIRED_PACKAGES += library/avro-c++
 REQUIRED_PACKAGES += library/unixodbc
 REQUIRED_PACKAGES += library/c++/zeromq-4.2
 REQUIRED_PACKAGES += library/c++/zeromq-4.2-header
 REQUIRED_PACKAGES += library/jansson
 REQUIRED_PACKAGES += library/security/openssl
 REQUIRED_PACKAGES += system/library/boost
+REQUIRED_PACKAGES += service/irods-runtime
+REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
+REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
+REQUIRED_PACKAGES += system/library/math
