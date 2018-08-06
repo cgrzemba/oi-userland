@@ -15,7 +15,7 @@ index f47ea66..b5e2c74 100644
        ${OPENSSL_CRYPTO_LIBRARY}
        ${OPENSSL_SSL_LIBRARY}
 +      /usr/gcc/6/lib${LIB_SUFFIX}/libstdc++.so
-+      m c++abi
++      m
        )
  
      target_compile_definitions(${IRODS_CURRENT_PLUGIN_TARGET} PRIVATE ${IRODS_NETWORK_COMPILE_DEFINTIONS_${TYPE}} ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)

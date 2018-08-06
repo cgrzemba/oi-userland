@@ -34,7 +34,7 @@ index 41b5f82..07f408b 100644
  set(CMAKE_INSTALL_RPATH ${IRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME}/lib)
  
 -set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -Wl,--export-dynamic") # export-dynamic so stacktrace entries from executables have function names
-+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,ignore")
++set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++ -Wl,-z,ignore")
  set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
  add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
@@ -208,15 +208,6 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index de04f16..7a67e25 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -59,7 +59,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
- set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
- set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
- add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
--link_libraries(c++abi)
-+# link_libraries(c++abi)
- include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
- 
- find_package(Threads REQUIRED)
 @@ -405,13 +405,13 @@ target_link_libraries(
    PRIVATE
    irods_plugin_dependencies
@@ -404,20 +395,12 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 330296e..e6bd9fd 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -59,7 +59,6 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
- set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
- set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libc++ -Wl,-z,defs")
- add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
--# link_libraries(c++abi)
- include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
- 
- find_package(Threads REQUIRED)
 @@ -74,7 +73,8 @@ if (NOT PAM_LIBRARY)
  endif()
  
  # find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
 -find_library(STDC++_LIBRARY c++ PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
-+find_library(STDC++_LIBRARY NAMES c++ c++abi PATHS /usr/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
++find_library(STDC++_LIBRARY NAMES stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
 +# link_libraries(c++abi)
  
  set(IRODS_VERSION_MAJOR "4")

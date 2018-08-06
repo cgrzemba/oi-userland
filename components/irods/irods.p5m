@@ -18,6 +18,9 @@
 <transform path=.*plugins.*lib.*so.* -> add pkg.depend.bypass-generate .*libgcc_s.so.1>
 <transform path=.*plugins.*lib.*so.* -> add pkg.linted.userland.action001.2 true>
 <transform path=usr/sbin/irods.* -> add pkg.depend.bypass-generate .*libboost.*>
+<transform path=usr/sbin/irods.* -> add pkg.depend.bypass-generate .*libavro.*>
+# <transform path=usr/sbin/.* -> add pkg.depend.bypass-generate .*libirods.*>
+# <transform path=var/lib/irods/clients/bin/genOSAuth -> add pkg.depend.bypass-generate .*libirods.*>
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
 set name=pkg.summary value="$(COMPONENT_SUMMARY)"
@@ -541,10 +544,6 @@ file path=usr/lib/irods/cmake/IRODSConfig.cmake
 file path=usr/lib/irods/cmake/IRODSConfigVersion.cmake
 file path=usr/lib/irods/cmake/IRODSTargets-release.cmake
 file path=usr/lib/irods/cmake/IRODSTargets.cmake
-file path=usr/lib/$(MACH64)/libirods_client.so
-file path=usr/lib/$(MACH64)/libirods_common.so
-file path=usr/lib/$(MACH64)/libirods_plugin_dependencies.so
-file path=usr/lib/$(MACH64)/libirods_server.so
 file path=usr/sbin/hostname_resolves_to_local_address
 file path=usr/sbin/irodsPamAuthCheck
 file path=usr/sbin/irodsReServer
@@ -691,3 +690,15 @@ file path=var/lib/irods/test/filesystem/mapping.txt
 file path=var/lib/irods/test/filesystem/setup_fs.sh
 file path=var/lib/irods/test/filesystem/teardown_fs.sh
 file path=var/lib/irods/test/test_framework_configuration.json
+link path=usr/lib/$(MACH64)/libirods_client.so \
+    target=libirods_client.so.$(COMPONENT_VERSION)
+file path=usr/lib/$(MACH64)/libirods_client.so.$(COMPONENT_VERSION)
+link path=usr/lib/$(MACH64)/libirods_common.so \
+    target=libirods_common.so.$(COMPONENT_VERSION)
+file path=usr/lib/$(MACH64)/libirods_common.so.$(COMPONENT_VERSION)
+link path=usr/lib/$(MACH64)/libirods_plugin_dependencies.so \
+    target=libirods_plugin_dependencies.so.$(COMPONENT_VERSION)
+file path=usr/lib/$(MACH64)/libirods_plugin_dependencies.so.$(COMPONENT_VERSION)
+link path=usr/lib/$(MACH64)/libirods_server.so \
+    target=libirods_server.so.$(COMPONENT_VERSION)
+file path=usr/lib/$(MACH64)/libirods_server.so.$(COMPONENT_VERSION)

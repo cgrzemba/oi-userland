@@ -6,5 +6,5 @@ index f2f8811..6add698 100644
    PRIVATE
    RodsAPIs
    ${CMAKE_THREAD_LIBS_INIT}
-+  c++abi socket nsl
++  socket nsl
    )

@@ -1,0 +1,56 @@
+diff --git a/plugins/database/src/db_plugin.cpp b/plugins/database/src/db_plugin.cpp
+index b0e80bd..98ec1ea 100644
+--- a/plugins/database/src/db_plugin.cpp
++++ b/plugins/database/src/db_plugin.cpp
+@@ -439,7 +439,6 @@ irods::error determine_user_has_modify_metadata_access(
+  */
+ void removeMetaMapAndAVU( char *dataObjNumber ) {
+     char tSQL[MAX_SQL_SIZE];
+-    int status;
+     cllBindVars[0] = dataObjNumber;
+     cllBindVarCount = 1;
+     if ( logSQL != 0 ) {
+@@ -447,7 +446,7 @@ void removeMetaMapAndAVU( char *dataObjNumber ) {
+     }
+     snprintf( tSQL, MAX_SQL_SIZE,
+               "delete from R_OBJT_METAMAP where object_id=?" );
+-    status =  cmlExecuteNoAnswerSql( tSQL, &icss );
++    cmlExecuteNoAnswerSql( tSQL, &icss );
+ 
+     /* Note, the status will be CAT_SUCCESS_BUT_WITH_NO_INFO (not 0) if
+        there were no rows deleted from R_OBJT_METAMAP, in which case there
+@@ -7664,7 +7663,6 @@ irods::error db_mod_user_op(
+     int auditId;
+     char auditComment[110];
+     char auditUserName[110];
+-    int userSettingOwnPassword;
+     int groupAdminSettingPassword; // JMC - backport 4772
+ 
+     char userName2[NAME_LEN];
+@@ -7686,7 +7684,6 @@ irods::error db_mod_user_op(
+         return ERROR( CAT_INVALID_ARGUMENT, "new value is empty" );
+     }
+ 
+-    userSettingOwnPassword = 0;
+     // =-=-=-=-=-=-=-
+     // JMC - backport 4772
+     groupAdminSettingPassword = 0;
+@@ -7701,7 +7698,7 @@ irods::error db_mod_user_op(
+             return ERROR( CAT_INSUFFICIENT_PRIVILEGE_LEVEL, "insufficient privilege" );
+         }
+         if ( strcmp( _user_name, _ctx.comm()->clientUser.userName ) == 0 )  {
+-            userSettingOwnPassword = 1;
++		;
+         }
+         else {
+             int status2;
+@@ -7847,8 +7844,7 @@ irods::error db_mod_user_op(
+         i = decodePw( _ctx.comm(), _new_value, decoded );
+         int status2 = icatApplyRule( _ctx.comm(), ( char* )"acCheckPasswordStrength", decoded );
+         if ( status2 == NO_RULE_OR_MSI_FUNCTION_FOUND_ERR ) {
+-            int status3;
+-            status3 = addRErrorMsg( &_ctx.comm()->rError, 0,
++            addRErrorMsg( &_ctx.comm()->rError, 0,
+                                     "acCheckPasswordStrength rule not found" );
+         }
+ 

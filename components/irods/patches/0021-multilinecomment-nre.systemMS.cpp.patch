@@ -1,0 +1,14 @@
+diff --git a/server/re/src/nre.systemMS.cpp b/server/re/src/nre.systemMS.cpp
+index f6d3f8f..9c0fd90 100644
+--- a/server/re/src/nre.systemMS.cpp
++++ b/server/re/src/nre.systemMS.cpp
+@@ -34,8 +34,7 @@ fillSubmitConditions( const char *action, const char *inDelayCondition, bytesBuf
+                       ruleExecSubmitInp_t *ruleSubmitInfo,  ruleExecInfo_t *rei );
+ 
+ 
+-//#define evaluateExpression(expr, eaVal, rei) \
+-//    computeExpression(expr, NULL,rei, 0, eaVal)
++//#define evaluateExpression(expr, eaVal, rei) computeExpression(expr, NULL,rei, 0, eaVal)
+ 
+ /**
+  * \cond oldruleengine

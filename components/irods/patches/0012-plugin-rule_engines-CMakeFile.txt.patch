@@ -14,7 +14,7 @@ index 37b16be..d326acf 100644
 +    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_regex.so
      dl
 +    /usr/gcc/6/lib${LIB_SUFFIX}/libstdc++.so
-+    m c++abi
++    m
      )
  
    target_compile_definitions(${PLUGIN} PRIVATE ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
