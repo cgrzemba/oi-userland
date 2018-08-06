@@ -6,23 +6,10 @@ index e8efe86..26f191a 100644
  
  macro (unittest name)
      add_executable (${name} test/${name}.cc)
-+    target_compile_options (${name} PRIVATE -pthreads)
++    target_compile_options (${name} PRIVATE -pthreads -D_PTHREADS)
      target_link_libraries (${name} avrocpp ${Boost_LIBRARIES})
      add_test (NAME ${name} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
          COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
-diff --git a/lang/c++/CMakeLists.txt b/lang/c++/CMakeLists.txt
-index 26f191a..344379b 100644
---- a/lang/c++/CMakeLists.txt
-+++ b/lang/c++/CMakeLists.txt
-@@ -49,7 +49,7 @@ add_definitions (
- endif()
- 
- if (CMAKE_COMPILER_IS_GNUCXX)
--    set(CMAKE_CXX_FLAGS "-Wall")
-+    set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
-     set(CMAKE_CXX_FLAGS_DEBUG "-fstack-protector-all -D_GLIBCXX_DEBUG")
-     # Unset _GLIBCXX_DEBUG for avrogencpp.cc because using Boost Program Options
-     # leads to linking errors when compiling with _GLIBCXX_DEBUG as described on
 diff --git a/lang/c++/CMakeLists.txt b/lang/c++/CMakeLists.txt
 index 02ae881..12e6824 100644
 --- a/lang/c++/CMakeLists.txt
@@ -43,3 +30,38 @@ index 02ae881..12e6824 100644
  
  install (DIRECTORY api/ DESTINATION include/avro
      FILES_MATCHING PATTERN *.hh)
+diff --git a/lang/c++/CMakeLists.txt b/lang/c++/CMakeLists.txt
+index 41297e1..b11c6ec 100644
+--- a/lang/c++/CMakeLists.txt
++++ b/lang/c++/CMakeLists.txt
+@@ -59,6 +59,8 @@ add_definitions (${Boost_LIB_DIAGNOSTIC_DEFINITIONS})
+ 
+ include_directories (api ${CMAKE_CURRENT_BINARY_DIR} ${Boost_INCLUDE_DIRS})
+ 
++find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX}/ NO_DEFAULT_PATH )
++ 
+ set (AVRO_SOURCE_FILES
+         impl/Compiler.cc impl/Node.cc
+         impl/NodeImpl.cc impl/ResolverSchema.cc impl/Schema.cc
+@@ -129,6 +131,8 @@ macro (unittest name)
+     add_executable (${name} test/${name}.cc)
+     target_compile_options (${name} PRIVATE -pthread)
+     target_link_libraries (${name} avrocpp ${Boost_LIBRARIES})
++    set_target_properties(${name} PROPERTIES 
++                      INSTALL_RPATH /usr/gcc/6/lib${LIB_SUFFIX})
+     add_test (NAME ${name} WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+         COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${name})
+ endmacro (unittest)
+diff --git a/lang/c++/CMakeLists.txt b/lang/c++/CMakeLists.txt
+index 8982889..b629038 100644
+--- a/lang/c++/CMakeLists.txt
++++ b/lang/c++/CMakeLists.txt
+@@ -48,7 +48,7 @@ add_definitions (
+ endif()
+ 
+ if (CMAKE_COMPILER_IS_GNUCXX)
+-    set(CMAKE_CXX_FLAGS "-Wall")
++    set(CMAKE_CXX_FLAGS "-Wall ${CMAKE_CXX_FLAGS}")
+ endif ()
+ 
+ 

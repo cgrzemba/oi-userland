@@ -1,0 +1,1 @@
+set (Boost_LIBRARIES -L/usr/gcc/6/lib${LIB_SUFFIX} ${Boost_LIBRARIES})

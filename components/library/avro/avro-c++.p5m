@@ -23,6 +23,7 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
 file path=usr/bin/avrogencpp
+file path=usr/bin/$(MACH64)/avrogencpp
 file path=usr/include/avro/AvroParse.hh 
 file path=usr/include/avro/AvroSerialize.hh 
 file path=usr/include/avro/AvroTraits.hh 
