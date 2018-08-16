@@ -1,0 +1,13 @@
+diff --git a/packaging/irods b/packaging/irods
+index 2927bc9..8c259b2 100755
+--- a/packaging/irods
++++ b/packaging/irods
+@@ -34,6 +34,8 @@ DETECTEDOS=`$IRODS_HOME/packaging/find_os.sh`
+ 
+ if [ "$DETECTEDOS" = "MacOSX" ] ; then
+     SU_SHELL_OPTS="-l"
++elif [ "$DETECTEDOS" = "Solaris" ] : then
++    SU_SHELL_OPTS="-"
+ else
+     SU_SHELL_OPTS="--shell=/bin/bash --login"
+ fi

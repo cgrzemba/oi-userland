@@ -323,7 +323,7 @@ index dcc6b47..3b46492 100644
      ${OPENSSL_INCLUDE_DIR}
      )
    set_property(TARGET ${EXECUTABLE} PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
-+  set_target_properties(${EXECUTABLE} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH /usr/gcc/6/lib{LIB_SUFIX}:/usr/zeromq-4.2/lib${LIB_SUFFIX})
++  set_target_properties(${EXECUTABLE} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH /usr/gcc/6/lib${LIB_SUFFIX}:/usr/zeromq-4.2/lib${LIB_SUFFIX})
    target_compile_definitions(
      ${EXECUTABLE}
      PRIVATE

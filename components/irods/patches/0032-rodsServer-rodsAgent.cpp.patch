@@ -1,0 +1,46 @@
+diff --git a/server/core/src/rodsServer.cpp b/server/core/src/rodsServer.cpp
+index ce6105a..82fb33f 100644
+--- a/server/core/src/rodsServer.cpp
++++ b/server/core/src/rodsServer.cpp
+@@ -260,7 +260,9 @@ main( int argc, char **argv )
+     strcpy( agent_factory_socket_file, agent_factory_socket_dir );
+     strcat( agent_factory_socket_file, "/irods_factory_" );
+     strcat( agent_factory_socket_file, random_suffix );
+-    strcpy( local_addr.sun_path, agent_factory_socket_file );
++    strncpy( local_addr.sun_path, agent_factory_socket_file, sizeof(local_addr.sun_path)-1 );
++    // Delete socket if it already exists
++    unlink( local_addr.sun_path );
+ 
+     agent_spawning_pid = fork();
+ 
+@@ -272,12 +274,13 @@ main( int argc, char **argv )
+     } else if ( agent_spawning_pid > 0 ) {
+         // Parent process
+         rodsLog( LOG_NOTICE, "Agent factory process pid = [%d]", agent_spawning_pid );
++        sleep(2); // avoid racing condition in socket setup
+         agent_conn_socket = socket( AF_UNIX, SOCK_STREAM, 0 );
+ 
+         time_t sock_connect_start_time = time( 0 );
+         while (true) {
+             const unsigned int len = sizeof(local_addr);
+-            ssize_t status = connect( agent_conn_socket, (const struct sockaddr*) &local_addr, len );
++            ssize_t status = connect( agent_conn_socket, (struct sockaddr*) &local_addr, len );
+             if ( status >= 0 ) {
+                 break;
+             }
+diff --git a/server/core/src/rodsAgent.cpp b/server/core/src/rodsAgent.cpp
+index 428e81d..b458158 100644
+--- a/server/core/src/rodsAgent.cpp
++++ b/server/core/src/rodsAgent.cpp
+@@ -213,10 +213,7 @@ runIrodsAgent( sockaddr_un agent_addr ) {
+         return SYS_SOCK_OPEN_ERR;
+     }
+ 
+-    // Delete socket if it already exists
+-    unlink( agent_addr.sun_path );
+-
+-    if ( bind( listen_socket, (struct sockaddr*) &agent_addr, len ) < 0 ) {
++    if ( bind( listen_socket, (struct sockaddr*) &agent_addr, sizeof agent_addr) < 0 ) {
+         rodsLog( LOG_ERROR, "Unable to bind socket in runIrodsAgent, errno [%d]: %s", errno, strerror( errno ) );
+         return SYS_SOCK_BIND_ERR;
+     }

@@ -31,7 +31,7 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-file path=etc/init.d/irods
+file path=etc/init.d/irods mode=544
 file path=usr/include/irods/HashStrategy.hpp
 file path=usr/include/irods/Hasher.hpp
 file path=usr/include/irods/MD5Strategy.hpp
@@ -569,7 +569,7 @@ file path=var/lib/irods/configuration_schemas/v3/server_config.json
 file path=var/lib/irods/configuration_schemas/v3/server_status.json
 file path=var/lib/irods/configuration_schemas/v3/service_account_environment.json
 file path=var/lib/irods/configuration_schemas/v3/zone_bundle.json
-file path=var/lib/irods/irodsctl
+file path=var/lib/irods/irodsctl mode=555
 file path=var/lib/irods/msiExecCmd_bin/hello
 file path=var/lib/irods/msiExecCmd_bin/irodsServerMonPerf
 file path=var/lib/irods/msiExecCmd_bin/test_execstream.py pkg.depend.bypass-generate=.*
@@ -579,15 +579,15 @@ file path=var/lib/irods/packaging/core.dvm.template
 file path=var/lib/irods/packaging/core.fnm.template
 file path=var/lib/irods/packaging/core.re.template
 file path=var/lib/irods/packaging/database_config.json.template
-file path=var/lib/irods/packaging/find_os.sh
+file path=var/lib/irods/packaging/find_os.sh mode=755
 file path=var/lib/irods/packaging/host_access_control_config.json.template
 file path=var/lib/irods/packaging/hosts_config.json.template
 file path=var/lib/irods/packaging/irodsMonPerf.config.in
 file path=var/lib/irods/packaging/localhost_setup_mysql.input
 file path=var/lib/irods/packaging/localhost_setup_oracle.input
 file path=var/lib/irods/packaging/localhost_setup_postgres.input
-file path=var/lib/irods/packaging/postinstall.sh
-file path=var/lib/irods/packaging/preremove.sh
+file path=var/lib/irods/packaging/postinstall.sh mode=755
+file path=var/lib/irods/packaging/preremove.sh mode=755
 file path=var/lib/irods/packaging/server_config.json.template
 file path=var/lib/irods/packaging/server_setup_instructions.txt
 file path=var/lib/irods/packaging/sql/icatDropSysTables.sql
@@ -596,11 +596,11 @@ file path=var/lib/irods/packaging/sql/icatSysInserts.sql
 file path=var/lib/irods/packaging/sql/icatSysTables.sql
 file path=var/lib/irods/packaging/sql/mysql_functions.sql
 file path=var/lib/irods/packaging/upgrade-3.3.xto4.0.0.sql
-file path=var/lib/irods/scripts/chown_directories_for_postinstall.py
-file path=var/lib/irods/scripts/cleanup_resource_tree.py
-file path=var/lib/irods/scripts/find_shared_object.py
-file path=var/lib/irods/scripts/get_db_schema_version.py
-file path=var/lib/irods/scripts/get_irods_version.py
+file path=var/lib/irods/scripts/chown_directories_for_postinstall.py mode=755
+file path=var/lib/irods/scripts/cleanup_resource_tree.py mode=755
+file path=var/lib/irods/scripts/find_shared_object.py mode=755
+file path=var/lib/irods/scripts/get_db_schema_version.py mode=755
+file path=var/lib/irods/scripts/get_irods_version.py mode=755
 file path=var/lib/irods/scripts/irods/__init__.py
 file path=var/lib/irods/scripts/irods/configuration.py
 file path=var/lib/irods/scripts/irods/controller.py
@@ -671,20 +671,20 @@ file path=var/lib/irods/scripts/irods/test/test_ssl.py
 file path=var/lib/irods/scripts/irods/test/test_util.py
 file path=var/lib/irods/scripts/irods/test/test_xmsg.py
 file path=var/lib/irods/scripts/irods/upgrade_configuration.py
-file path=var/lib/irods/scripts/irods_control.py
-file path=var/lib/irods/scripts/kill_pid.py
-file path=var/lib/irods/scripts/make_resource_tree.py
-file path=var/lib/irods/scripts/manual_cleanup.py
-file path=var/lib/irods/scripts/pid_age.py
-file path=var/lib/irods/scripts/rulebase_fastswap_test_2276.sh
-file path=var/lib/irods/scripts/run_coverage_test.sh
-file path=var/lib/irods/scripts/run_cppcheck.sh
-file path=var/lib/irods/scripts/run_tests.py
-file path=var/lib/irods/scripts/setup_irods.py
-file path=var/lib/irods/scripts/switchuser.py
-file path=var/lib/irods/scripts/system_identification.py
-file path=var/lib/irods/scripts/terminate_irods_processes.py
-file path=var/lib/irods/scripts/validate_json.py
+file path=var/lib/irods/scripts/irods_control.py mode=755
+file path=var/lib/irods/scripts/kill_pid.py mode=755
+file path=var/lib/irods/scripts/make_resource_tree.py mode=755
+file path=var/lib/irods/scripts/manual_cleanup.py mode=755
+file path=var/lib/irods/scripts/pid_age.py mode=755
+file path=var/lib/irods/scripts/rulebase_fastswap_test_2276.sh mode=755
+file path=var/lib/irods/scripts/run_coverage_test.sh mode=755
+file path=var/lib/irods/scripts/run_cppcheck.sh mode=755
+file path=var/lib/irods/scripts/run_tests.py mode=755
+file path=var/lib/irods/scripts/setup_irods.py mode=755
+file path=var/lib/irods/scripts/switchuser.py mode=755
+file path=var/lib/irods/scripts/system_identification.py mode=755
+file path=var/lib/irods/scripts/terminate_irods_processes.py mode=755
+file path=var/lib/irods/scripts/validate_json.py mode=755
 file path=var/lib/irods/test/filesystem/make_sector_mapping_table.py
 file path=var/lib/irods/test/filesystem/mapping.txt
 file path=var/lib/irods/test/filesystem/setup_fs.sh
@@ -702,3 +702,32 @@ file path=usr/lib/$(MACH64)/libirods_plugin_dependencies.so.$(COMPONENT_VERSION)
 link path=usr/lib/$(MACH64)/libirods_server.so \
     target=libirods_server.so.$(COMPONENT_VERSION)
 file path=usr/lib/$(MACH64)/libirods_server.so.$(COMPONENT_VERSION)
+depend fmri=library/python/psutil type=require
+depend fmri=library/python/requests type=require
+depend fmri=library/python/mock type=require
+# depend fmri=library/python/pyasn1 type=require
+depend fmri=library/python/enum type=require
+depend fmri=library/python/idna type=require
+# depend fmri=library/python/ipaddress type=require
+# depend fmri=library/python/cffi-backend type=require
+# depend fmri=library/python/urllib3 type=require
+# depend fmri=library/python/chardet type=require
+depend fmri=library/python/six type=require
+# depend fmri=library/python/cryptography type=require
+# depend fmri=library/python/funcsigs type=require
+# depend fmri=library/python/functools type=require
+# depend fmri=library/python/pbr type=require
+depend fmri=library/python/jsonschema type=require
+# depend fmri=library/python/openssl type=require
+# depend fmri=library/python/ndg-httpsclient type=require
+
+group groupname=irods gid=1248
+user username=irods group=irods uid=1248 home-dir=/var/lib/irods
+dir path=var/lib/irods group=irods owner=irods
+dir path=var/lib/irods/log group=irods owner=irods
+dir path=var/lib/irods/config group=irods owner=irods
+dir path=var/lib/irods/config/lockFileDir group=irods owner=irods
+dir path=var/lib/irods/config/packedRei group=irods owner=irods
+dir path=var/lib/irods/Vault group=irods owner=irods mode=700
+dir path=etc/irods group=irods owner=irods
+file Solaris/irods.xml path=var/svc/manifest/site/irods.xml restart_fmri=svc:/system/manifest-import:default

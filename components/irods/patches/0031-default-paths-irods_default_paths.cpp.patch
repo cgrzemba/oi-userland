@@ -1,0 +1,16 @@
+# This is the most complicated way to get a '/'
+# path is the /usr/lib/amd64/libirods_common.so.4.2.3 and not the Linux style /usr/lib/libirods_common.so.4.2.3
+# so we have to remove one part more
+diff --git a/lib/core/src/irods_default_paths.cpp b/lib/core/src/irods_default_paths.cpp
+index cc8f38d..4816f1f 100644
+--- a/lib/core/src/irods_default_paths.cpp
++++ b/lib/core/src/irods_default_paths.cpp
+@@ -18,7 +18,7 @@ namespace irods {
+         try {
+             boost::filesystem::path path{dl_info.dli_fname};
+             path = boost::filesystem::canonical(path);
+-            path.remove_filename().remove_filename().remove_filename(); // Removes filename and the two directories (usr and lib) between libirods_common.so and base of irods install
++            path.remove_filename().remove_filename().remove_filename().remove_filename(); // Removes filename and the two directories (usr and lib) between libirods_common.so and base of irods install
+             return path;
+         } catch(const boost::filesystem::filesystem_error& e) {
+             THROW(-1, e.what());

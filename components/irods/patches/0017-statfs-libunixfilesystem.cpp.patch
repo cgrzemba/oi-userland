@@ -27,3 +27,16 @@ index cd93f0f..aaae7ca 100644
      if( err < 0 ) {
          std::stringstream msg;
          msg << "statfs failed for ["
+diff --git a/plugins/resources/unixfilesystem/libunixfilesystem.cpp b/plugins/resources/unixfilesystem/libunixfilesystem.cpp
+index aaae7ca..fd981c6 100644
+--- a/plugins/resources/unixfilesystem/libunixfilesystem.cpp
++++ b/plugins/resources/unixfilesystem/libunixfilesystem.cpp
+@@ -387,7 +387,7 @@ irods::error unix_file_getfs_freespace(
+         if ( ( result = ASSERT_ERROR( status >= 0, err_status, "Statfs error for \"%s\", status = %d.",
+                                       path.c_str(), err_status ) ).ok() ) {
+ 
+-#if defined(sgi_platform)
++#if defined(sgi_platform) || defined(solaris_platform)
+             if ( statbuf.f_frsize > 0 ) {
+                 fssize = statbuf.f_frsize;
+             }
