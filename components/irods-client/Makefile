@@ -37,7 +37,7 @@ COMPONENT_ARCHIVE_HASH=	\
 COMPONENT_ARCHIVE_URL=	http://github.com/$(COMPONENT_NAME)/$(COMPONENT_SUBNAME)/tarball/$(COMPONENT_VERSION)
 COMPONENT_LICENSE=      BSD-3-Clause
 COMPONENT_LICENSE_FILE = LICENSE
-COMPONENT_SUMMARY=     	integrated Rule-Oriented Data System (iRODS) is open source data management software 
+COMPONENT_SUMMARY=     	The integrated Rule-Oriented Data System
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/cmake.mk
