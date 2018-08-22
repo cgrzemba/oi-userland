@@ -26,20 +26,20 @@ file path=$(COMPONENT_USR_DIR)/bin/$(MACH64)/curve_keygen
 file path=$(COMPONENT_USR_DIR)/bin/curve_keygen
 file path=$(COMPONENT_USR_DIR)/include/zmq.h
 file path=$(COMPONENT_USR_DIR)/include/zmq_utils.h
-link path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/libzmq.so target=libzmq.so.5.1.3
-link path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/libzmq.so.5 target=libzmq.so.5.1.3
-file path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/libzmq.so.5.1.3
+link path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/libzmq.so target=libzmq.so.5.1.5
+link path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/libzmq.so.5 target=libzmq.so.5.1.5
+file path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/libzmq.so.5.1.5
 file path=$(COMPONENT_USR_DIR)/lib/$(MACH64)/pkgconfig/libzmq.pc
-link path=$(COMPONENT_USR_DIR)/lib/libzmq.so target=libzmq.so.5.1.3
-link path=$(COMPONENT_USR_DIR)/lib/libzmq.so.5 target=libzmq.so.5.1.3
-file path=$(COMPONENT_USR_DIR)/lib/libzmq.so.5.1.3
+link path=$(COMPONENT_USR_DIR)/lib/libzmq.so target=libzmq.so.5.1.5
+link path=$(COMPONENT_USR_DIR)/lib/libzmq.so.5 target=libzmq.so.5.1.5
+file path=$(COMPONENT_USR_DIR)/lib/libzmq.so.5.1.5
 file path=$(COMPONENT_USR_DIR)/lib/pkgconfig/libzmq.pc
 # Mediate this:
 link path=usr/lib/$(MACH64)/libzmq.so \
-    target=../../$(COMPONENT_SUB_DIR)/lib/$(MACH64)/libzmq.so.$(COMPONENT_VERSION_ABI).1.3 \
+    target=../../$(COMPONENT_SUB_DIR)/lib/$(MACH64)/libzmq.so.$(COMPONENT_VERSION_ABI).1.5 \
     mediator=zeromq mediator-version=$(COMPONENT_VERSION_MAJ_MIN)
 link path=usr/lib/libzmq.so \
-    target=../$(COMPONENT_SUB_DIR)/lib/libzmq.so.$(COMPONENT_VERSION_ABI).1.3 \
+    target=../$(COMPONENT_SUB_DIR)/lib/libzmq.so.$(COMPONENT_VERSION_ABI).1.5 \
     mediator=zeromq mediator-version=$(COMPONENT_VERSION_MAJ_MIN)
 
 link path=usr/lib/$(MACH64)/pkgconfig/libzmq.pc \
