@@ -1,0 +1,13 @@
+diff --git a/src/bitops.c b/src/bitops.c
+index 43450fc..9f442f3 100644
+--- a/src/bitops.c
++++ b/src/bitops.c
+@@ -1050,7 +1050,7 @@ void bitfieldCommand(client *c) {
+                     addReply(c,shared.nullbulk);
+                 }
+             } else {
+-                uint64_t oldval, newval, wrapped, retval;
++                uint64_t oldval, newval=0, wrapped=0, retval;
+                 int overflow;
+ 
+                 oldval = getUnsignedBitfield(o->ptr,thisop->offset,

@@ -1,0 +1,32 @@
+diff --git a/redis.conf b/redis.conf
+index 43562c5..a20f62b 100644
+--- a/redis.conf
++++ b/redis.conf
+@@ -133,7 +133,8 @@ tcp-keepalive 300
+ 
+ # By default Redis does not run as a daemon. Use 'yes' if you need it.
+ # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
+-daemonize no
++# daemonize no
++daemonize yes
+ 
+ # If you run Redis from upstart or systemd, Redis can interact with your
+ # supervision tree. Options:
+@@ -191,7 +192,7 @@ databases 16
+ #
+ # However it is possible to force the pre-4.0 behavior and always show a
+ # ASCII art logo in startup logs by setting the following option to yes.
+-always-show-logo yes
++always-show-logo no
+ 
+ ################################ SNAPSHOTTING  ################################
+ #
+@@ -260,7 +261,7 @@ dbfilename dump.rdb
+ # The Append Only File will also be created inside this directory.
+ #
+ # Note that you must specify a directory here, not a file name.
+-dir ./
++dir /var/lib/redis/6379
+ 
+ ################################# REPLICATION #################################
+ 

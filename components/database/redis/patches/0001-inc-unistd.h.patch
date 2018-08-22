@@ -1,0 +1,20 @@
+diff --git a/src/zmalloc.c b/src/zmalloc.c
+index 094dd80..3a03710 100644
+--- a/src/zmalloc.c
++++ b/src/zmalloc.c
+@@ -41,6 +41,7 @@ void zlibc_free(void *ptr) {
+ 
+ #include <string.h>
+ #include <pthread.h>
++#include <unistd.h>
+ #include "config.h"
+ #include "zmalloc.h"
+ #include "atomicvar.h"
+@@ -230,7 +231,6 @@ void zmalloc_set_oom_handler(void (*oom_handler)(size_t)) {
+  * version of the function. */
+ 
+ #if defined(HAVE_PROC_STAT)
+-#include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>

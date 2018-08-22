@@ -1,0 +1,28 @@
+diff --git a/deps/lua/etc/Makefile b/deps/lua/etc/Makefile
+index 6d00008..6a9c1d4 100644
+--- a/deps/lua/etc/Makefile
++++ b/deps/lua/etc/Makefile
+@@ -8,8 +8,8 @@ SRC= $(TOP)/src
+ TST= $(TOP)/test
+ 
+ CC= gcc
+-CFLAGS= -O2 -Wall -I$(INC) $(MYCFLAGS)
+-MYCFLAGS= 
++CFLAGS= -Wall -I$(INC) $(MYCFLAGS)
++MYCFLAGS?=  -O2
+ MYLDFLAGS= -Wl,-E
+ MYLIBS= -lm
+ #MYLIBS= -lm -Wl,-E -ldl -lreadline -lhistory -lncurses
+diff --git a/deps/lua/src/Makefile b/deps/lua/src/Makefile
+index f3bba2f..1d256f3 100644
+--- a/deps/lua/src/Makefile
++++ b/deps/lua/src/Makefile
+@@ -8,7 +8,7 @@
+ PLAT= none
+ 
+ CC?= gcc
+-CFLAGS= -O2 -Wall $(MYCFLAGS)
++CFLAGS= -Wall $(MYCFLAGS)
+ AR= ar rcu
+ RANLIB= ranlib
+ RM= rm -f

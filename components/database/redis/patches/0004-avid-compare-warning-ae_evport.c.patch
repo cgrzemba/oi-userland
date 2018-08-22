@@ -1,0 +1,44 @@
+diff --git a/src/ae_evport.c b/src/ae_evport.c
+index 5c317be..943ccbb 100644
+--- a/src/ae_evport.c
++++ b/src/ae_evport.c
+@@ -244,7 +244,7 @@ static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) {
+     aeApiState *state = eventLoop->apidata;
+     struct timespec timeout, *tsp;
+     int mask, i;
+-    uint_t nevents;
++    uint_t nevents, u;
+     port_event_t event[MAX_EVENT_BATCHSZ];
+ 
+     /*
+@@ -294,22 +294,22 @@ static int aeApiPoll(aeEventLoop *eventLoop, struct timeval *tvp) {
+ 
+     state->npending = nevents;
+ 
+-    for (i = 0; i < nevents; i++) {
++    for (u = 0; u < nevents; u++) {
+             mask = 0;
+-            if (event[i].portev_events & POLLIN)
++            if (event[u].portev_events & POLLIN)
+                 mask |= AE_READABLE;
+-            if (event[i].portev_events & POLLOUT)
++            if (event[u].portev_events & POLLOUT)
+                 mask |= AE_WRITABLE;
+ 
+-            eventLoop->fired[i].fd = event[i].portev_object;
+-            eventLoop->fired[i].mask = mask;
++            eventLoop->fired[u].fd = event[u].portev_object;
++            eventLoop->fired[u].mask = mask;
+ 
+             if (evport_debug)
+                 fprintf(stderr, "aeApiPoll: fd %d mask 0x%x\n",
+-                    (int)event[i].portev_object, mask);
++                    (int)event[u].portev_object, mask);
+ 
+-            state->pending_fds[i] = event[i].portev_object;
+-            state->pending_masks[i] = (uintptr_t)event[i].portev_user;
++            state->pending_fds[u] = event[u].portev_object;
++            state->pending_masks[u] = (uintptr_t)event[u].portev_user;
+     }
+ 
+     return nevents;
