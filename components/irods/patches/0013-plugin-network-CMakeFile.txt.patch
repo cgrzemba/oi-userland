@@ -14,7 +14,7 @@ index f47ea66..b5e2c74 100644
 +      ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib${LIB_SUFFIX}/libarchive.so
        ${OPENSSL_CRYPTO_LIBRARY}
        ${OPENSSL_SSL_LIBRARY}
-+      /usr/gcc/6/lib${LIB_SUFFIX}/libstdc++.so
++      /usr/gcc/7/lib${LIB_SUFFIX}/libstdc++.so
 +      m
        )
  

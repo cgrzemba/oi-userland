@@ -1,0 +1,14 @@
+diff --git a/lib/core/src/rodsPath.cpp b/lib/core/src/rodsPath.cpp
+index 23a3ce8..501b8c5 100644
+--- a/lib/core/src/rodsPath.cpp
++++ b/lib/core/src/rodsPath.cpp
+@@ -106,6 +106,9 @@ parseRodsPath( rodsPath_t *rodsPath, rodsEnv *myRodsEnv ) {
+     }
+     else {
+         /* a relative path */
++        if (strlen(myRodsEnv->rodsCwd)+strlen(rodsPath->inPath) >= MAX_NAME_LEN)
++            rodsLog( LOG_ERROR,
++                         "parseRodsPath: paths too long: %s/%s", myRodsEnv->rodsCwd, rodsPath->inPath );
+         snprintf( rodsPath->outPath, MAX_NAME_LEN, "%s/%s",
+                   myRodsEnv->rodsCwd, rodsPath->inPath );
+     }

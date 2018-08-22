@@ -44,22 +44,17 @@ include $(WS_MAKE_RULES)/ips.mk
 
 PATH=$(PATH.gnu)
 
-# CC=/usr/bin/clang
-# CXX=/usr/bin/clang++
-CC=/usr/gcc/6/bin/gcc
-CXX=/usr/gcc/6/bin/g++
-# CXXFLAGS: -DBOOST_SYSTEM_NO_DEPRECATED -D_FILE_OFFSET_BITS=64 -D_LARGEFILE64_SOURCE -D_LARGEFILE_SOURCE -D_LARGE_FILES -Dirods_rule_engine_plugin_go_EXPORTS -Dlinux_platform -fPIC -O3 -DNDEBUG -stdlib=libc++ -Wl,-z,defs -shared -nostdinc++ -std=c++11 -std=gnu++11
-# CXXFLAGS = -std=c++11 -D_GLIBCXX_USE_CXX11_ABI=0
 
 # FLAVOUR = OPT
 FLAVOUR = DBG
 
 IRODS_GIT_SHA1 = 7cdff46fc97928f3709e1307d94febab31577bfb
-IRODS_CXX_STANDARD = 11
+IRODS_CXX_STANDARD = 14
+CFLAGS =  -m$(BITS)
 CXXFLAGS = -m$(BITS)
 CXXFLAGS += -std=c++$(IRODS_CXX_STANDARD) -D_PTHREADS
-CXXFLAGS += -Wno-unknown-pragmas
-CXXFLAGS.DBG += -g
+CXXFLAGS += -Wno-unknown-pragmas -Wno-format-truncation -Wno-implicit-fallthrough
+CXXFLAGS.DBG += -gdwarf-2 -g0 -O0 -fno-builtin-flags
 CXXFLAGS += $(CXXFLAGS.$(FLAVOUR))
 
 LIBSUFFIX.64 = /$(MACH64)
@@ -77,9 +72,9 @@ CMAKE_OPTIONS+= "$(CXXFLAGS)"
 CMAKE_OPTIONS+= -DIRODS_EXTERNALS_FULLPATH_CLANG=/usr
 # CMAKE_OPTIONS+= -DCMAKE_C_COMPILER=/usr/bin/clang
 # CMAKE_OPTIONS+= -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-CMAKE_OPTIONS+= -DCMAKE_C_COMPILER=/usr/gcc/6/bin/gcc
-CMAKE_OPTIONS+= -DCMAKE_CXX_COMPILER=/usr/gcc/6/bin/g++
-CMAKE_OPTIONS+= -DCMAKE_CPP_COMPILER=/usr/gcc/6/bin/cpp
+CMAKE_OPTIONS+= -DCMAKE_C_COMPILER=/usr/gcc/7/bin/gcc
+CMAKE_OPTIONS+= -DCMAKE_CXX_COMPILER=/usr/gcc/7/bin/g++
+CMAKE_OPTIONS+= -DCMAKE_CPP_COMPILER=/usr/gcc/7/bin/cpp
 CMAKE_OPTIONS+= -DCMAKE_BUILD_TYPE=Release
 CMAKE_OPTIONS+= -DIRODS_LINUX_DISTRIBUTION_NAME=solaris
 CMAKE_OPTIONS+= -DIRODS_LINUX_DISTRIBUTION_VERSION_MAJOR=11
@@ -93,10 +88,10 @@ CMAKE_OPTIONS+= -DIRODS_EXTERNALS_FULLPATH_ZMQ=/usr/zeromq-4.2
 CMAKE_OPTIONS+= -DIRODS_EXTERNALS_FULLPATH_ARCHIVE=/usr
 CMAKE_OPTIONS+= -DIRODS_EXTERNALS_PACKAGE_ROOT=/usr
 CMAKE_OPTIONS+= -DCMAKE_INSTALL_PREFIX=/
-CMAKE_OPTIONS.64 += -DCMAKE_INSTALL_RPATH=/usr/gcc/6/lib/amd64:/usr/zeromq-4.2/lib/amd64
-CMAKE_OPTIONS.64 += -DIRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME=/usr/gcc/6
-CMAKE_OPTIONS.64 += -DCMAKE_SHARED_LINKER_FLAGS="-R/usr/gcc/6/lib/amd64 -R/usr/zeromq-4.2/lib/amd64"
-CMAKE_OPTIONS.32 += -DCMAKE_INSTALL_RPATH=/usr/gcc/6/lib:/usr/zeromq-4.2/lib
+CMAKE_OPTIONS.64 += -DCMAKE_INSTALL_RPATH=/usr/gcc/7/lib/amd64:/usr/zeromq-4.2/lib/amd64
+# CMAKE_OPTIONS.64 += -DIRODS_EXTERNALS_FULLPATH_CLANG_RUNTIME=/usr/gcc/7
+CMAKE_OPTIONS.64 += -DCMAKE_SHARED_LINKER_FLAGS="-R/usr/gcc/7/lib/amd64 -R/usr/zeromq-4.2/lib/amd64"
+# CMAKE_OPTIONS.32 += -DCMAKE_INSTALL_RPATH=/usr/gcc/6/lib:/usr/zeromq-4.2/lib
 CMAKE_OPTIONS += $(CMAKE_OPTIONS.$(BITS))
 
 COMPONENT_PRE_CMAKE_ACTION = ( cd $(SOURCE_DIR) && tar xf $(COMPONENT_DIR)/Solaris/irods_schema_messaging.tar )
@@ -104,12 +99,12 @@ COMPONENT_PRE_CMAKE_ACTION = ( cd $(SOURCE_DIR) && tar xf $(COMPONENT_DIR)/Solar
 COMPONENT_BUILD_GMAKE_ARGS = -j14
 
 # no runpath in bins
-COMPONENT_POST_INSTALL_ACTION =  cd  $(PROTOUSRSBINDIR) && for f in `/usr/bin/find . -type f`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib$(LIBSUFFIX):/usr/zeromq-4.2/lib$(LIBSUFFIX)' $$f; };
+COMPONENT_POST_INSTALL_ACTION =  cd  $(PROTOUSRSBINDIR) && for f in `/usr/bin/find . -type f`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/7/lib$(LIBSUFFIX):/usr/zeromq-4.2/lib$(LIBSUFFIX)' $$f; };
 # use this with patch +set(IRODS_PLUGINS_DIRECTORY usr/lib/irods/${LIB_SUFFIX}/plugins)
-# COMPONENT_POST_INSTALL_ACTION += cd $(PROTOUSRLIBDIR)/irods$(LIBSUFFIX)/plugins && for f in `/usr/bin/find . -name "lib*so*"`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib$(LIBSUFFIX)' $$f;};
-COMPONENT_POST_INSTALL_ACTION += cd $(PROTOUSRLIBDIR)/irods/plugins && for f in `/usr/bin/find . -name "lib*so*"`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib$(LIBSUFFIX)' $$f;};
-COMPONENT_POST_INSTALL_ACTION += cd $(PROTOUSRLIBDIR)$(LIBSUFFIX) && for f in `/usr/bin/find . -name "lib*so*"`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib$(LIBSUFFIX)' $$f;};
-COMPONENT_POST_INSTALL_ACTION += cd $(PROTOVARDIR)/lib/irods/clients/bin && /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/6/lib$(LIBSUFFIX)' genOSAuth;
+# COMPONENT_POST_INSTALL_ACTION += cd $(PROTOUSRLIBDIR)/irods$(LIBSUFFIX)/plugins && for f in `/usr/bin/find . -name "lib*so*"`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/7/lib$(LIBSUFFIX)' $$f;};
+COMPONENT_POST_INSTALL_ACTION += cd $(PROTOUSRLIBDIR)/irods/plugins && for f in `/usr/bin/find . -name "lib*so*"`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/7/lib$(LIBSUFFIX)' $$f;};
+COMPONENT_POST_INSTALL_ACTION += cd $(PROTOUSRLIBDIR)$(LIBSUFFIX) && for f in `/usr/bin/find . -name "lib*so*"`; { /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/7/lib$(LIBSUFFIX)' $$f;};
+COMPONENT_POST_INSTALL_ACTION += cd $(PROTOVARDIR)/lib/irods/clients/bin && /usr/bin/elfedit -e 'dyn:runpath /usr/gcc/7/lib$(LIBSUFFIX)' genOSAuth;
 
 build: $(BUILD_64)
 

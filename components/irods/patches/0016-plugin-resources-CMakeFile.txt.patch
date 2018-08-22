@@ -13,7 +13,7 @@ index 946cd41..4cdbd69 100644
 +    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_system.so
 +    ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib${LIB_SUFFIX}/libarchive.so
      ${OPENSSL_CRYPTO_LIBRARY}
-+    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +    m
      )
  
