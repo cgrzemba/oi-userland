@@ -28,9 +28,10 @@ file bin/redis-check-rdb path=usr/bin/redis-check-rdb
 file bin/redis-cli path=usr/bin/redis-cli
 link path=usr/sbin/redis-sentinel target=redis-server
 file bin/redis-server path=usr/sbin/redis-server
-dir path=etc/redis user=redis
-dir path=var/lib/redis/6379 group=redis user=redis
-file redis.conf path=etc/redis/redis_6379.conf preserve=legacy user=redis
-file Solaris/redis.xml path=var/svc/manifest/site/redis.xml restart_fmri=svc:/system/manifest-import:default
 group groupname=redis
 user home-dir=/var/lib/redis group=redis username=redis
+dir path=etc/redis owner=redis
+dir path=var/lib/redis group=redis owner=redis
+dir path=var/lib/redis/6379 group=redis owner=redis
+file redis.conf path=etc/redis/redis_6379.conf preserve=true owner=redis
+file Solaris/redis.xml path=var/svc/manifest/site/redis.xml restart_fmri=svc:/system/manifest-import:default
