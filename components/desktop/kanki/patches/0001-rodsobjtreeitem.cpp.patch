@@ -1,0 +1,13 @@
+diff --git a/src/rodsobjtreeitem.cpp b/src/rodsobjtreeitem.cpp
+index 6bb1885..fea18be 100644
+--- a/src/rodsobjtreeitem.cpp
++++ b/src/rodsobjtreeitem.cpp
+@@ -173,7 +173,7 @@ QVariant RodsObjTreeItem::data(int column) const
+                     tmp = tmp / 1024;
+ 
+                 // construct size string from floored down value
+-                double order = floor(objEntry->objSize / pow(1024, p));
++                double order = floor(objEntry->objSize / pow((double)1024, (int) p));
+                 QString sizeStr = QVariant(order).toString() + " " + RodsObjTreeItem::binPrefixes[p] + "B";
+ 
+                 return (QVariant(sizeStr));

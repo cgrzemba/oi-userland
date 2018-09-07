@@ -1,0 +1,12 @@
+diff --git a/src/rodsdatainstream.cpp b/src/rodsdatainstream.cpp
+index 38e5da8..ce43954 100644
+--- a/src/rodsdatainstream.cpp
++++ b/src/rodsdatainstream.cpp
+@@ -13,6 +13,7 @@
+ 
+ // Kanki library class RodsDataInStream header
+ #include "rodsdatainstream.h"
++#include <sys/fcntl.h>
+ 
+ namespace Kanki {
+ 

@@ -1,0 +1,18 @@
+diff --git a/config/build.pri b/config/build.pri
+index 3b8b9fe..c760889 100644
+--- a/config/build.pri
++++ b/config/build.pri
+@@ -1,3 +1,2 @@
+-OSX_IRODS_BUILD=/usr/local/irods
+-OSX_IRODS_BOOST=boost_1_58_0z
+-OSX_IRODS_JANSSON=jansson-2.7
++QMAKE_CXXFLAGS += -pthreads
++
+diff --git a/config/build.pri b/config/build.pri
+index c2de7ef..db58317 100644
+--- a/config/build.pri
++++ b/config/build.pri
+@@ -1,2 +1,2 @@
+ QMAKE_CXXFLAGS += -pthreads
+-
++QMAKE_LFLAGS += -Bdirect -zignore

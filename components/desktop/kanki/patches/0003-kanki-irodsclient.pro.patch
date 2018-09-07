@@ -1,0 +1,16 @@
+diff --git a/src/kanki-irodsclient.pro b/src/kanki-irodsclient.pro
+index 5cc6aa5..ff174f5 100644
+--- a/src/kanki-irodsclient.pro
++++ b/src/kanki-irodsclient.pro
+@@ -230,9 +230,9 @@ macx {
+ } 
+ 
+ else {
+-    LIBS += -L/usr/lib/irods/externals -lirods_client_api -lirods_client -lboost_filesystem -lboost_regex -lboost_system -lboost_thread
++    LIBS += -lirods_client -lirods_common -lirods_plugin_dependencies -lboost_filesystem -lboost_regex -lboost_system -lboost_thread
+     LIBS += -lboost_chrono -lboost_date_time -lboost_filesystem -lboost_iostreams -lboost_program_options
+-    LIBS += /usr/lib/irods/externals/libjansson.a
++    LIBS += -ljansson
+     LIBS += -lcrypto -lssl
+ }
+ 
