@@ -1,0 +1,45 @@
+diff --git a/plugins/resources/unixfilesystem/libunixfilesystem.cpp b/plugins/resources/unixfilesystem/libunixfilesystem.cpp
+index aaae7ca..792c846 100644
+--- a/plugins/resources/unixfilesystem/libunixfilesystem.cpp
++++ b/plugins/resources/unixfilesystem/libunixfilesystem.cpp
+@@ -380,14 +380,13 @@ irods::error unix_file_getfs_freespace(
+ #elif defined(aix_platform) || defined(linux_platform) || defined(osx_platform)
+         status = statfs( path.c_str(), &statbuf );
+ #endif
+-
+         // =-=-=-=-=-=-=-
+         // handle error, if any
+         int err_status = UNIX_FILE_GET_FS_FREESPACE_ERR - errno;
+         if ( ( result = ASSERT_ERROR( status >= 0, err_status, "Statfs error for \"%s\", status = %d.",
+                                       path.c_str(), err_status ) ).ok() ) {
+ 
+-#if defined(sgi_platform)
++#if defined(sgi_platform) || defined(solaris_platform)
+             if ( statbuf.f_frsize > 0 ) {
+                 fssize = statbuf.f_frsize;
+             }
+@@ -395,6 +394,7 @@ irods::error unix_file_getfs_freespace(
+                 fssize = statbuf.f_bsize;
+             }
+             fssize *= statbuf.f_bavail;
++			rodsLog(LOG_DEBUG, "unix_file_getfs_freespace: fssize [%ld]", fssize);
+ #endif
+ 
+ #if defined(aix_platform) || defined(osx_platform) ||   \
+@@ -403,6 +403,7 @@ defined(linux_platform)
+ #elif defined(sgi_platform)
+             fssize = statbuf.f_bfree * statbuf.f_bsize;
+ #endif
++			rodsLog(LOG_DEBUG, "unix_file_getfs_freespace: set result fssize [%ld]", fssize);
+             result.code( fssize );
+         }
+ 
+@@ -583,7 +584,7 @@ irods::error unix_file_create(
+         ret = unix_file_getfs_freespace( _ctx );
+         if ( ( result = ASSERT_PASS( ret, "Error determining freespace on system." ) ).ok() ) {
+             rodsLong_t file_size = fco->size();
+-            if ( ( result = ASSERT_ERROR( file_size < 0 || ret.code() >= file_size, USER_FILE_TOO_LARGE, "File size: %ld is greater than space left on device: %ld",
++            if ( ( result = ASSERT_ERROR( file_size < 0 || ret.code() >= file_size, USER_FILE_TOO_LARGE, "File size of %s [%ld] is greater than space left on device [%ld]", fco->physical_path().c_str(),
+                                           file_size, ret.code() ) ).ok() ) {
+                 // =-=-=-=-=-=-=-
+                 // make call to umask & open for create

@@ -1,0 +1,13 @@
+diff --git a/scripts/irods/lib.py b/scripts/irods/lib.py
+index 1f21c18..470c705 100644
+--- a/scripts/irods/lib.py
++++ b/scripts/irods/lib.py
+@@ -34,7 +34,7 @@ from . import paths
+ #(no, really, getfqdn() is insufficient)
+ def get_hostname():
+     return socket.getaddrinfo(
+-        socket.gethostname(), 0, 0, 0, 0, socket.AI_CANONNAME)[0][3]
++        socket.gethostname(), 0, socket.SOCK_STREAM, 0, socket.IPPROTO_TCP, socket.AI_CANONNAME)[0][3]
+ 
+ def safe_shlex_split_for_2_6(args):
+     if not isinstance(args, str) and isinstance(args, six.text_type):

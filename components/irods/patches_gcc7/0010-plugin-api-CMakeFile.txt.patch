@@ -26,7 +26,7 @@ index b53752e..e35a863 100644
 +    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
 +    ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib/${LIB_SUFFIX}/libarchive.so
      ${OPENSSL_CRYPTO_LIBRARY}
-+    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +    m
      )
  
@@ -39,7 +39,7 @@ index e35a863..30eb355 100644
    target_compile_definitions(${PLUGIN} PRIVATE ${IRODS_API_PLUGIN_COMPILE_DEFINITIONS_${PLUGIN}} ${IRODS_COMPILE_DEFINITIONS} BOOST_SYSTEM_NO_DEPRECATED)
    target_compile_options(${PLUGIN} PRIVATE -Wno-write-strings)
    set_property(TARGET ${PLUGIN} PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
-+  set_target_properties(${PLUGIN} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH_USE_LINK_PATH TRUE INSTALL_RPATH "/usr/gcc/6/lib${LIB_SUFFIX}")
++  set_target_properties(${PLUGIN} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH_USE_LINK_PATH TRUE INSTALL_RPATH "/usr/gcc/7/lib${LIB_SUFFIX}")
  endforeach()
  
  install(

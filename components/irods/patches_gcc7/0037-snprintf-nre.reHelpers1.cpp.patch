@@ -1,0 +1,13 @@
+diff --git a/plugins/rule_engines/irods_rule_engine_plugin-irods_rule_language/nre.reHelpers1.cpp b/plugins/rule_engines/irods_rule_engine_plugin-irods_rule_language/nre.reHelpers1.cpp
+index a40a537..1c07ab4 100644
+--- a/plugins/rule_engines/irods_rule_engine_plugin-irods_rule_language/nre.reHelpers1.cpp
++++ b/plugins/rule_engines/irods_rule_engine_plugin-irods_rule_language/nre.reHelpers1.cpp
+@@ -67,7 +67,7 @@ int initializeReDebug( rsComm_t *svrComm ) {
+     myPID = ( int ) getpid();
+     myHostName[0] = '\0';
+     gethostname( myHostName, MAX_NAME_LEN );
+-    sprintf( condRead, "(*XUSER  == \"%s@%s\") && (*XHDR == \"STARTDEBUG\")",
++    snprintf( condRead, NAME_LEN, "(*XUSER  == \"%s@%s\") && (*XHDR == \"STARTDEBUG\")",
+              svrComm->clientUser.userName, svrComm->clientUser.rodsZone );
+     status = _readXMsg( GlobalREDebugFlag, condRead, &m, &s, &readhdr, &readmsg, &user, &addr );
+     if ( status >= 0 ) {

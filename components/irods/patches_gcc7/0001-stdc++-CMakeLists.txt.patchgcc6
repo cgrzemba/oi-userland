@@ -38,9 +38,9 @@ index dcc6b47..3b46492 100644
 -add_compile_options(-nostdinc++ -Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
 -link_libraries(c++abi)
 -include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
-+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libstdc++ -Wl,-z,ignore")
-+set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -stdlib=libstdc++ -Wl,-z,defs")
-+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -stdlib=libstdc++ -Wl,-z,defs")
++set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,stdc++ -Wl,-z,ignore")
++set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,defs")
++set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,defs")
 +add_compile_options(-Wall -Wextra -Werror -Wno-unused-function -Wno-unused-parameter)
  
  find_package(Threads REQUIRED)
@@ -55,8 +55,8 @@ index dcc6b47..3b46492 100644
    endif()
  endif()
  
-+# find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
-+find_library(STDC++_LIBRARY NAMES stdc++ PATHS /usr/gcc/6/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
++# find_library(STDC++_LIBRARY stdc++ PATHS /usr/gcc/7/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
++find_library(STDC++_LIBRARY NAMES stdc++ PATHS /usr/gcc/7/lib/${LIB_SUFFIX} NO_DEFAULT_PATH )
 +# link_libraries(c++abi)
 +message(STATUS "Found stdlib: ${STDC++_LIBRARY}")
 +
@@ -100,7 +100,7 @@ index dcc6b47..3b46492 100644
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so
 +  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
-+  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++  /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
    ${OPENSSL_SSL_LIBRARY}
    ${OPENSSL_CRYPTO_LIBRARY}
@@ -146,7 +146,7 @@ index dcc6b47..3b46492 100644
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_regex.so
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_system.so
 +  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
-+  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++  /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
    ${OPENSSL_SSL_LIBRARY}
    ${OPENSSL_CRYPTO_LIBRARY}
@@ -296,7 +296,7 @@ index dcc6b47..3b46492 100644
 +    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
 +    ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
 +    ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
-+    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +    ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
      ${OPENSSL_CRYPTO_LIBRARY}
      ${OPENSSL_SSL_LIBRARY}
@@ -323,7 +323,7 @@ index dcc6b47..3b46492 100644
      ${OPENSSL_INCLUDE_DIR}
      )
    set_property(TARGET ${EXECUTABLE} PROPERTY CXX_STANDARD ${IRODS_CXX_STANDARD})
-+  set_target_properties(${EXECUTABLE} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH /usr/gcc/6/lib${LIB_SUFFIX}:/usr/zeromq-4.2/lib${LIB_SUFFIX})
++  set_target_properties(${EXECUTABLE} PROPERTIES BUILD_WITH_INSTALL_RPATH TRUE INSTALL_RPATH /usr/gcc/7/lib${LIB_SUFFIX}:/usr/zeromq-4.2/lib${LIB_SUFFIX})
    target_compile_definitions(
      ${EXECUTABLE}
      PRIVATE
@@ -354,7 +354,7 @@ index dcc6b47..3b46492 100644
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_chrono.so
 +  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/${LIB_SUFFIX}/libjansson.so
 +  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
-+  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++  /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/${LIB_SUFFIX}/libzmq.so
    ${OPENSSL_CRYPTO_LIBRARY}
    ${OPENSSL_SSL_LIBRARY}
@@ -397,7 +397,7 @@ index dcc6b47..3b46492 100644
 -  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_regex.so
 -  ${IRODS_EXTERNALS_FULLPATH_JANSSON}/lib/libjansson.so
 -  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
-+  /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++  /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/${LIB_SUFFIX}/libavrocpp.so
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_filesystem.so
 +  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/${LIB_SUFFIX}/libboost_thread.so

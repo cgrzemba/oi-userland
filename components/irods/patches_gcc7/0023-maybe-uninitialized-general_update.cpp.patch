@@ -1,0 +1,13 @@
+diff --git a/plugins/database/src/general_update.cpp b/plugins/database/src/general_update.cpp
+index e7e20ab..4a7f65c 100644
+--- a/plugins/database/src/general_update.cpp
++++ b/plugins/database/src/general_update.cpp
+@@ -131,7 +131,7 @@ int
+ generalDelete( generalUpdateInp_t generalUpdateInp ) {
+     int i, j;
+     char *tableName, *columnName;
+-    char *firstTableName;
++    char *firstTableName = NULL;
+ 
+     rstrcpy( tSQL, "delete from ", MAX_SQL_SIZE );
+ 

@@ -12,7 +12,7 @@ index 1626489..ce04abe 100644
 +    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_regex.so
 +    ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib${LIB_SUFFIX}/libboost_filesystem.so
      ${ODBC_LIBRARY}
-+    /usr/gcc/6/lib/${LIB_SUFFIX}/libstdc++.so
++    /usr/gcc/7/lib/${LIB_SUFFIX}/libstdc++.so
 +    m socket nsl
      )
  

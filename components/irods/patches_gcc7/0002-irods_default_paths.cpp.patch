@@ -1,0 +1,13 @@
+diff --git a/lib/core/src/irods_default_paths.cpp b/lib/core/src/irods_default_paths.cpp
+index 051658f..cc8f38d 100644
+--- a/lib/core/src/irods_default_paths.cpp
++++ b/lib/core/src/irods_default_paths.cpp
+@@ -7,7 +7,7 @@ namespace irods {
+     boost::filesystem::path
+     get_irods_root_directory() {
+         Dl_info dl_info;
+-        const int dladdr_ret = dladdr(__FUNCTION__, &dl_info);
++        const int dladdr_ret = dladdr((void*)__FUNCTION__, &dl_info);
+         if (dladdr_ret == 0) {
+             THROW(-1, "dladdr returned 0");
+         }

@@ -1,0 +1,46 @@
+diff --git a/lib/core/src/packStruct.cpp b/lib/core/src/packStruct.cpp
+index 137452d..7b43b7f 100644
+--- a/lib/core/src/packStruct.cpp
++++ b/lib/core/src/packStruct.cpp
+@@ -344,27 +344,23 @@ packTypeLookup( const char *typeName ) {
+ }
+ 
+ packedOutput_t
+-initPackedOutput( const int len ) {
+-    return {
+-        .bBuf={
+-            .buf=malloc(len),
+-            .len=0
+-        },
+-        .bufSize=len,
+-        .nopackBufArray={}
+-    };
++initPackedOutputWithBuf( void *buf, const int len ) {
++    packedOutput_t temp;
++    temp.bBuf.buf = buf;
++    temp.bBuf.len = 0;
++    temp.bufSize = len;
++    temp.nopackBufArray = {};
++    return temp;
+ }
+ 
+ packedOutput_t
+-initPackedOutputWithBuf( void *buf, const int len ) {
+-    return {
+-        .bBuf={
+-            .buf=buf,
+-            .len=0
+-        },
+-        .bufSize=len,
+-        .nopackBufArray={}
+-    };
++initPackedOutput( const int len ) {
++    packedOutput_t temp;
++    temp.bBuf.buf = malloc(len);
++    temp.bBuf.len = 0;
++    temp.bufSize = len;
++    temp.nopackBufArray = {};
++    return temp;
+ }
+ 
+ int

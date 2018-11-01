@@ -1,0 +1,13 @@
+diff --git a/cmake/runtime_library.cmake b/cmake/runtime_library.cmake
+index c596eb5..76ee40f 100644
+--- a/cmake/runtime_library.cmake
++++ b/cmake/runtime_library.cmake
+@@ -6,7 +6,7 @@ install(
+   irods_server
+   EXPORT IRODSTargets
+   LIBRARY
+-  DESTINATION usr/lib
++  DESTINATION usr/lib${LIB_SUFFIX}
+   COMPONENT ${IRODS_PACKAGE_COMPONENT_RUNTIME_NAME}
+   )
+ 

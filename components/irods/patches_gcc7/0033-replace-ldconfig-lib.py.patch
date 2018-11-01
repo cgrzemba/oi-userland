@@ -1,0 +1,13 @@
+diff --git a/scripts/irods/lib.py b/scripts/irods/lib.py
+index 470c705..9f3e979 100644
+--- a/scripts/irods/lib.py
++++ b/scripts/irods/lib.py
+@@ -188,7 +188,7 @@ def find_shared_object(so_name, regex=False, additional_directories=[]):
+ 
+     env = os.environ.copy()
+     env['PATH'] = ':'.join([env['PATH'], '/sbin'])
+-    out, _ = execute_command(['ldconfig', '-vNX'], env=env)
++    out, _ = execute_command(['true', '-vNX'], env=env)
+     for directory in [d.rstrip(':') for d in out.splitlines() if d and d[0] == '/']:
+         if regex and os.path.exists(directory):
+             for name in os.listdir(directory):

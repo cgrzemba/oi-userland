@@ -1,0 +1,13 @@
+diff --git a/lib/core/src/scanUtil.cpp b/lib/core/src/scanUtil.cpp
+index 336624d..612ce91 100644
+--- a/lib/core/src/scanUtil.cpp
++++ b/lib/core/src/scanUtil.cpp
+@@ -38,6 +38,8 @@ scanObj( rcComm_t *conn,
+         }
+ 
+         char inpPath[ LONG_NAME_LEN ];
++        if (strlen(inpPathO) >= LONG_NAME_LEN)
++            rodsLog( LOG_ERROR, "scanObj: %s too long", inpPathO );
+         snprintf( inpPath, sizeof( inpPath ), "%s", inpPathO );
+         // if it is part of a mounted collection, abort
+         if ( is_directory( p ) ) {

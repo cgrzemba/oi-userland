@@ -1,0 +1,19 @@
+diff --git a/plugins/network/tcp/libtcp.cpp b/plugins/network/tcp/libtcp.cpp
+index 913e123..1ad00cd 100644
+--- a/plugins/network/tcp/libtcp.cpp
++++ b/plugins/network/tcp/libtcp.cpp
+@@ -64,11 +64,12 @@ irods::error tcp_socket_read(
+ 
+         int num_bytes = read( _socket, ( void * ) read_ptr, len_to_read );
+         if ( num_bytes < 0 ) {
+-            if ( EINTR == errno ) {
++            if ( EINTR == errno || EAGAIN == errno) {
++		rodsLog( LOG_DEBUG, "tcp_socket_read: miss [%d]bytes", len_to_read );
+                 errno = 0;
+                 num_bytes = 0;
+             } else {
+-                return ERROR(SYS_SOCK_READ_ERR - errno, boost::format("error reading from socket after [%d] bytes read") % _bytes_read);
++                return ERROR(SYS_SOCK_READ_ERR - errno, boost::format("error [%d] reading from socket [%d:%d] after [%d] bytes read, miss [%d] ") % errno % getpid() % _socket % _bytes_read % len_to_read);
+             }
+         } else if ( num_bytes == 0 ) {
+             break;

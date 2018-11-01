@@ -1,0 +1,44 @@
+diff --git a/server/core/src/irods_server_control_plane.cpp b/server/core/src/irods_server_control_plane.cpp
+index 9c44636..82c6cb4 100644
+--- a/server/core/src/irods_server_control_plane.cpp
++++ b/server/core/src/irods_server_control_plane.cpp
+@@ -95,7 +95,7 @@ namespace irods {
+         cmd.options[ SERVER_CONTROL_HOST_KW ]   = _host;
+ 
+         // serialize using the generated avro class
+-        std::auto_ptr< avro::OutputStream > out = avro::memoryOutputStream();
++        std::unique_ptr< avro::OutputStream > out = avro::memoryOutputStream();
+         avro::EncoderPtr e = avro::binaryEncoder();
+         e->init( *out );
+         avro::encode( *e, cmd );
+@@ -1116,7 +1116,7 @@ namespace irods {
+ 
+         error final_ret = SUCCESS();
+ 
+-        int port, num_hash_rounds;
++        int num_hash_rounds;
+         boost::optional<const std::string&> encryption_algorithm;
+         buffer_crypt::array_t shared_secret;
+         try {
+@@ -1155,7 +1155,7 @@ namespace irods {
+         }
+ 
+ 
+-        std::auto_ptr<avro::InputStream> in = avro::memoryInputStream(
++        std::unique_ptr<avro::InputStream> in = avro::memoryInputStream(
+                 static_cast<const uint8_t*>(
+                     data_to_process.data() ),
+                 data_to_process.size() );
+diff --git a/server/core/src/irods_server_control_plane.cpp b/server/core/src/irods_server_control_plane.cpp
+index 82c6cb4..ca70cc7 100644
+--- a/server/core/src/irods_server_control_plane.cpp
++++ b/server/core/src/irods_server_control_plane.cpp
+@@ -1120,7 +1120,7 @@ namespace irods {
+         boost::optional<const std::string&> encryption_algorithm;
+         buffer_crypt::array_t shared_secret;
+         try {
+-            port = get_server_property<const int>(port_prop_);
++            get_server_property<const int>(port_prop_);
+             num_hash_rounds = get_server_property<const int>(CFG_SERVER_CONTROL_PLANE_ENCRYPTION_NUM_HASH_ROUNDS_KW);
+             encryption_algorithm.reset(get_server_property<const std::string>(CFG_SERVER_CONTROL_PLANE_ENCRYPTION_ALGORITHM_KW));
+             const auto& key = get_server_property<const std::string>(CFG_SERVER_CONTROL_PLANE_KEY);

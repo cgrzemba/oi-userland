@@ -1,0 +1,36 @@
+diff --git a/lib/core/src/packStruct.cpp b/lib/core/src/packStruct.cpp
+index 0623a2b..5a0ccee 100644
+--- a/lib/core/src/packStruct.cpp
++++ b/lib/core/src/packStruct.cpp
+@@ -1612,6 +1612,9 @@ packChildStruct( const void *&inPtr, packedOutput_t &packedOutput,
+ 
+         /* now pack each child item */
+         packItem_t* tmpItem = &packItemHead;
++#if defined(solaris_platform)
++    	int doubleInStruct = 0;
++#endif
+         while ( tmpItem != NULL ) {
+ #if defined(solaris_platform)
+             if ( tmpItem->pointerType == 0 &&
+@@ -2526,7 +2529,7 @@ unpackChildStruct( const void *&inPtr, packedOutput_t &unpackedOutput,
+         /* seems that solaris align to 64 bit boundary if there is any
+          * double in struct */
+         if ( doubleInStruct > 0 ) {
+-            extendPackedOutput( unpackedOutput, sizeof( rodsLong_t ), &outPtr1 );
++            extendPackedOutput( unpackedOutput, sizeof( rodsLong_t ), outPtr1 );
+             outPtr2 = alignDouble( outPtr1 );
+             unpackedOutput.bBuf.len += ( ( int ) outPtr2 - ( int ) outPtr1 );
+         }
+diff --git a/lib/core/src/packStruct.cpp b/lib/core/src/packStruct.cpp
+index 5a0ccee..137452d 100644
+--- a/lib/core/src/packStruct.cpp
++++ b/lib/core/src/packStruct.cpp
+@@ -2531,7 +2531,7 @@ unpackChildStruct( const void *&inPtr, packedOutput_t &unpackedOutput,
+         if ( doubleInStruct > 0 ) {
+             extendPackedOutput( unpackedOutput, sizeof( rodsLong_t ), outPtr1 );
+             outPtr2 = alignDouble( outPtr1 );
+-            unpackedOutput.bBuf.len += ( ( int ) outPtr2 - ( int ) outPtr1 );
++            unpackedOutput.bBuf.len += ( ( rodsLong_t ) outPtr2 - ( rodsLong_t ) outPtr1 );
+         }
+ #endif
+         if ( irodsProt == XML_PROT ) {
