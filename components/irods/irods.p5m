@@ -542,7 +542,7 @@ file path=usr/lib/irods/plugins/rule_engines/libirods_rule_engine_plugin-cpp_def
 file path=usr/lib/irods/plugins/rule_engines/libirods_rule_engine_plugin-irods_rule_language.so
 file path=usr/lib/irods/cmake/IRODSConfig.cmake
 file path=usr/lib/irods/cmake/IRODSConfigVersion.cmake
-file path=usr/lib/irods/cmake/IRODSTargets-release.cmake
+file path=usr/lib/irods/cmake/IRODSTargets-debug.cmake
 file path=usr/lib/irods/cmake/IRODSTargets.cmake
 file path=usr/sbin/hostname_resolves_to_local_address
 file path=usr/sbin/irodsPamAuthCheck
@@ -573,21 +573,21 @@ file path=var/lib/irods/irodsctl mode=555
 file path=var/lib/irods/msiExecCmd_bin/hello
 file path=var/lib/irods/msiExecCmd_bin/irodsServerMonPerf
 file path=var/lib/irods/msiExecCmd_bin/test_execstream.py pkg.depend.bypass-generate=.*
-file path=var/lib/irods/msiExecCmd_bin/univMSSInterface.sh pkg.depend.bypass-generate=.*
+file path=var/lib/irods/msiExecCmd_bin/univMSSInterface.sh.template pkg.depend.bypass-generate=.*
 file path=var/lib/irods/packaging/connectControl.config.template
 file path=var/lib/irods/packaging/core.dvm.template
 file path=var/lib/irods/packaging/core.fnm.template
 file path=var/lib/irods/packaging/core.re.template
 file path=var/lib/irods/packaging/database_config.json.template
-file path=var/lib/irods/packaging/find_os.sh mode=755
+file path=var/lib/irods/packaging/find_os.sh mode=555
 file path=var/lib/irods/packaging/host_access_control_config.json.template
 file path=var/lib/irods/packaging/hosts_config.json.template
 file path=var/lib/irods/packaging/irodsMonPerf.config.in
 file path=var/lib/irods/packaging/localhost_setup_mysql.input
 file path=var/lib/irods/packaging/localhost_setup_oracle.input
 file path=var/lib/irods/packaging/localhost_setup_postgres.input
-file path=var/lib/irods/packaging/postinstall.sh mode=755
-file path=var/lib/irods/packaging/preremove.sh mode=755
+file path=var/lib/irods/packaging/postinstall.sh mode=555
+file path=var/lib/irods/packaging/preremove.sh mode=555
 file path=var/lib/irods/packaging/server_config.json.template
 file path=var/lib/irods/packaging/server_setup_instructions.txt
 file path=var/lib/irods/packaging/sql/icatDropSysTables.sql
@@ -596,11 +596,11 @@ file path=var/lib/irods/packaging/sql/icatSysInserts.sql
 file path=var/lib/irods/packaging/sql/icatSysTables.sql
 file path=var/lib/irods/packaging/sql/mysql_functions.sql
 file path=var/lib/irods/packaging/upgrade-3.3.xto4.0.0.sql
-file path=var/lib/irods/scripts/chown_directories_for_postinstall.py mode=755
-file path=var/lib/irods/scripts/cleanup_resource_tree.py mode=755
-file path=var/lib/irods/scripts/find_shared_object.py mode=755
-file path=var/lib/irods/scripts/get_db_schema_version.py mode=755
-file path=var/lib/irods/scripts/get_irods_version.py mode=755
+file path=var/lib/irods/scripts/chown_directories_for_postinstall.py mode=555
+file path=var/lib/irods/scripts/cleanup_resource_tree.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/find_shared_object.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/get_db_schema_version.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/get_irods_version.py mode=555 pkg.depend.bypass-generate=.*
 file path=var/lib/irods/scripts/irods/__init__.py
 file path=var/lib/irods/scripts/irods/configuration.py
 file path=var/lib/irods/scripts/irods/controller.py
@@ -671,20 +671,20 @@ file path=var/lib/irods/scripts/irods/test/test_ssl.py
 file path=var/lib/irods/scripts/irods/test/test_util.py
 file path=var/lib/irods/scripts/irods/test/test_xmsg.py
 file path=var/lib/irods/scripts/irods/upgrade_configuration.py
-file path=var/lib/irods/scripts/irods_control.py mode=755
-file path=var/lib/irods/scripts/kill_pid.py mode=755
-file path=var/lib/irods/scripts/make_resource_tree.py mode=755
-file path=var/lib/irods/scripts/manual_cleanup.py mode=755
-file path=var/lib/irods/scripts/pid_age.py mode=755
-file path=var/lib/irods/scripts/rulebase_fastswap_test_2276.sh mode=755
-file path=var/lib/irods/scripts/run_coverage_test.sh mode=755
-file path=var/lib/irods/scripts/run_cppcheck.sh mode=755
-file path=var/lib/irods/scripts/run_tests.py mode=755
-file path=var/lib/irods/scripts/setup_irods.py mode=755
-file path=var/lib/irods/scripts/switchuser.py mode=755
-file path=var/lib/irods/scripts/system_identification.py mode=755
-file path=var/lib/irods/scripts/terminate_irods_processes.py mode=755
-file path=var/lib/irods/scripts/validate_json.py mode=755
+file path=var/lib/irods/scripts/irods_control.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/kill_pid.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/make_resource_tree.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/manual_cleanup.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/pid_age.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/rulebase_fastswap_test_2276.sh mode=555
+file path=var/lib/irods/scripts/run_coverage_test.sh mode=555
+file path=var/lib/irods/scripts/run_cppcheck.sh mode=555
+file path=var/lib/irods/scripts/run_tests.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/setup_irods.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/switchuser.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/system_identification.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/terminate_irods_processes.py mode=555 pkg.depend.bypass-generate=.*
+file path=var/lib/irods/scripts/validate_json.py mode=555 pkg.depend.bypass-generate=.*
 file path=var/lib/irods/test/filesystem/make_sector_mapping_table.py
 file path=var/lib/irods/test/filesystem/mapping.txt
 file path=var/lib/irods/test/filesystem/setup_fs.sh
