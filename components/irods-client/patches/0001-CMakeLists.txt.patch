@@ -1,17 +1,4 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b605e9a..f207226 100644
---- a/CMakeLists.txt
-+++ b/CMakeLists.txt
-@@ -1,8 +1,6 @@
- cmake_minimum_required(VERSION 3.5.0 FATAL_ERROR) #CPACK_DEBIAN_<COMPONENT>_PACKAGE_NAME
- include(${CMAKE_SOURCE_DIR}/cmake/RequireOutOfSourceBuild.cmake)
- 
--find_package(IRODS 4.2.3 EXACT REQUIRED CONFIG)
--
- set(CMAKE_C_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang)
- set(CMAKE_CXX_COMPILER ${IRODS_EXTERNALS_FULLPATH_CLANG}/bin/clang++)
- 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
 index f207226..778a4cb 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
