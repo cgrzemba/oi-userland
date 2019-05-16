@@ -15,12 +15,13 @@
 # Copyright 2018-2019 Michal Nowak
 #
 
-PREFERRED_BITS=		64
+PREFERRED_BITS=		32
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		xscreensaver
 COMPONENT_VERSION=	5.42
+COMPONENT_REVISION=	1
 COMPONENT_PROJECT_URL=	https://www.jwz.org/xscreensaver/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
@@ -67,7 +68,6 @@ CONFIGURE_OPTIONS+=	--with-pam=/usr
 CONFIGURE_OPTIONS+=	--without-shadow
 CONFIGURE_OPTIONS+=	--without-kerberos 
 CONFIGURE_OPTIONS+=	--with-xinput-ext
-CONFIGURE_OPTIONS+=	--with-randr-ext
 CONFIGURE_OPTIONS+=	--enable-root-passwd
 CONFIGURE_OPTIONS+=	--with-gl=/usr
 CONFIGURE_OPTIONS+=	--without-motif
@@ -77,27 +77,20 @@ CONFIGURE_OPTIONS+=	--with-configdir=/usr/lib/xscreensaver/config/control-center
 CONFIGURE_OPTIONS+=	--with-image-directory=/usr/share/pixmaps/backgrounds
 CONFIGURE_OPTIONS+=	--with-text-file=/etc/motd
 CONFIGURE_OPTIONS+=	--with-x-app-defaults=/usr/share/X11/app-defaults
-CONFIGURE_OPTIONS+=	--with-jpeg
-CONFIGURE_OPTIONS+=	--with-png
-CONFIGURE_OPTIONS+=	--with-gl
 
 COMPONENT_INSTALL_ENV += MAKEFLAGS=-e install_prefix=$(PROTO_DIR)
 
-../rss-glx/build/i86/.built:
-	(cd ../rss-glx ; $(GMAKE) build)
-
 # common targets
-build:		$(BUILD_64)
+build:		$(BUILD_32)
 
-install:	$(INSTALL_64) ../rss-glx/build/i86/.built
-	perl ../rss-glx/build/i86/utils/rss-glx_install.pl $(PROTO_DIR)/usr/share/X11/app-defaults/XScreenSaver
+install:	$(INSTALL_32)
+
 test:		$(NO_TESTS)
 
 REQUIRED_PACKAGES += image/library/$(JPEG_IMPLEM)
 REQUIRED_PACKAGES += image/library/libpng16
 REQUIRED_PACKAGES += library/c++/harfbuzz
 REQUIRED_PACKAGES += library/perl-5/xml-parser
-REQUIRED_PACKAGES += runtime/perl-522
 REQUIRED_PACKAGES += x11/library/mesa
 # Auto-generated dependencies
 REQUIRED_PACKAGES += gnome/config/gconf
