@@ -21,14 +21,14 @@ PREFERRED_BITS=		64
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		firefox
-IPS_COMPONENT_VERSION=	60.9.0
+IPS_COMPONENT_VERSION=	68.0.2
 COMPONENT_VERSION=	$(IPS_COMPONENT_VERSION)esr
-COMPONENT_REVISION=	2
+COMPONENT_REVISION=	0
 COMPONENT_SUMMARY= 	Mozilla Firefox Web browser
 COMPONENT_SRC= 		$(COMPONENT_NAME)-$(IPS_COMPONENT_VERSION)
 COMPONENT_ARCHIVE= 	$(COMPONENT_NAME)-$(COMPONENT_VERSION).source.tar.xz
 COMPONENT_ARCHIVE_HASH= \
-	sha256:9f453c8cc5669e46e38f977764d49a36295bf0d023619d9aac782e6bb3e8c53f
+	sha256:6c140440f72938269bfbd0ff0c03203bc24b226a2839b34d88d8ff7069f85c89
 ifdef CANDIDATE_BUILD
 COMPONENT_ARCHIVE_URL= \
 	https://ftp.mozilla.org/pub/firefox/candidates/$(COMPONENT_VERSION)-candidates/build$(CANDIDATE_BUILD)/source/$(COMPONENT_ARCHIVE)
@@ -70,20 +70,33 @@ CONFIGURE_OPTIONS +=	--disable-jemalloc
 CONFIGURE_OPTIONS +=	--enable-optimize="-O2 -fno-schedule-insns2 -fno-lifetime-dse -fno-delete-null-pointer-checks"
 CONFIGURE_OPTIONS +=	--disable-dtrace
 CONFIGURE_OPTIONS +=	--disable-crashreporter
+CONFIGURE_OPTIONS+=        --disable-necko-wifi
+CONFIGURE_OPTIONS+=        --enable-chrome-format=flat
+CONFIGURE_OPTIONS+=        --disable-libjpeg-turbo
+# CONFIGURE_ARGS+=        --with-system-webp
+
+CONFIGURE_OPTIONS+=        --disable-gconf
+CONFIGURE_OPTIONS+=       --enable-readline
+CONFIGURE_OPTIONS+=        --disable-icf
+
 CONFIGURE_OPTIONS +=	--enable-pulseaudio
 CONFIGURE_OPTIONS +=	--disable-webrtc
 CONFIGURE_OPTIONS +=	--with-intl-api
 CONFIGURE_OPTIONS +=	--disable-debug
 CONFIGURE_OPTIONS +=	--enable-default-toolkit=cairo-gtk3
-CONFIGURE_OPTIONS +=	--with-pthreads
 CONFIGURE_OPTIONS +=	--enable-system-pixman
+CONFIGURE_OPTIONS +=	--enable-system-ffi
+# CONFIGURE_OPTIONS+=        --with-system-icu
+# CONFIGURE_OPTIONS+=        --with-system-nss
+# CONFIGURE_OPTIONS+=        --with-system-nspr
+#CONFIGURE_OPTIONS+=       --with-system-jpeg
 CONFIGURE_OPTIONS +=	--with-system-zlib
 CONFIGURE_OPTIONS +=	--with-system-bz2
-CONFIGURE_OPTIONS +=	--enable-system-ffi
 CONFIGURE_OPTIONS +=	--prefix=$(CONFIGURE_PREFIX)
 CONFIGURE_OPTIONS +=	--libdir=$(FIREFOX_LIBDIR)
 CONFIGURE_OPTIONS +=	--host=$(GNU_ARCH)
 CONFIGURE_OPTIONS +=	--target=$(GNU_ARCH)
+CONFIGURE_OPTIONS +=	--disable-rust-simd
 
 ENV +=  PATH=$(PATH)
 ENV +=	CC=$(CC)
