@@ -1,0 +1,58 @@
+diff --git a/third_party/rust/num_cpus/.cargo-checksum.json b/third_party/rust/num_cpus/.cargo-checksum.json
+index bd4234a..d0514de 100644
+--- a/third_party/rust/num_cpus/.cargo-checksum.json
++++ b/third_party/rust/num_cpus/.cargo-checksum.json
+@@ -1 +1 @@
+-{"files":{"CHANGELOG.md":"fef18c34a831fd8d6a6c4248ee76363a2ff273757989fd0f1fd0ba410421c08b","CONTRIBUTING.md":"2390961aab1bba026135338da1216b6cc828dfaeed9357d9c155c55a252d3efb","Cargo.toml":"70e408f452f3b9a83dd60cf5d1e2fcf92982a0fffbd017601e974e0ea2df3224","LICENSE-APACHE":"a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2","LICENSE-MIT":"0593d22d122d4bfec6407115e3907546312976f75473417aaa4c57ecd2095ae6","README.md":"12451d6905fe9cdac206410de8071b562e5ea936b6e55a19ac97982831a0fcdb","src/lib.rs":"deccac6ae539302e2f1c12b4f91cecd1583272916543ea09717a6ac91efc133c"},"package":"514f0d73e64be53ff320680ca671b64fe3fb91da01e1ae2ddc99eb51d453b20d"}
+\ No newline at end of file
++{"files":{"CHANGELOG.md":"fef18c34a831fd8d6a6c4248ee76363a2ff273757989fd0f1fd0ba410421c08b","CONTRIBUTING.md":"2390961aab1bba026135338da1216b6cc828dfaeed9357d9c155c55a252d3efb","Cargo.toml":"70e408f452f3b9a83dd60cf5d1e2fcf92982a0fffbd017601e974e0ea2df3224","LICENSE-APACHE":"a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2","LICENSE-MIT":"0593d22d122d4bfec6407115e3907546312976f75473417aaa4c57ecd2095ae6","README.md":"12451d6905fe9cdac206410de8071b562e5ea936b6e55a19ac97982831a0fcdb","src/lib.rs":"3451b1a7135d2ceda07b41118936c4788e1b9c65675f6d345220b61f20f8c396"},"package":"514f0d73e64be53ff320680ca671b64fe3fb91da01e1ae2ddc99eb51d453b20d"}
+diff --git a/third_party/rust/num_cpus/src/lib.rs b/third_party/rust/num_cpus/src/lib.rs
+index 0ec5058..cf64378 100644
+--- a/third_party/rust/num_cpus/src/lib.rs
++++ b/third_party/rust/num_cpus/src/lib.rs
+@@ -295,6 +296,7 @@ fn get_num_cpus() -> usize {
+     target_os = "macos",
+     target_os = "ios",
+     target_os = "android",
++    target_os = "illumos",
+     target_os = "solaris",
+     target_os = "fuchsia")
+ )]
+diff --git a/third_party/rust/term_size/.cargo-checksum.json b/third_party/rust/term_size/.cargo-checksum.json
+index 64cdea3..9562df3 100644
+--- a/third_party/rust/term_size/.cargo-checksum.json
++++ b/third_party/rust/term_size/.cargo-checksum.json
+@@ -1 +1 @@
+-{"files":{"CHANGELOG.md":"c3ba8be220413f2ed5fce3f49a3888d22e20802f19a237cdaa1171fb13000427","Cargo.toml":"4de1d58c6b6e19f026939fcd1a3bb1ae65abeaeb524f3c9d0f29909a61d08604","LICENSE-APACHE":"a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2","LICENSE-MIT":"6725d1437fc6c77301f2ff0e7d52914cf4f9509213e1078dc77d9356dbe6eac5","README.md":"9cf3574889a4e7f4fe68f532bacd596786057d41eb20fe8e8ed2215d430d8bd3","appveyor.yml":"bd88ad4a942e10ef602540ae592f3e010327dc93aa3d60f07f9f7ff6d3562719","index.html":"d2203968a6fb051d52c55d6e517614c942ea0edbc283e6c3cc8aeb4556eeaad4","justfile":"8255dafcc5dbb0c4df869d68d5cfe0f8b16835669151dacbc0782fbeb3a3e5d4","rustfmt.toml":"8fd2d63119df515fd5f44e530c709b19d66b09fbc2e22a640bf4b64c57e7d6b3","src/lib.rs":"eab371fe8be05d03bb1cd2a5f1ec3e665423501412383d211552174e21da05c7"},"package":"e2b6b55df3198cc93372e85dd2ed817f0e38ce8cc0f22eb32391bfad9c4bf209"}
+\ No newline at end of file
++{"files":{"CHANGELOG.md":"c3ba8be220413f2ed5fce3f49a3888d22e20802f19a237cdaa1171fb13000427","Cargo.toml":"4de1d58c6b6e19f026939fcd1a3bb1ae65abeaeb524f3c9d0f29909a61d08604","LICENSE-APACHE":"a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2","LICENSE-MIT":"6725d1437fc6c77301f2ff0e7d52914cf4f9509213e1078dc77d9356dbe6eac5","README.md":"9cf3574889a4e7f4fe68f532bacd596786057d41eb20fe8e8ed2215d430d8bd3","appveyor.yml":"bd88ad4a942e10ef602540ae592f3e010327dc93aa3d60f07f9f7ff6d3562719","index.html":"d2203968a6fb051d52c55d6e517614c942ea0edbc283e6c3cc8aeb4556eeaad4","justfile":"8255dafcc5dbb0c4df869d68d5cfe0f8b16835669151dacbc0782fbeb3a3e5d4","rustfmt.toml":"8fd2d63119df515fd5f44e530c709b19d66b09fbc2e22a640bf4b64c57e7d6b3","src/lib.rs":"ed339f56b7bd7fdc5adb71f97891ba05776a5e56aabdeebbad18676554f0363e"},"package":"e2b6b55df3198cc93372e85dd2ed817f0e38ce8cc0f22eb32391bfad9c4bf209"}
+diff --git a/third_party/rust/term_size/src/lib.rs b/third_party/rust/term_size/src/lib.rs
+index da2b96c..c439c51 100644
+--- a/third_party/rust/term_size/src/lib.rs
++++ b/third_party/rust/term_size/src/lib.rs
+@@ -30,6 +30,7 @@ pub use platform::{dimensions, dimensions_stdout, dimensions_stdin, dimensions_s
+           target_os = "freebsd",
+           target_os = "netbsd",
+           target_os = "openbsd",
++          target_os = "illumos",
+           target_os = "solaris"))]
+ mod platform {
+     use libc::{STDOUT_FILENO, STDIN_FILENO, STDERR_FILENO, c_int, c_ulong, winsize};
+@@ -48,7 +49,8 @@ mod platform {
+               target_os = "openbsd"))]
+     static TIOCGWINSZ: c_ulong = 0x40087468;
+ 
+-    #[cfg(target_os = "solaris")]
++    #[cfg(target_os = "solaris",
++		      "illumos")]
+     static TIOCGWINSZ: c_ulong = 0x5468;
+ 
+     extern "C" {
+@@ -227,6 +229,7 @@ mod platform {
+               target_os = "freebsd",
+               target_os = "netbsd",
+               target_os = "openbsd",
++              target_os = "illumos",
+               target_os = "solaris",
+               target_os = "windows")))]
+ mod platform {

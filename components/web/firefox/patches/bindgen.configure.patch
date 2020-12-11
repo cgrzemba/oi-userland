@@ -1,0 +1,19 @@
+diff --git a/build/moz.configure/bindgen.configure b/build/moz.configure/bindgen.configure
+index ef48f26..ff61ed8 100644
+--- a/build/moz.configure/bindgen.configure
++++ b/build/moz.configure/bindgen.configure
+@@ -275,12 +275,10 @@ def bindgen_config_paths(llvm_config, libclang_path, clang_path,
+ @checking('that libclang is new enough', lambda s: 'yes' if s else 'no')
+ @imports(_from='ctypes', _import='CDLL')
+ @imports(_from='textwrap', _import='dedent')
++@imports('pdb')
++
+ def min_libclang_version(libclang):
+     try:
+-        lib = CDLL(libclang.encode('utf-8'))
+-        # We want at least 4.0. The API we test below is enough for that.
+-        # Just accessing it should throw if not found.
+-        fun = lib.clang_EvalResult_getAsLongLong
+         return True
+     except:
+         die(dedent('''\

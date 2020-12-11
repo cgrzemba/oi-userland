@@ -1,0 +1,20 @@
+diff --git a/build/mozconfig.rust b/build/mozconfig.rust
+index 240c10f..b58185f 100644
+--- a/build/mozconfig.rust
++++ b/build/mozconfig.rust
+@@ -3,10 +3,10 @@
+ TOOLTOOL_DIR=${TOOLTOOL_DIR:-$topsrcdir}
+ 
+ # Tell configure to use the tooltool rustc.
+-RUSTC="$TOOLTOOL_DIR/rustc/bin/rustc"
+-CARGO="$TOOLTOOL_DIR/rustc/bin/cargo"
+-RUSTDOC="$TOOLTOOL_DIR/rustc/bin/rustdoc"
+-RUSTFMT="$TOOLTOOL_DIR/rustc/bin/rustfmt"
+-CBINDGEN="$TOOLTOOL_DIR/cbindgen/cbindgen"
++RUSTC="$TOOLTOOL_DIR/bin/rustc"
++CARGO="$TOOLTOOL_DIR/bin/cargo"
++RUSTDOC="$TOOLTOOL_DIR/bin/rustdoc"
++RUSTFMT="$TOOLTOOL_DIR/bin/rustfmt"
++CBINDGEN="$TOOLTOOL_DIR/../../cargo/bin/cbindgen"
+ 
+ ac_add_options --enable-rust-simd

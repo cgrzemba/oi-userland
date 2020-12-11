@@ -1,0 +1,33 @@
+diff --git a/gfx/layers/CompositionRecorder.cpp b/gfx/layers/CompositionRecorder.cpp
+index 424bf3c..8776533 100644
+--- a/gfx/layers/CompositionRecorder.cpp
++++ b/gfx/layers/CompositionRecorder.cpp
+@@ -8,6 +8,10 @@
+ #include "gfxUtils.h"
+ #include "mozilla/gfx/2D.h"
+ #include "gfxPrefs.h"
++#include "mozilla/gfx/gfxVars.h"
++#include "nsIInputStream.h"
++#include "nsIBinaryOutputStream.h"
++#include "nsIObjectOutputStream.h"
+ 
+ #include <ctime>
+ #include <iomanip>
+@@ -34,11 +38,14 @@ void CompositionRecorder::RecordFrame(RecordedFrame* aFrame) {
+ }
+ 
+ void CompositionRecorder::WriteCollectedFrames() {
+-  std::time_t t = std::time(nullptr);
+-  std::tm tm = *std::localtime(&t);
++  // std::time_t t = std::time(nullptr);
++  // std::tm tm = *std::localtime(&t);
+   std::stringstream str;
++  nsCString recordingStartTime;
++  TimeDuration delta = TimeStamp::NowUnfuzzed() - mRecordingStart;
++  recordingStartTime.AppendFloat( static_cast<double>(PR_Now() / 1000.0 - delta.ToMilliseconds()));
+   str << gfxPrefs::LayersWindowRecordingPath() << "windowrecording-"
+-      << std::put_time(&tm, "%Y%m%d%H%M%S");
++      << recordingStartTime;
+ 
+ #ifdef XP_WIN
+   _mkdir(str.str().c_str());

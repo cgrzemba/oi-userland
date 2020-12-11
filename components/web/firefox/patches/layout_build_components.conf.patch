@@ -1,0 +1,13 @@
+diff --git a/layout/build/components.conf b/layout/build/components.conf
+index a5ba38f..88de0d1 100644
+--- a/layout/build/components.conf
++++ b/layout/build/components.conf
+@@ -431,7 +431,7 @@ Classes = [
+ if defined('DEBUG'):
+     Classes += [
+         {
+-            'cid': '{NS_LAYOUT_DEBUGGER_CID}',
++            'cid': '{d2386709-8dbe-e1dd-f3dc-9ee45e60cb98}',
+             'type': 'nsILayoutDebugger',
+         },
+     ]
