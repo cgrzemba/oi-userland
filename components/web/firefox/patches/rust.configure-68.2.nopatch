@@ -1,0 +1,23 @@
+diff --git a/build/moz.configure/rust.configure b/build/moz.configure/rust.configure
+index 9647cbc..467966a 100644
+--- a/build/moz.configure/rust.configure
++++ b/build/moz.configure/rust.configure
+@@ -232,6 +232,8 @@ def rust_triple_alias(host_or_target):
+              arm_target, when=rust_compiler)
+     @checking('for rust %s triplet' % host_or_target_str)
+     @imports('os')
++    @imports('re')
++    @imports('pdb')
+     @imports('subprocess')
+     @imports(_from='mozbuild.configure.util', _import='LineIO')
+     @imports(_from='mozbuild.shellutil', _import='quote')
+@@ -254,6 +256,9 @@ def rust_triple_alias(host_or_target):
+             else:
+                 host_or_target_os = 'windows-msvc'
+             host_or_target_raw_os = host_or_target_os
++        elif host_or_target.raw_os == 'solaris2.11':
++            host_or_target_raw_os = 'solaris'
++            host_or_target_os = 'solaris'
+         else:
+             host_or_target_os = host_or_target.os
+             host_or_target_raw_os = host_or_target.raw_os

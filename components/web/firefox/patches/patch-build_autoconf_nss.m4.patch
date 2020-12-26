@@ -1,0 +1,13 @@
+diff --git a/build/autoconf/nss.m4 b/build/autoconf/nss.m4
+index 07efb00..abd9390 100644
+--- a/build/autoconf/nss.m4
++++ b/build/autoconf/nss.m4
+@@ -22,7 +22,7 @@ AC_ARG_WITH(nss-exec-prefix,
+ 	if test -n "$nss_config_exec_prefix"; then
+ 		nss_config_args="$nss_config_args --exec-prefix=$nss_config_exec_prefix"
+ 		if test -z "$NSS_CONFIG"; then
+-			NSS_CONFIG=$nss_config_exec_prefix/bin/nss-config
++			NSS_CONFIG=$nss_config_exec_prefix/nss-config
+ 		fi
+ 	fi
+ 	if test -n "$nss_config_prefix"; then

@@ -1,0 +1,13 @@
+diff --git a/gfx/harfbuzz/src/hb-common.cc b/gfx/harfbuzz/src/hb-common.cc
+index ab93bf4..04970f0 100644
+--- a/gfx/harfbuzz/src/hb-common.cc
++++ b/gfx/harfbuzz/src/hb-common.cc
+@@ -67,7 +67,7 @@ _hb_options_init ()
+         p = c + strlen (c);
+ 
+ #define OPTION(name, symbol) \
+-	if (0 == strncmp (c, name, p - c) && strlen (name) == p - c) u.opts.symbol = true;
++	if (0 == strncmp (c, name, p - c) && (long)strlen (name) == p - c) u.opts.symbol = true;
+ 
+       OPTION ("uniscribe-bug-compatible", uniscribe_bug_compatible);
+       OPTION ("aat", aat);

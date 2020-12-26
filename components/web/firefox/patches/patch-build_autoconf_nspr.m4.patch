@@ -1,0 +1,13 @@
+diff --git a/build/autoconf/nspr.m4 b/build/autoconf/nspr.m4
+index cccc882..513f643 100644
+--- a/build/autoconf/nspr.m4
++++ b/build/autoconf/nspr.m4
+@@ -34,7 +34,7 @@ AC_ARG_WITH(nspr-exec-prefix,
+ 	if test -n "$nspr_config_exec_prefix"; then
+ 		nspr_config_args="$nspr_config_args --exec-prefix=$nspr_config_exec_prefix"
+ 		if test -z "$NSPR_CONFIG"; then
+-			NSPR_CONFIG=$nspr_config_exec_prefix/bin/nspr-config
++			NSPR_CONFIG=$nspr_config_exec_prefix/nspr-config
+ 		fi
+ 	fi
+ 	if test -n "$nspr_config_prefix"; then

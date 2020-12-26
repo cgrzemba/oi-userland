@@ -1,0 +1,14 @@
+diff --git a/build/moz.configure/rust.configure b/build/moz.configure/rust.configure
+index b006e92..1f22c51 100644
+--- a/build/moz.configure/rust.configure
++++ b/build/moz.configure/rust.configure
+@@ -256,6 +259,9 @@ def rust_triple_alias(host_or_target):
+             else:
+                 host_or_target_os = 'windows-msvc'
+             host_or_target_raw_os = host_or_target_os
++        elif host_or_target.raw_os == 'solaris2':
++            host_or_target_raw_os = 'illumos'
++            host_or_target_os = 'illumos'
+         else:
+             host_or_target_os = host_or_target.os
+             host_or_target_raw_os = host_or_target.raw_os
