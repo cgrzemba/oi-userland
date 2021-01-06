@@ -1,0 +1,13 @@
+diff --git a/src/bootstrap/bootstrap.py b/src/bootstrap/bootstrap.py
+index bb16941..a17ce34 100644
+--- a/src/bootstrap/bootstrap.py
++++ b/src/bootstrap/bootstrap.py
+@@ -645,7 +645,7 @@ class RustBuild(object):
+             if "LIBRARY_PATH" in env else ""
+         # preserve existing RUSTFLAGS
+         env.setdefault("RUSTFLAGS", "")
+-        env["RUSTFLAGS"] += " -Cdebuginfo=2"
++        env["RUSTFLAGS"] += " -Copt-level=2"
+ 
+         build_section = "target.{}".format(self.build_triple())
+         target_features = []
