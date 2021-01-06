@@ -10,39 +10,24 @@
 #
 
 #
-# Copyright 2013 Alexander Pyhalov.  All rights reserved.
-# Copyright 2020 Till Wegmüller
+# Copyright 2020 <contributor>
 #
-
-set name=pkg.fmri value=pkg:/developer/icu@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
-set name=pkg.summary value="$(COMPONENT_SUMMARY) (development files)"
-set name=info.classification value=org.opensolaris.category.2008:System/Internationalization
-set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
-set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
-set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
-set name=pkg.description value="ICU is a set of C and C++ libraries that provides robust and full-featured Unicode and locale support. The library provides calendar support, conversions for many character sets, language sensitive collation, date and time formatting, support for many locales, message catalogs and resources, message formatting, normalization, number and currency formatting, time zones support, transliteration, word, line and sentence breaking, etc. This package contains the Unicode character database and derived properties, along with converters and time zones data. This package contains the runtime libraries for ICU."
-
-license icu.license license="X License"
 
 <transform file path=usr.*/pkgconfig/.+ -> default group other>
 <transform file path=usr.*/man/.+ -> default mangler.man.stability uncommitted>
 
-file files/libicudata.3lib path=usr/share/man/man3lib/libicudata.3lib
-file files/libicui18n.3lib path=usr/share/man/man3lib/libicui18n.3lib
-file files/libicuio.3lib path=usr/share/man/man3lib/libicuio.3lib
-file files/libicule.3lib path=usr/share/man/man3lib/libicule.3lib
-file files/libiculx.3lib path=usr/share/man/man3lib/libiculx.3lib
-file files/libicutu.3lib path=usr/share/man/man3lib/libicutu.3lib
-file files/libicuuc.3lib path=usr/share/man/man3lib/libicuuc.3lib
+set name=pkg.fmri value=pkg:/developer/icu@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
-# These links need to be handled here because the installation routine of icu creates symlink -> symlink -> file
-# IPS cannot handle symlinks layered like that.
-link path=usr/lib/icu/Makefile.inc target=$(COMPONENT_VERSION)/Makefile.inc
-link path=usr/lib/icu/pkgdata.inc target=$(COMPONENT_VERSION)/pkgdata.inc
-link path=usr/lib/$(MACH64)/icu/Makefile.inc target=$(COMPONENT_VERSION)/Makefile.inc
-link path=usr/lib/$(MACH64)/icu/pkgdata.inc target=$(COMPONENT_VERSION)/pkgdata.inc
+license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-# Binaries
+# Force dependency to ensure consistency across updates
+depend fmri=pkg:/developer/icu type=require
+
 file path=usr/bin/$(MACH32)/derb
 file path=usr/bin/$(MACH32)/genbrk
 file path=usr/bin/$(MACH32)/gencfu
@@ -219,6 +204,7 @@ file path=usr/include/unicode/unorm.h
 file path=usr/include/unicode/unorm2.h
 file path=usr/include/unicode/unum.h
 file path=usr/include/unicode/unumberformatter.h
+file path=usr/include/unicode/unumberrangeformatter.h
 file path=usr/include/unicode/unumsys.h
 file path=usr/include/unicode/uobject.h
 file path=usr/include/unicode/upluralrules.h
@@ -254,17 +240,27 @@ file path=usr/include/unicode/uversion.h
 file path=usr/include/unicode/vtzone.h
 file path=usr/lib/$(MACH64)/icu/$(COMPONENT_VERSION)/Makefile.inc
 file path=usr/lib/$(MACH64)/icu/$(COMPONENT_VERSION)/pkgdata.inc
-#link path=usr/lib/$(MACH64)/icu/Makefile.inc target=current/Makefile.inc
-#link path=usr/lib/$(MACH64)/icu/current target=$(COMPONENT_VERSION)
-#link path=usr/lib/$(MACH64)/icu/pkgdata.inc target=current/pkgdata.inc
+link path=usr/lib/$(MACH64)/icu/Makefile.inc target=$(COMPONENT_VERSION)/Makefile.inc
+link path=usr/lib/$(MACH64)/icu/pkgdata.inc target=$(COMPONENT_VERSION)/pkgdata.inc
+file path=usr/lib/$(MACH64)/libicudata.a
+file path=usr/lib/$(MACH64)/libicui18n.a
+file path=usr/lib/$(MACH64)/libicuio.a
+file path=usr/lib/$(MACH64)/libicutest.a
+file path=usr/lib/$(MACH64)/libicutu.a
+file path=usr/lib/$(MACH64)/libicuuc.a
 file path=usr/lib/$(MACH64)/pkgconfig/icu-i18n.pc
 file path=usr/lib/$(MACH64)/pkgconfig/icu-io.pc
 file path=usr/lib/$(MACH64)/pkgconfig/icu-uc.pc
 file path=usr/lib/icu/$(COMPONENT_VERSION)/Makefile.inc
 file path=usr/lib/icu/$(COMPONENT_VERSION)/pkgdata.inc
-#link path=usr/lib/icu/Makefile.inc target=current/Makefile.inc
-#link path=usr/lib/icu/current target=$(COMPONENT_VERSION)
-#link path=usr/lib/icu/pkgdata.inc target=current/pkgdata.inc
+link path=usr/lib/icu/Makefile.inc target=$(COMPONENT_VERSION)/Makefile.inc
+link path=usr/lib/icu/pkgdata.inc target=$(COMPONENT_VERSION)/pkgdata.inc
+file path=usr/lib/libicudata.a
+file path=usr/lib/libicui18n.a
+file path=usr/lib/libicuio.a
+file path=usr/lib/libicutest.a
+file path=usr/lib/libicutu.a
+file path=usr/lib/libicuuc.a
 file path=usr/lib/pkgconfig/icu-i18n.pc
 file path=usr/lib/pkgconfig/icu-io.pc
 file path=usr/lib/pkgconfig/icu-uc.pc
@@ -274,7 +270,6 @@ file path=usr/sbin/gencmn
 file path=usr/sbin/gennorm2
 file path=usr/sbin/gensprep
 file path=usr/sbin/icupkg
-file path=usr/share/icu/$(COMPONENT_VERSION)/LICENSE
 file path=usr/share/icu/$(COMPONENT_VERSION)/config/mh-solaris-gcc
 file path=usr/share/icu/$(COMPONENT_VERSION)/install-sh
 file path=usr/share/icu/$(COMPONENT_VERSION)/mkinstalldirs
