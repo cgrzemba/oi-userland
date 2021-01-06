@@ -34,6 +34,7 @@ SYMBOL_VERSION sqlite_3.31.1 {
         sqlite3_column_table_name;
         sqlite3_column_table_name16;
         sqlite3_drop_modules;
+        sqlite3_expanded_sql;
         sqlite3_filename_database;
         sqlite3_filename_journal;
         sqlite3_filename_wal;
@@ -42,6 +43,7 @@ SYMBOL_VERSION sqlite_3.31.1 {
         sqlite3_keyword_count;
         sqlite3_keyword_name;
         sqlite3_stmt_isexplain;
+        sqlite3_trace_v2;
         sqlite3_uri_key;
         sqlite3_value_frombind;
 } sqlite_3.19.0;
