@@ -13,10 +13,12 @@
 # Copyright 2013, Jon Tibble
 # Copyright 2014, Alexander Pyhalov 
 # Copyright 2019, Michal Nowak
-# Copyright 2020, Carsten grzemba
+# Copyright 2020, Carsten Grzemba
 #
 
+BUILD_BITS= 32_and_64
 include ../../../make-rules/shared-macros.mk
+
 
 COMPONENT_NAME=		nss
 COMPONENT_VERSION=	3.57
@@ -26,17 +28,21 @@ COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH=	sha256:55a86c01be860381d64bb4e5b94eb198df9b0f098a8af0e58c014df398bdc382
 COMPONENT_ARCHIVE_URL=	https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_57_RTM/src/$(COMPONENT_ARCHIVE)
 
+include $(WS_MAKE_RULES)/prep.mk
+include $(WS_MAKE_RULES)/justmake.mk
+include $(WS_MAKE_RULES)/ips.mk
+
+GCC_VERSION= 9
+
+COMPONENT_COPY_ACTION = \
+        ($(CLONEY) $(SOURCE_DIR)/nss $(@D))
+
 # Enable compiler optimizations and disable debugging code
 COMPONENT_BUILD_ENV += BUILD_OPT=1
-
-# Generate symbolic info for debuggers and use c99 by default
-# COMPONENT_BUILD_ENV += XCFLAGS="-g -std=c99 -D__EXTENSIONS__"
-
-# COMPONENT_BUILD_ENV += PATH=$(GCC_ROOT)/bin:$(PATH)
-# COMPONENT_BUILD_ENV += PKG_CONFIG_ALLOW_SYSTEM_LIBS=1
-# COMPONENT_BUILD_ENV += PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
-# COMPONENT_BUILD_ENV += NSS_USE_SYSTEM_SQLITE=1
-# COMPONENT_BUILD_ENV += NS_USE_GCC=1
+COMPONENT_BUILD_ENV += BUILD_SUN_PKG=1
+COMPONENT_BUILD_ENV += PATH=$(GCC_ROOT)/bin:$(PATH)
+COMPONENT_BUILD_ENV += NSS_USE_SYSTEM_SQLITE=1
+COMPONENT_BUILD_ENV += NS_USE_GCC=1
 
 # MPS.32=/usr/lib/mps
 # MPS.64=/usr/lib/mps/$(MACH64)
@@ -46,52 +52,28 @@ COMPONENT_BUILD_ENV += BUILD_OPT=1
 # COMPONENT_BUILD_ENV += "SOFTOKEN_INCLUDE_DIR=../softoken -I../util"
 # COMPONENT_BUILD_ENV += NSS_LIB_DIR=$(MPS.$(BITS))
 
-# COMPONENT_BUILD_ENV.64 += USE_64=1
-# COMPONENT_BUILD_ENV += $(COMPONENT_BUILD_ENV.$(BITS))
+# build 32bit is not the default anymore
+ARCHFLAG.32 = -m32
+ARCHFLAG.64 = -m64
+ARCHFLAG = $(ARCHFLAG.$(BITS))
+SOL_CFLAGS = $(ARCHFLAG)
+DSO_LDOPTS = -shared $(ARCHFLAG) -z text
+ASFLAGS   = -x assembler-with-cpp $(ARCHFLAG)
+
+COMPONENT_BUILD_ENV.64 += USE_64=1
+COMPONENT_BUILD_ENV += $(COMPONENT_BUILD_ENV.$(BITS))
+COMPONENT_BUILD_ARGS += SOL_CFLAGS="$(SOL_CFLAGS)" DSO_LDOPTS="$(DSO_LDOPTS)" ASFLAGS="$(ASFLAGS)"
+
+COMPONENT_BUILD_TARGETS = all
 
 COMPONENT_TEST_ENV += $(COMPONENT_BUILD_ENV)
 COMPONENT_TEST_ENV += HOST=127.0.0.1
-COMPONENT_TEST_DIR = $(BUILD_DIR_$(BITS))/nss/tests
+COMPONENT_TEST_DIR = $(BUILD_DIR_$(BITS))/tests
 
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/justmake.mk
-include $(WS_MAKE_RULES)/ips.mk
+COMPONENT_INSTALL_ENV += $(COMPONENT_BUILD_ENV)
+COMPONENT_INSTALL_ARGS += $(COMPONENT_BUILD_ARGS)
 
-COMPONENT_PRE_BUILD_ACTION = \
-	($(CLONEY) $(SOURCE_DIR)/nss $(@D))
-
-NSPR_LIB_DIR.32 =	/usr/lib/mps
-NSPR_LIB_DIR.64 =	/usr/lib/mps/64
-SQLITE_LIB_DIR.32 =	$(USRLIBDIR)
-SQLITE_LIB_DIR.64 =	$(USRLIBDIR64)
-USE_64_FLAG.64 = USE_64=1
-
-NSS_ENV += NS_USE_GCC=1
-NSS_ENV += BUILD_OPT=1
-NSS_ENV += BUILD_SUN_PKG=1
-NSS_ENV += NSS_USE_SYSTEM_SQLITE=1
-NSS_ENV += NSPR_INCLUDE_DIR=/usr/include/mps
-NSS_ENV += NSPR_LIB_DIR=$(NSPR_LIB_DIR.$(BITS))
-NSS_ENV += SQLITE_LIB_DIR=$(SQLITE_LIB_DIR.$(BITS))
-NSS_ENV += NSS_ENABLE_WERROR=0
-NSS_ENV += $(USE_64_FLAG.$(BITS))
-
-COMPONENT_BUILD_ENV += $(NSS_ENV)
-COMPONENT_BUILD_TARGETS =  all
-
-# $(BUILD_DIR)/%/.built:	$(SOURCE_DIR)/.prep
-# 	$(RM) -r $(@D) ; $(MKDIR) $(@D)
-# 	$(CLONEY) $(SOURCE_DIR) $(@D)
-# 	$(COMPONENT_PRE_BUILD_ACTION)
-# 	(cd $(@D); $(ENV) $(COMPONENT_BUILD_ENV) $(GMAKE) -C nss/coreconf)
-# 	(cd $(@D); $(ENV) $(COMPONENT_BUILD_ENV) $(GMAKE) -C nss/lib)
-# 	(cd $(@D); $(ENV) $(COMPONENT_BUILD_ENV) $(GMAKE) -C nss/cmd)
-# 	$(COMPONENT_POST_BUILD_ACTION)
-# 	$(TOUCH) $@
-
-build: $(BUILD_32_and_64)
-
-install: build
+install: $(INSTALL_32_and_64)
 	$(MKDIR) -p $(PROTO_DIR)/usr/sfw/bin
 	$(MKDIR) -p $(PROTO_DIR)/usr/sfw/bin/$(MACH64)
 	$(MKDIR) -p $(PROTO_DIR)/usr/lib/mps
@@ -106,7 +88,7 @@ install: build
 	cp $(BUILD_DIR)/dist/SunOS5.11_i86pc_gcc_64_OPT.OBJ/lib/*.so $(PROTO_DIR)/usr/lib/mps/$(MACH64)
 	cp $(BUILD_DIR)/dist/SunOS5.11_i86pc_gcc_64_OPT.OBJ/lib/*.chk $(PROTO_DIR)/usr/lib/mps/$(MACH64)
 	for i in addbuiltin certutil cmsutil crlutil modutil pk12util signtool signver ssltap; do \
-		cp $(BUILD_DIR_32)/dist/SunOS5.11_i86pc_gcc_OPT.OBJ/bin/$$i $(PROTO_DIR)/usr/sfw/bin; \
+		cp $(BUILD_DIR)/dist/SunOS5.11_i86pc_gcc_OPT.OBJ/bin/$$i $(PROTO_DIR)/usr/sfw/bin; \
 		cp $(BUILD_DIR)/dist/SunOS5.11_i86pc_gcc_64_OPT.OBJ/bin/$$i $(PROTO_DIR)/usr/sfw/bin/$(MACH64); \
 		done
 	cat $(COMPONENT_DIR)/files/nss.pc | sed s/^Version:/Version:\ $(COMPONENT_VERSION)/ \
