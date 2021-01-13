@@ -19,6 +19,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		nspr
 COMPONENT_VERSION=	4.29
+COMPONENT_REVISION=	1
 COMPONENT_PROJECT_URL=	https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSPR
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
@@ -26,6 +27,8 @@ COMPONENT_ARCHIVE_HASH=	sha256:22286bdb8059d74632cc7c2865c139e63953ecfb33bf4362a
 COMPONENT_ARCHIVE_URL=	https://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v$(COMPONENT_VERSION)/src/$(COMPONENT_ARCHIVE)
 
 include $(WS_MAKE_RULES)/common.mk
+
+GCC_VERSION= 9
 
 # Test suite needs cloney
 COMPONENT_PRE_CONFIGURE_ACTION = \
