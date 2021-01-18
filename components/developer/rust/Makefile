@@ -23,6 +23,7 @@
 # Copyright 2018, cgrzemba@opencsw.org
 # Copyright 2018, Aurelien Larcher
 # Copyright 2018, Michal Nowak
+# Copyright 2021, Carsten Grzemba
 #
 
 PREFERRED_BITS=		64
@@ -58,12 +59,11 @@ include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
-#omnios uses gcc 7.
 GCC_VERSION =  7
 
 PATH=$(GCC_BINDIR):$(PATH.gnu)
 
-PATCH_LEVEL=1
+# PATCH_LEVEL=1
 
 # Need some help to pick the correct ar binary
 GNUAR=$(GNUBIN)/ar
@@ -86,8 +86,8 @@ COMPONENT_PREP_ACTION = \
 		$(SOURCE_DIR)/vendor/lzma-sys/.cargo-checksum.json;
 
 COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D); \
-	rm $(@D)/src/tools/cargo/src/etc/* ; \
-	cp -p $(SOURCE_DIR)/src/tools/cargo/src/etc/* $(@D)/src/tools/cargo/src/etc/* )
+	rm -rf $(@D)/src/tools/cargo/src/etc/* ; \
+	cp -rp $(SOURCE_DIR)/src/tools/cargo/src/etc/* $(@D)/src/tools/cargo/src/etc/ )
 
 # Rust expects the library path to be /usr/lib and is broken otherwise 
 RUSTC_LIBDIR= $(USRLIBDIR)
@@ -138,13 +138,15 @@ COMPONENT_BUILD_ENV += CFLAGS="$(CFLAGS)"
 COMPONENT_BUILD_ENV += CXX=$(CXX)
 COMPONENT_BUILD_ENV += CXXFLAGS="$(CXXFLAGS)"
 COMPONENT_BUILD_ENV += AR=$(GNUAR)
-# COMPONENT_BUILD_ENV += RUSTC=$(RUST_BOOTSTRAP_PATH)/bin/rustc
+COMPONENT_BUILD_ENV += RUSTC=$(RUST_BOOTSTRAP_PATH)/bin/rustc
 # Enforce linker consistency
 COMPONENT_BUILD_ENV += RUSTFLAGS="-C linker=$(CC)"
 COMPONENT_BUILD_ENV += RUST_BACKTRACE=1
+# doit never!!! configure have to set the right path!!
 # rustc builds libs without any search path!
 # We need to add the path to GCC runtime libraries
-# COMPONENT_BUILD_ENV += LD_LIBRARY_PATH=$(GCC_ROOT)/lib/$(MACH64):$(USRLIBDIR.$(BITS)):$(RUST_BOOTSTRAP_PATH)/lib
+# COMPONENT_BUILD_ENV += LD_LIBRARY_PATH=$(GCC_ROOT)/lib/$(MACH64):$(RUST_BOOTSTRAP_PATH)/lib:$(CLANG_ROOT)/lib
+# use instead
 
 GMAKE = $(PYTHON)
 COMPONENT_BUILD_GMAKE_ARGS = 
@@ -172,7 +174,7 @@ COMPONENT_POST_INSTALL_ACTION= \
   ( $(RM) $(PROTOUSRLIBDIR)/*.so; \
     $(MKDIR) $(PROTOUSRLIBDIR.$(BITS)); \
     $(RM) $(PROTOUSRLIBDIR.$(BITS))/*.so; \
-    cp build/amd64/build/x86_64-sun-solaris/stage2/lib/rustlib/x86_64-sun-solaris/lib/librustc_driver-39de5197e6f997e4.so $(PROTOUSRLIBDIR)/rustlib/x86_64-sun-solaris/lib/ ; \
+    cp $(@D)/build/$(RUST_ARCH)/stage2/lib/rustlib/$(RUST_ARCH)/lib/librustc_driver-39de5197e6f997e4.so $(PROTOUSRLIBDIR)/rustlib/$(RUST_ARCH)/lib/ ; \
     cd $(PROTOUSRLIBDIR.$(BITS)); \
     $(LN) -s ../rustlib/$(RUST_ARCH)/lib/*.so .; \
     for file in $(RUSTC_BIN_POST); \
@@ -189,6 +191,7 @@ COMPONENT_POST_INSTALL_ACTION= \
       /usr/bin/elfedit -e 'dyn:value -s  RUNPATH "$(GCC_LIBDIR):$$ORIGIN:$$ORIGIN/../../$(MACH64)"' $$file ; \
       /usr/bin/elfedit -e 'dyn:value -s  RPATH   "$(GCC_LIBDIR):$$ORIGIN:$$ORIGIN/../../$(MACH64)"' $$file ; \
     done; \
+    elfedit -e 'dyn:rpath :$(GCC_LIBDIR):$$ORIGIN:$$ORIGIN/../../$(MACH64):/usr/clang/9.0/lib' $(PROTOUSRLIBDIR)/rustlib/$(RUST_ARCH)/lib/librustc_driver-39de5197e6f997e4.so; \
   )
 
 build:		$(BUILD_64)

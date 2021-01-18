@@ -15,7 +15,7 @@ index 8b0ad16..559a2f2 100644
                  Some("-Wl,-rpath,@loader_path/../lib")
              } else if !target.contains("windows") {
 -                Some("-Wl,-rpath,$ORIGIN/../lib")
-+                Some("-Wl,-rpath,/usr/clang/9.0/lib:$ORIGIN/../lib")
++                Some("-Wl,-rpath,$ORIGIN/../lib:/usr/clang/9.0/lib")
              } else {
                  None
              };
