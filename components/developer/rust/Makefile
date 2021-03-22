@@ -23,6 +23,7 @@
 # Copyright 2018, cgrzemba@opencsw.org
 # Copyright 2018, Aurelien Larcher
 # Copyright 2018, Michal Nowak
+# Copyright 2018, Michal Nowak
 #
 
 PREFERRED_BITS=		64
@@ -30,25 +31,25 @@ PREFERRED_BITS=		64
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		rustc
-COMPONENT_VERSION=	1.32.0
+COMPONENT_VERSION=	1.44.1
 COMPONENT_FMRI=		developer/lang/rustc
 COMPONENT_SUMMARY=	Rust - Safe, concurrent, practical language
 COMPONENT_CLASSIFICATION=	Development/Other Languages
 COMPONENT_PROJECT_URL=	http://www.rust-lang.org
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)-src
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	sha256:4c594c7712a0e7e8eae6526c464bf6ea1d82f77b4f61717c3fc28fb27ba2224a
+COMPONENT_ARCHIVE_HASH=	sha256:7e2e64cb298dd5d5aea52eafe943ba0458fa82f2987fdcda1ff6f537b6f88473
 COMPONENT_ARCHIVE_URL=	https://static.rust-lang.org/dist/$(COMPONENT_ARCHIVE)
 COMPONENT_LICENSE=	MIT or Apache-2.0
 
-RUST_STAGE0_VER=        1.32.0
+RUST_STAGE0_VER=        1.44.1
 RUST_ARCH:=             x86_64-sun-solaris
 
 COMPONENT_NAME_1=	rust
 COMPONENT_VERSION_1=	$(RUST_STAGE0_VER)
 COMPONENT_SRC_1=	$(COMPONENT_NAME_1)-$(COMPONENT_VERSION_1)-$(RUST_ARCH)
 COMPONENT_ARCHIVE_1=	$(COMPONENT_SRC_1).tar.gz
-COMPONENT_ARCHIVE_HASH_1=	sha256:689586af4297df329884239f5e82b09ac3f8ac9f425ffcbfdb5382b1c7465496
+COMPONENT_ARCHIVE_HASH_1=	sha256:d203192453e132d41d32f32a70c2c6785515a7f43d2bd71a2b95ddfbd971f6f4
 COMPONENT_ARCHIVE_URL_1=	https://us-east.manta.joyent.com/pkgsrc/public/pkg-bootstraps/$(COMPONENT_ARCHIVE_1)
 
 SOURCE_DIR_1=		$(COMPONENT_DIR)/$(COMPONENT_SRC_1)
@@ -58,30 +59,50 @@ include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
+GCC_VERSION =  7
+
 PATH=$(GCC_BINDIR):$(PATH.gnu)
 
-PATCH_LEVEL=0
+# PATCH_LEVEL=1
 
 # Need some help to pick the correct ar binary
 GNUAR=$(GNUBIN)/ar
 
 # getpwuid_r failure
-CFLAGS   +=	-D_POSIX_PTHREAD_SEMANTICS
-CXXFLAGS +=	-D_POSIX_PTHREAD_SEMANTICS
+CXXFLAGS += -D_POSIX_PTHREAD_SEMANTICS
+CFLAGS += -D_POSIX_PTHREAD_SEMANTICS
 
 # Add arch triplet to pkg macros
 PKG_MACROS+= RUST_ARCH="$(RUST_ARCH)"
 
-COMPONENT_PREP_ACTION = \
-	$(GSED) -i -e 's/9c6af198a2f80da827054784faf70bc404673d9568fb45664b4f73c46245fdbd/c3851969a854d6ccaa8a94369f1288025149d1ebdc74b36f224423f35b18f7a7/' \
-		$(SOURCE_DIR)/vendor/libc/.cargo-checksum.json; \
-	$(GSED) -i -e 's/cb94a0b54e47022b2e9b58b45e0196785c61d083760333276226da435cc040d9/bcb195562cf830c9e2078757e6d0976f86ede59816ff305e21a2764a4a4cf43e/' \
-		$(SOURCE_DIR)/vendor/rand/.cargo-checksum.json;
+# COMPONENT_PREP_ACTION = \
+# 	$(GSED) -i -e 's/1e732c2e3b4bd1561f11e0979bf9d20669a96eae7afe0deff9dfbb980ee47bf1/55abd8100db14a076dedbf84ce0f2db08158e1bd33ff1d4978bd3c4ad978f281/' \
+# 		$(SOURCE_DIR)/vendor/rand-0.6.1/.cargo-checksum.json; \
+# 	$(GSED) -i -e 's/8e5369ed1e86c5be92831d290b9eeb77c537a2de728950a5086e77438a4f0f3a/dac34dab563a2ca03c1d43f0224736f30662c3bbf0c2f1c44e220a7172345f4f/' \
+# 		$(SOURCE_DIR)/vendor/libc/.cargo-checksum.json; \
+# 	$(GSED) -i -e 's/59763fc255248b54fba5d0761d61093a73d51fa4cb400b0df1b5f339b9c2f48a/ba66d192421fd536ceddb50616c4c4aea06f4e39450eb0bc2bbbaed0b1e684c1/' \
+# 		$(SOURCE_DIR)/vendor/backtrace-sys/.cargo-checksum.json; \
+# 	$(GSED) -i -e 's/51a9ca7a4576822dc4fa01b31bc4bbed21817777abb304f605ef5951f68c3ed2/807c3aa4b5a62a70ba790df151e9ecf19f4bb562f2858575d690908751262db3/' \
+# 		$(SOURCE_DIR)/vendor/lzma-sys/.cargo-checksum.json;
+# 
+COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D); )
 
-COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D))
+# workaround the symlink name lenght 100 problem, but hope it is not neccessary with
+# CONFIGURE_OPTIONS += --set dist.src-tarball=false
+# COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D); \
+# 	cd $(@D) ; \
+# 	$(COMPONENT_DIR)/files/sym2hard.py ; )
+
+# Put the bits cargo downloads in a private directory.  This could be cached
+# somewhere more permanent, but it's important to make sure that a person's
+# $HOME/.cargo isn't used.
+COMPONENT_BUILD_ENV +=	CARGO_HOME=$(BUILD_DIR)/.cargo
+COMPONENT_INSTALL_ENV +=	CARGO_HOME=$(BUILD_DIR)/.cargo
+COMPONENT_TEST_ENV += CARGO_HOME=$(BUILD_DIR)/.cargo
 
 # Rust expects the library path to be /usr/lib and is broken otherwise 
 RUSTC_LIBDIR= $(USRLIBDIR)
+CLANG_ROOT= /usr/clang/9.0
 
 CONFIGURE_OPTIONS = --prefix=$(CONFIGURE_PREFIX)
 CONFIGURE_OPTIONS += --mandir=$(CONFIGURE_MANDIR)
@@ -107,16 +128,20 @@ CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).cc=$(CC)
 CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).cxx=$(CXX)
 CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).ar=$(GNUAR)
 CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).linker=$(CC)
+CONFIGURE_OPTIONS += --set dist.src-tarball=false
 # CONFIGURE_OPTIONS += --disable-rustbuild
 CONFIGURE_OPTIONS += --enable-rpath
 CONFIGURE_OPTIONS += --disable-codegen-tests
 CONFIGURE_OPTIONS += --disable-dist-src
 CONFIGURE_OPTIONS += --disable-llvm-static-stdcpp
-CONFIGURE_OPTIONS += --disable-ninja
+CONFIGURE_OPTIONS += --enable-ninja
 CONFIGURE_OPTIONS += --enable-vendor
 CONFIGURE_OPTIONS += --disable-docs
+CONFIGURE_OPTIONS += --disable-compiler-docs
 CONFIGURE_OPTIONS += --release-channel=stable
 CONFIGURE_OPTIONS += --python=$(PYTHON)
+CONFIGURE_OPTIONS += --enable-llvm-link-shared
+CONFIGURE_OPTIONS += --llvm-root=$(CLANG_ROOT)
 
 # Cleanup standard environment!
 COMPONENT_BUILD_ENV =
@@ -129,9 +154,11 @@ COMPONENT_BUILD_ENV += RUSTC=$(RUST_BOOTSTRAP_PATH)/bin/rustc
 # Enforce linker consistency
 COMPONENT_BUILD_ENV += RUSTFLAGS="-C linker=$(CC)"
 COMPONENT_BUILD_ENV += RUST_BACKTRACE=1
+# doit never!!! configure have to set the right path!!
 # rustc builds libs without any search path!
 # We need to add the path to GCC runtime libraries
-COMPONENT_BUILD_ENV += LD_LIBRARY_PATH=$(GCC_ROOT)/lib/$(MACH64):$(USRLIBDIR.$(BITS)):$(RUST_BOOTSTRAP_PATH)/lib
+# COMPONENT_BUILD_ENV += LD_LIBRARY_PATH=$(GCC_ROOT)/lib/$(MACH64):$(RUST_BOOTSTRAP_PATH)/lib:$(CLANG_ROOT)/lib
+# use instead
 
 GMAKE = $(PYTHON)
 COMPONENT_BUILD_GMAKE_ARGS = 
@@ -148,7 +175,7 @@ COMPONENT_INSTALL_ENV += DESTDIR=$(PROTO_DIR)
 COMPONENT_PRE_INSTALL_ACTION = mkdir -p $(PROTO_DIR)
 
 RUSTC_BIN_POST = cargo
-RUSTC_BIN_POST+= clippy-driver
+#RUSTC_BIN_POST+= clippy-driver
 RUSTC_BIN_POST+= rls
 RUSTC_BIN_POST+= rustc
 RUSTC_BIN_POST+= rustdoc
@@ -159,6 +186,7 @@ COMPONENT_POST_INSTALL_ACTION= \
   ( $(RM) $(PROTOUSRLIBDIR)/*.so; \
     $(MKDIR) $(PROTOUSRLIBDIR.$(BITS)); \
     $(RM) $(PROTOUSRLIBDIR.$(BITS))/*.so; \
+    cp $(@D)/build/$(RUST_ARCH)/stage2/lib/rustlib/$(RUST_ARCH)/lib/librustc_driver-637b1017ef7a0c2f.so $(PROTOUSRLIBDIR)/rustlib/$(RUST_ARCH)/lib/ ; \
     cd $(PROTOUSRLIBDIR.$(BITS)); \
     $(LN) -s ../rustlib/$(RUST_ARCH)/lib/*.so .; \
     for file in $(RUSTC_BIN_POST); \
@@ -174,7 +202,9 @@ COMPONENT_POST_INSTALL_ACTION= \
     do \
       /usr/bin/elfedit -e 'dyn:value -s  RUNPATH "$(GCC_LIBDIR):$$ORIGIN:$$ORIGIN/../../$(MACH64)"' $$file ; \
       /usr/bin/elfedit -e 'dyn:value -s  RPATH   "$(GCC_LIBDIR):$$ORIGIN:$$ORIGIN/../../$(MACH64)"' $$file ; \
-    done; )
+    done; \
+    /usr/bin/elfedit -e 'dyn:value -s RPATH "$(GCC_LIBDIR):$$ORIGIN:$$ORIGIN/../../$(MACH64):/usr/clang/9.0/lib"' $(PROTOUSRLIBDIR)/rustlib/$(RUST_ARCH)/lib/librustc_driver-637b1017ef7a0c2f.so; \
+  )
 
 build:		$(BUILD_64)
 
@@ -184,6 +214,7 @@ install:	$(INSTALL_64)
 REQUIRED_PACKAGES += utility/bash-completion
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
+REQUIRED_PACKAGES += developer/clang-90
 REQUIRED_PACKAGES += library/libssh2
 REQUIRED_PACKAGES += library/http-parser
 # Auto-generated dependencies
