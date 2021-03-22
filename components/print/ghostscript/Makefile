@@ -20,27 +20,24 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2011, 2013, Oracle and/or its affiliates. All rights reserved.
-# Copyright (c) 2018, Michal Nowak
 #
 
-PREFERRED_BITS= 64
+# parfait seems to spin when looking at the .bc files, so
+# for now disable it.
+PARFAIT_BUILD=no
 
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         ghostscript
-COMPONENT_VERSION=      9.26
-COMPONENT_SUMMARY=	GPL Ghostscript
-COMPONENT_PROJECT_URL=	https://ghostscript.com
+COMPONENT_VERSION=      9.22
+COMPONENT_REVISION=	0
+COMPONENT_PROJECT_URL=	http://ghostscript.com/
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-    sha256:831fc019bd477f7cc2d481dc5395ebfa4a593a95eb2fe1eb231a97e450d7540d
-COMPONENT_DOWNLOAD_URL= \
-    https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download
-COMPONENT_ARCHIVE_URL=  $(COMPONENT_DOWNLOAD_URL)/gs926/$(COMPONENT_ARCHIVE)
-COMPONENT_FMRI= print/filter/ghostscript
-COMPONENT_CLASSIFICATION= System/Printing
-COMPONENT_LICENSE=      GPLv3
+    sha256:7f5f4487c0df9dce37481e4c8f192c0322e4c69f5a2ba900a7833c992331bcf4
+COMPONENT_ARCHIVE_URL=  https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs922/$(COMPONENT_ARCHIVE)
+COMPONENT_BUGDB=	utility/ghostscript
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/ips.mk
@@ -59,20 +56,18 @@ LDFLAGS  += $(JPEG_LDFLAGS)
 # configure(1) options to use
 CONFIGURE_OPTIONS +=	--with-drivers=ALL
 CONFIGURE_OPTIONS +=	--with-ijs
+CONFIGURE_OPTIONS +=	--without-omni
 CONFIGURE_OPTIONS +=	--with-jbig2dec
+CONFIGURE_OPTIONS +=	--with-jasper
 CONFIGURE_OPTIONS +=	--enable-cups
 CONFIGURE_OPTIONS +=	--enable-dynamic
 CONFIGURE_OPTIONS +=	--disable-compile-inits
-CONFIGURE_OPTIONS +=	--enable-freetype
-CONFIGURE_OPTIONS +=	--with-fontpath=/usr/share/ghostscript/$(COMPONENT_VERSION)/Resource:/usr/share/ghostscript/$(COMPONENT_VERSION)/Resource/Font:/usr/share/ghostscript/fonts:/usr/openwin/lib/X11/fonts/Type1:/usr/openwin/lib/X11/fonts/TrueType:/usr/openwin/lib/X11/fonts/Type3:/usr/X11/lib/X11/fonts/Type1:/usr/X11/lib/fonts/TrueType:/usr/X11/lib/X11/fonts/Type3:/usr/X11/lib/X11/fonts/Resource:/usr/X11/lib/X11/Resource/Font:/usr/share/fonts/TrueType
-
-# configure options to generate 32 bit binaries
-$(BUILD_DIR)/$(MACH32)/.configured: CONFIGURE_OPTIONS += CC="$(CC) -m32"
-$(BUILD_DIR)/$(MACH32)/ijs/.configured: CONFIGURE_OPTIONS += CC="$(CC) -m32"
-
+CONFIGURE_OPTIONS +=	--disable-freetype
+CONFIGURE_OPTIONS +=	--with-fontpath=/usr/share/ghostscript/$(COMPONENT_VERSION)/Resource:/usr/share/ghostscript/$(COMPONENT_VERSION)/Resource/Font:/usr/share/ghostscript/fonts:/usr/openwin/lib/X11/fonts/Type1:/usr/openwin/lib/X11/fonts/TrueType:/usr/openwin/lib/X11/fonts/Type3:/usr/X11/lib/X11/fonts/Type1:/usr/X11/lib/fonts/TrueType:/usr/X11/lib/X11/fonts/Type3:/usr/X11/lib/X11/fonts/Resource:/usr/X11/lib/X11/Resource/Font
 
 # configure options to generate 64 bit binaries
 $(BUILD_DIR)/$(MACH64)/.configured: CONFIGURE_OPTIONS += CC="$(CC) -m64"
+$(BUILD_DIR)/$(MACH64)/ijs/.configured: CONFIGURE_OPTIONS += CC="$(CC) -m64"
 
 # config env
 CONFIGURE_ENV += LDFLAGS_SO="-shared "
@@ -121,16 +116,14 @@ install: $(VARIANTS:%=%/.installed)
 
 test: $(NO_TESTS)
 
-# Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += image/library/libjpeg8-turbo
 REQUIRED_PACKAGES += image/library/libpng16
-REQUIRED_PACKAGES += library/desktop/cairo
-REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
-REQUIRED_PACKAGES += library/desktop/gtk3
+REQUIRED_PACKAGES += library/desktop/gtk2
 REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += library/print/cups-libs
 REQUIRED_PACKAGES += library/zlib
-REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += runtime/perl-522
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/fontconfig
 REQUIRED_PACKAGES += system/library/math

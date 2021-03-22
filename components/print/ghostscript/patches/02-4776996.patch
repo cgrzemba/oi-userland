@@ -1,6 +1,11 @@
---- ghostscript-9.25/Resource/Init/pdf_sec.ps	2018-09-13 12:02:01.000000000 +0000
-+++ ghostscript-9.25/Resource/Init/pdf_sec.ps.new	2018-09-23 11:54:12.754858110 +0000
-@@ -505,12 +505,12 @@ def
+This patch addressed bug# 15132887
+GNU Ghostscript should not enable decryption of PDFs when shipped with Solaris
+
+Note : Not suitable for fixing upstream, as this Solaris specific.
+
+--- ghostscript-9.22/Resource/Init/pdf_sec.ps.orig
++++ ghostscript-9.22/Resource/Init/pdf_sec.ps
+@@ -472,12 +472,12 @@
      } ifelse
    } ifelse
  
@@ -16,6 +21,6 @@
 +     /pdf_process_Encrypt cvx /invalidfileaccess signalerror
 +   }
 +  if
- } bind executeonly def
+ } bind def
  
  % Calculate the key used to decrypt an object (to pass to .decpdfrun or

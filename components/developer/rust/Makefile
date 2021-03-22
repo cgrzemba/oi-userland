@@ -85,13 +85,11 @@ PKG_MACROS+= RUST_ARCH="$(RUST_ARCH)"
 # 	$(GSED) -i -e 's/51a9ca7a4576822dc4fa01b31bc4bbed21817777abb304f605ef5951f68c3ed2/807c3aa4b5a62a70ba790df151e9ecf19f4bb562f2858575d690908751262db3/' \
 # 		$(SOURCE_DIR)/vendor/lzma-sys/.cargo-checksum.json;
 # 
-COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D); )
 
-# workaround the symlink name lenght 100 problem, but hope it is not neccessary with
-# CONFIGURE_OPTIONS += --set dist.src-tarball=false
-# COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D); \
-# 	cd $(@D) ; \
-# 	$(COMPONENT_DIR)/files/sym2hard.py ; )
+#  workaround the symlink name lenght 100 problem, but hope it is not neccessary with
+COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D); \
+ 	cd $(@D) ; \
+ 	$(COMPONENT_DIR)/files/sym2hard.py ; )
 
 # Put the bits cargo downloads in a private directory.  This could be cached
 # somewhere more permanent, but it's important to make sure that a person's
@@ -128,7 +126,7 @@ CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).cc=$(CC)
 CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).cxx=$(CXX)
 CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).ar=$(GNUAR)
 CONFIGURE_OPTIONS += --set target.$(RUST_ARCH).linker=$(CC)
-CONFIGURE_OPTIONS += --set dist.src-tarball=false
+# CONFIGURE_OPTIONS += --set dist.src-tarball=false
 # CONFIGURE_OPTIONS += --disable-rustbuild
 CONFIGURE_OPTIONS += --enable-rpath
 CONFIGURE_OPTIONS += --disable-codegen-tests
