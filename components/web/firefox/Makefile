@@ -48,20 +48,22 @@ LANG_FILES_LOCATION= \
 	http://ftp.mozilla.org/pub/mozilla.org/firefox/candidates/$(COMPONENT_VERSION)-candidates/build$(CANDIDATE_BUILD)/linux-x86_64/xpi/
 else
 LANG_FILES_LOCATION= \
-	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(COMPONENT_VERSION)/linux-x86_64/xpi/
+	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(COMPONENT_VERSION)$(ESR)/linux-x86_64/xpi/
 endif
 
 CONFIGURE_DEFAULT_DIRS=no
 
 include $(WS_MAKE_RULES)/common.mk
 
-#PATH=$(USRBINDIR.64):$(PATH.illumos)
+PATH=$(USRBINDIR.64):$(PATH.illumos)
 # /usr/gnu/bin needed to pick up the GNU version of tail and readelf.
 # /usr/sbin needed for dtrace.
-PATH = /usr/gnu/bin:/usr/bin:/usr/sbin
+# PATH = /usr/gnu/bin:/usr/bin:/usr/sbin
 
 MOZCONFIG = $(SOURCE_DIR)/mozconfig
 GNU_ARCH=		x86_64-sun-solaris
+
+GCC_VERSION= 7
 
 ifdef DEBUG
 # disable code optimization
@@ -78,18 +80,32 @@ endif
 CONFIGURE_ENV=
 CONFIGURE_OPTIONS=
 
-CXXFLAGS += -Wno-invalid-offsetof -fpermissive
+# clang or gcc
+CC_TYPE = gcc
+COMPILER.gcc= gcc
+COMPILER.clang= clang
+COMPILER = $(COMPILER.$(CC_TYPE))
+
+# CXXFLAGS += -Wno-invalid-offsetof -fpermissive
+CXXFLAGS += -DSOLARIS -DXP_SOLARIS
 # not set in build 'js/xpconnect'
 CPPFLAGS += -I/usr/include/libevent2
 # type problem compiling ffvpx with clang 
 CFLAGS += -D__int8_t_defined
 
+FIREFOX_LIBDIR = /usr/lib/$(MACH64)
+
+#	echo "ac_add_options --enable-unaligned-private-values" >> $(MOZCONFIG) ; \
 #	echo "ac_add_options PKG_CONFIG=/usr/bin/amd64/pkg-config" >> $(MOZCONFIG) ; 
 COMPONENT_PRE_CONFIGURE_ACTION += \
         rm -f  $(MOZCONFIG); \
 	echo "ac_add_options MOZILLA_OFFICIAL=1" >> $(MOZCONFIG) ; \
+	echo "ac_add_options PKG_CONFIG=/usr/bin/amd64/pkg-config" >> $(MOZCONFIG) ; \
+	echo "ac_add_options CC_TYPE=$(CC_TYPE)" >> $(MOZCONFIG) ; \
+	echo "ac_add_options CC=$(CC)" >> $(MOZCONFIG) ; \
+	echo "ac_add_options CXX=$(CXX)" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --prefix=/usr" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --libdir=/usr/lib" >> $(MOZCONFIG) ; \
+	echo "ac_add_options --libdir=$(FIREFOX_LIBDIR)" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --disable-av1" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --disable-crashreporter" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --disable-debug-symbols" >> $(MOZCONFIG_NON_DEBUG) ; \
@@ -98,24 +114,16 @@ COMPONENT_PRE_CONFIGURE_ACTION += \
 	echo "ac_add_options --disable-tests" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --disable-updater" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-debug" >> $(MOZCONFIG_DEBUG) ; \
-	echo "ac_add_options --enable-jemalloc" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-js-shell" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-official-branding" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-optimize" >> $(MOZCONFIG_NON_DEBUG) ; \
 	echo "ac_add_options --enable-pulseaudio" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --enable-replace-malloc" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-startup-notification" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --enable-system-ffi" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-system-pixman" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-system-sqlite" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --enable-update-channel=esr" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --with-intl-api" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --with-system-bz2" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --with-system-icu" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --with-system-nss" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --with-system-nspr" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --with-nspr-exec-prefix=/usr/bin/amd64" >> $(MOZCONFIG) ; \
-	echo "ac_add_options --with-nss-exec-prefix=/usr/bin/amd64" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --with-system-libevent" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --with-system-zlib" >> $(MOZCONFIG) ; \
 	echo "ac_add_options --host=$(GNU_ARCH)" >> $(MOZCONFIG) ; \
@@ -174,8 +182,6 @@ COMPONENT_POST_BUILD_ACTION = \
 	(cd $(@D)/browser/installer ; $(ENV) $(COMPONENT_BUILD_ENV) \
 		$(GMAKE) $(COMPONENT_BUILD_ARGS) $(COMPONENT_BUILD_TARGETS))
 
-FIREFOX_LIBDIR = /usr/lib
-
 COMPONENT_POST_INSTALL_ACTION  = \
     for file in $(PROTO_DIR)$(FIREFOX_LIBDIR)/firefox/*.so \
           $(PROTO_DIR)$(FIREFOX_LIBDIR)/firefox/plugin-container; do \
@@ -220,6 +226,7 @@ REQUIRED_PACKAGES += library/http-parser
 
 
 # Auto-generated dependencies
+REQUIRED_PACKAGES += library/c++/harfbuzz
 REQUIRED_PACKAGES += library/desktop/atk
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
@@ -246,3 +253,4 @@ REQUIRED_PACKAGES += x11/library/libxcb
 REQUIRED_PACKAGES += x11/library/libxext
 REQUIRED_PACKAGES += x11/library/libxrender
 REQUIRED_PACKAGES += x11/library/toolkit/libxt
+

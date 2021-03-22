@@ -1,15 +1,7 @@
-# HG changeset patch
-# User Petr Sumbera <petr.sumbera@oracle.com>
-# Date 1561016175 -7200
-#      Thu Jun 20 09:36:15 2019 +0200
-# Node ID 883bf26204730965dc9c03de2a441f8c3269ddd2
-# Parent  1c2190cf70a58a6e9ad82f52da97b00abcc81a8d
-Bug 1405345 linking issue nss libfreebl..
-https://phabricator.services.mozilla.com/D26278
-
-diff -r 1c2190cf70a5 -r 883bf2620473 security/nss/coreconf/config.gypi
---- a/security/nss/coreconf/config.gypi	Wed Jun 19 11:39:44 2019 +0200
-+++ b/security/nss/coreconf/config.gypi	Thu Jun 20 09:36:15 2019 +0200
+diff --git a/security/nss/coreconf/config.gypi b/security/nss/coreconf/config.gypi
+index 62d3cc7..5a0772a 100644
+--- a/security/nss/coreconf/config.gypi
++++ b/security/nss/coreconf/config.gypi
 @@ -37,7 +37,7 @@
          },{
            'use_system_sqlite%': 0,
@@ -19,7 +11,7 @@ diff -r 1c2190cf70a5 -r 883bf2620473 security/nss/coreconf/config.gypi
            'cc_use_gnu_ld%': 0,
          }, {
            'cc_use_gnu_ld%': 1,
-@@ -383,6 +383,11 @@
+@@ -393,6 +393,11 @@
                '_REENTRANT',
              ],
            }],
@@ -31,9 +23,9 @@ diff -r 1c2190cf70a5 -r 883bf2620473 security/nss/coreconf/config.gypi
            [ 'OS!="mac" and OS!="ios" and OS!="win"', {
              'cflags': [
                '-fPIC',
-@@ -393,9 +398,6 @@
+@@ -406,9 +411,6 @@
              'cflags_cc': [
-               '-std=c++0x',
+               '-std=c++11',
              ],
 -            'ldflags': [
 -              '-z', 'noexecstack',
@@ -41,7 +33,7 @@ diff -r 1c2190cf70a5 -r 883bf2620473 security/nss/coreconf/config.gypi
              'conditions': [
                [ 'target_arch=="ia32"', {
                  'cflags': ['-m32'],
-@@ -628,7 +630,7 @@
+@@ -648,7 +650,7 @@
      },
    },
    'conditions': [
