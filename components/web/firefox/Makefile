@@ -24,15 +24,15 @@ include ../../../make-rules/shared-macros.mk
 ESR = esr
 
 COMPONENT_NAME =	firefox
-COMPONENT_VERSION =	78.8.0
-COMPONENT_REVISION=     1
+COMPONENT_VERSION =	78.9.0
+COMPONENT_REVISION=     0
 COMPONENT_SUMMARY=      Mozilla Firefox Web browser
 COMPONENT_PROJECT_URL =	http://www.mozilla.com/firefox
 COMPONENT_SRC_NAME =	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_SRC = 	$(COMPONENT_SRC_NAME)
 COMPONENT_ARCHIVE =	$(COMPONENT_SRC_NAME)$(ESR).source.tar.xz
 COMPONENT_ARCHIVE_HASH= \
-	sha256:1cf2dfdee2e31fd0a5ecced6275a33fa11bee1d2a7c65e23350b26992584a110
+	sha256:8e03ac1dfc5ac804c8b13a529414a9387e0425e545bb2f4462d74c3175e64864
 ifndef CANDIDATE_BUILD
 MOZILLA_FTP =		http://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)$(ESR)
 else
@@ -72,6 +72,8 @@ CXXFLAGS =
 
 MOZCONFIG_DEBUG =	$(MOZCONFIG)
 MOZCONFIG_NON_DEBUG =	/dev/null
+LD_OPTIONS += -msave-args
+
 else
 MOZCONFIG_DEBUG =	/dev/null
 MOZCONFIG_NON_DEBUG =	$(MOZCONFIG)
@@ -136,8 +138,6 @@ LD_Z_IGNORE=
 # missing symbols from gtk3 during Firefox start
 LD_B_DIRECT=
 
-LD_OPTIONS += -msave-args
-
 # because we touched old-configure.in and js/src/old-configure.in
 COMPONENT_PRE_CONFIGURE_ACTION += (cd $(COMPONENT_NAME)-$(COMPONENT_VERSION); autoreconf; touch configure; cd js/src; autoreconf; touch configure);
 
@@ -181,10 +181,10 @@ COMPONENT_POST_BUILD_ACTION = \
 		$(GMAKE) $(COMPONENT_BUILD_ARGS) $(COMPONENT_BUILD_TARGETS))
 
 COMPONENT_POST_INSTALL_ACTION  = \
-    for file in $(PROTO_DIR)$(FIREFOX_LIBDIR)/firefox/*.so \
-          $(PROTO_DIR)$(FIREFOX_LIBDIR)/firefox/plugin-container; do \
-        /usr/bin/elfedit -e 'dyn:value -s  RUNPATH "$(GCC_LIBDIR):$(FIREFOX_LIBDIR)/firefox:/usr/lib/mps/amd64:$$ORIGIN"' $$file ; \
-        /usr/bin/elfedit -e 'dyn:value -s  RPATH   "$(GCC_LIBDIR):$(FIREFOX_LIBDIR)/firefox:/usr/lib/mps/amd64:$$ORIGIN"' $$file ; \
+    for file in `find $(PROTO_DIR)$(FIREFOX_LIBDIR)/firefox/ -name "*.so"`; \
+          do \
+        /usr/bin/elfedit -e 'dyn:value -s  RUNPATH "$(GCC_LIBDIR):$(FIREFOX_LIBDIR)/firefox:$$ORIGIN"' $$file ; \
+        /usr/bin/elfedit -e 'dyn:value -s  RPATH   "$(GCC_LIBDIR):$(FIREFOX_LIBDIR)/firefox:$$ORIGIN"' $$file ; \
     done ;
 
 donothave_SIGNED_LIST = libsoftokn3.so libnssdbm3.so libfreebl3.so
