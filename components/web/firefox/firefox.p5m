@@ -103,8 +103,8 @@ file path=usr/lib/$(MACH64)/firefox/browser/omni.ja
 file path=usr/lib/$(MACH64)/firefox/chrome.manifest
 file path=usr/lib/$(MACH64)/firefox/defaults/pref/channel-prefs.js
 file path=usr/lib/$(MACH64)/firefox/dependentlibs.list
-file path=usr/lib/$(MACH64)/firefox/firefox
-file path=usr/lib/$(MACH64)/firefox/firefox-bin
+file path=usr/lib/$(MACH64)/firefox/firefox mode=0555
+file path=usr/lib/$(MACH64)/firefox/firefox-bin mode=0555
 file path=usr/lib/$(MACH64)/firefox/fonts/TwemojiMozilla.ttf
 file path=usr/lib/$(MACH64)/firefox/gmp-clearkey/0.1/libclearkey.so
 file path=usr/lib/$(MACH64)/firefox/gmp-clearkey/0.1/manifest.json
@@ -130,7 +130,7 @@ file path=usr/lib/$(MACH64)/firefox/libsoftokn3.so
 file path=usr/lib/$(MACH64)/firefox/libssl3.so
 file path=usr/lib/$(MACH64)/firefox/libxul.so
 file path=usr/lib/$(MACH64)/firefox/omni.ja
-file path=usr/lib/$(MACH64)/firefox/pingsender
+file path=usr/lib/$(MACH64)/firefox/pingsender mode=0555
 file path=usr/lib/$(MACH64)/firefox/platform.ini
-file path=usr/lib/$(MACH64)/firefox/plugin-container
+file path=usr/lib/$(MACH64)/firefox/plugin-container mode=0555
 file path=usr/lib/$(MACH64)/firefox/removed-files
