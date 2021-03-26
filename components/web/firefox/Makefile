@@ -42,7 +42,7 @@ COMPONENT_ARCHIVE_URL =	$(MOZILLA_FTP)/source/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://www.mozilla.com/en-US/firefox/
 COMPONENT_FMRI=		web/browser/firefox
 
-LANG_LIST=	ar bg ca cs da de el es-AR es-CL es-ES et fi fr he hi-IN hr hu id is it ja kk ko lt lv mk nb-NO nl nn-NO pl pt-BR pt-PT ro ru sk sl sq sr sv-SE th tr uk vi zh-CN zh-TW
+LANG_LIST=	ach af ar ast az be bg bn br bs ca-valencia ca cak cs cy da de dsb el en-CA en-GB en-US  eo es-AR es-CL es-ES es-MX et eu fa ff fi fr fy-NL ga gd gn gu-IN he hi-IN hr hsb hu hy-AM ia id is it ja ka kab kk km ko kij lt lv mk mr ms my nb-NO ne-NP nl nn-NO oc pa-IN pl pt-BR pt-PT rm ro ru si sk sl son sq sr sv-SE ta te th tl tr trs uk ur uz vi xh zh-CN zh-TW
 ifdef CANDIDATE_BUILD
 LANG_FILES_LOCATION= \
 	http://ftp.mozilla.org/pub/mozilla.org/firefox/candidates/$(COMPONENT_VERSION)-candidates/build$(CANDIDATE_BUILD)/linux-x86_64/xpi/
