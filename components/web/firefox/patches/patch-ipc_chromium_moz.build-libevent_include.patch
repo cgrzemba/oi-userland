@@ -1,12 +1,15 @@
+#include <event.h> failed because include path is missing
+patch should send upstream
+
 diff --git a/ipc/chromium/moz.build b/ipc/chromium/moz.build
-index 3766f25..f17c9b5 100644
+index 62acea0..13617dd 100644
 --- a/ipc/chromium/moz.build
 +++ b/ipc/chromium/moz.build
-@@ -121,6 +121,7 @@ if os_solaris:
+@@ -117,6 +117,7 @@ if os_solaris:
      ]
  
- CXXFLAGS += CONFIG['TK_CFLAGS']
+ CXXFLAGS += CONFIG["TK_CFLAGS"]
 +CXXFLAGS += CONFIG['MOZ_LIBEVENT_CFLAGS']
  
- include('/ipc/chromium/chromium-config.mozbuild')
+ include("/ipc/chromium/chromium-config.mozbuild")
  

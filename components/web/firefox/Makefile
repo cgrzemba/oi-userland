@@ -21,10 +21,10 @@ BUILD_BITS = 64
 
 include ../../../make-rules/shared-macros.mk
 
-ESR = esr
+# ESR = esr
 
 COMPONENT_NAME =	firefox
-COMPONENT_VERSION =	78.9.0
+COMPONENT_VERSION =	86.0.1
 COMPONENT_REVISION=     0
 COMPONENT_SUMMARY=      Mozilla Firefox Web browser
 COMPONENT_PROJECT_URL =	http://www.mozilla.com/firefox
@@ -32,7 +32,7 @@ COMPONENT_SRC_NAME =	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_SRC = 	$(COMPONENT_SRC_NAME)
 COMPONENT_ARCHIVE =	$(COMPONENT_SRC_NAME)$(ESR).source.tar.xz
 COMPONENT_ARCHIVE_HASH= \
-	sha256:8e03ac1dfc5ac804c8b13a529414a9387e0425e545bb2f4462d74c3175e64864
+	
 ifndef CANDIDATE_BUILD
 MOZILLA_FTP =		http://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)$(ESR)
 else
@@ -42,13 +42,13 @@ COMPONENT_ARCHIVE_URL =	$(MOZILLA_FTP)/source/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://www.mozilla.com/en-US/firefox/
 COMPONENT_FMRI=		web/browser/firefox
 
-LANG_LIST=	ach af ar ast az be bg bn br bs ca-valencia ca cak cs cy da de dsb el en-CA en-GB en-US  eo es-AR es-CL es-ES es-MX et eu fa ff fi fr fy-NL ga gd gn gu-IN he hi-IN hr hsb hu hy-AM ia id is it ja ka kab kk km ko kij lt lv mk mr ms my nb-NO ne-NP nl nn-NO oc pa-IN pl pt-BR pt-PT rm ro ru si sk sl son sq sr sv-SE ta te th tl tr trs uk ur uz vi xh zh-CN zh-TW
+LANG_LIST=	ach af ar ast az be bg bn br bs ca-valencia ca cak cs cy da de dsb el en-CA en-GB en-US  eo es-AR es-CL es-ES es-MX et eu fa ff fi fr fy-NL ga-IE gd gn gu-IN he hi-IN hr hsb hu hy-AM ia id is it ja ka kab kk km ko lij lt lv mk mr ms my nb-NO ne-NP nl nn-NO oc pa-IN pl pt-BR pt-PT rm ro ru si sk sl son sq sr sv-SE ta te th tl tr trs uk ur uz vi xh zh-CN zh-TW
 ifdef CANDIDATE_BUILD
 LANG_FILES_LOCATION= \
 	http://ftp.mozilla.org/pub/mozilla.org/firefox/candidates/$(COMPONENT_VERSION)-candidates/build$(CANDIDATE_BUILD)/linux-x86_64/xpi/
 else
 LANG_FILES_LOCATION= \
-	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(COMPONENT_VERSION)$(ESR)/linux-x86_64/xpi/
+	http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(COMPONENT_VERSION)$(ESR)/linux-x86_64/xpi
 endif
 
 CONFIGURE_DEFAULT_DIRS=no
@@ -139,7 +139,7 @@ LD_Z_IGNORE=
 LD_B_DIRECT=
 
 # because we touched old-configure.in and js/src/old-configure.in
-COMPONENT_PRE_CONFIGURE_ACTION += (cd $(COMPONENT_NAME)-$(COMPONENT_VERSION); autoreconf; touch configure; cd js/src; autoreconf; touch configure);
+COMPONENT_PRE_CONFIGURE_ACTION += (cd $(COMPONENT_NAME)-$(COMPONENT_VERSION); autoreconf-2.13; touch configure; cd js/src; autoreconf-2.13; touch configure);
 
 
 #FIREFOX_LIBDIR =	$(CONFIGURE_LIBDIR.$(BITS))
