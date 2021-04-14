@@ -11,6 +11,7 @@
 
 #
 # Copyright 2017 Alexander Pyhalov
+# Copyright 2021 Carsten Grzemba
 #
 
 BUILD_BITS=64
@@ -18,20 +19,20 @@ BUILD_BITS=64
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= speech-dispatcher
-COMPONENT_VERSION= 0.8.7
-COMPONENT_REVISION= 3
+COMPONENT_VERSION= 0.10.2
+COMPONENT_REVISION= 0
 COMPONENT_SUMMARY= Speech Dispatcher
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:200be1adb054dd14bfbc46e798ac6a7c0d4abaa13343fb987312c5265e4cb134
+
 COMPONENT_ARCHIVE_URL= \
   https://devel.freebsoft.org/pub/projects/speechd/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = https://devel.freebsoft.org/speechd
 COMPONENT_FMRI= library/desktop/speech-dispatcher
 COMPONENT_CLASSIFICATION= Applications/Universal Access
 COMPONENT_LICENSE = GPLv2
-COMPONENT_LICENSE_FILE = COPYING
+COMPONENT_LICENSE_FILE = COPYING.GPL-2
 
 TEST_TARGET = $(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
@@ -44,7 +45,9 @@ LDFLAGS += -lnsl -lsocket
 
 # The split-version.sh script is called from the builddir by configure.
 # Version numbers are silently missing without this.
-COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D))
+COMPONENT_PRE_CONFIGURE_ACTION = ( \
+	$(CLONEY) $(SOURCE_DIR) $(@D); \
+        cd  $(SOURCE_DIR) && aclocal ;)
 
 CONFIGURE_OPTIONS += --sysconfdir=$(ETCDIR)
 CONFIGURE_OPTIONS += --disable-static
@@ -56,6 +59,10 @@ CONFIGURE_ENV+=    PYTHON=$(PYTHON)
 CONFIGURE_ENV+=    am_cv_python_pyexecdir=$(PYTHON_VENDOR_PACKAGES)
 CONFIGURE_ENV+=    am_cv_python_pythondir=$(PYTHON_VENDOR_PACKAGES)
 
+REQUIRED_PACKAGES += developer/build/help2man
+REQUIRED_PACKAGES += library/python/python-xdg
+# for python-xdg Python3.5
+REQUIRED_PACKAGES += runtime/python-35
 # Auto-generated dependencies
 REQUIRED_PACKAGES += library/audio/libao
 REQUIRED_PACKAGES += library/audio/pulseaudio

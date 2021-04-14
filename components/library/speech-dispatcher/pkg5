@@ -1,13 +1,16 @@
 {
     "dependencies": [
         "SUNWcs",
+        "developer/build/help2man",
         "library/audio/libao",
         "library/audio/pulseaudio",
         "library/desktop/dotconf",
         "library/glib2",
         "library/libsndfile",
         "library/libtool/libltdl",
+        "library/python/python-xdg",
         "library/speech/espeak",
+        "shell/ksh93",
         "system/library"
     ],
     "fmris": [

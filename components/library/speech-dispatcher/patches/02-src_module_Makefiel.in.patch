@@ -1,0 +1,63 @@
+diff --git a/src/modules/Makefile.in b/src/modules/Makefile.in
+index fcdbffa..40d894d 100644
+--- a/src/modules/Makefile.in
++++ b/src/modules/Makefile.in
+@@ -1500,16 +1500,16 @@ uninstall-am: uninstall-dist_snddataDATA uninstall-modulebinPROGRAMS
+ 
+ 
+ @ibmtts_shim_TRUE@@ibmtts_support_TRUE@libibmeci.so: $(srcdir)/ibmtts_shim.c
+-@ibmtts_shim_TRUE@@ibmtts_support_TRUE@	$(CC) -fPIC -shared $< -o $@
++@ibmtts_shim_TRUE@@ibmtts_support_TRUE@	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+ 
+ @baratinoo_shim_TRUE@@baratinoo_support_TRUE@libbaratinoo.so: $(srcdir)/baratinoo_shim.c
+-@baratinoo_shim_TRUE@@baratinoo_support_TRUE@	$(CC) -fPIC -shared $< -o $@
++@baratinoo_shim_TRUE@@baratinoo_support_TRUE@	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+ 
+ @kali_shim_TRUE@@kali_support_TRUE@lib%.so: $(srcdir)/kali_%_shim.cpp
+-@kali_shim_TRUE@@kali_support_TRUE@	$(CXX) -fPIC -shared $< -o $@ -I$(srcdir)/kali_shim
++@kali_shim_TRUE@@kali_support_TRUE@	$(CXX) $(CFLAGS) -fPIC -shared $< -o $@ -I$(srcdir)/kali_shim
+ 
+ @voxin_shim_TRUE@@voxin_support_TRUE@libvoxin.so: $(srcdir)/voxin_shim.c
+-@voxin_shim_TRUE@@voxin_support_TRUE@	$(CC) -fPIC -shared $< -o $@
++@voxin_shim_TRUE@@voxin_support_TRUE@	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+ 
+ -include $(top_srcdir)/git.mk
+ 
+--- a/src/modules/Makefile.am	Mon Mar 22 14:03:40 2021
++++ b/src/modules/Makefile.am	Mon Mar 22 14:02:52 2021
+@@ -87,7 +87,7 @@
+ EXTRA_sd_ibmtts_DEPENDENCIES = libibmeci.so
+ 
+ libibmeci.so: $(srcdir)/ibmtts_shim.c
+-	$(CC) -fPIC -shared $< -o $@
++	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+ 
+ CLEANFILES += $(EXTRA_sd_ibmtts_DEPENDENCIES)
+ endif
+@@ -143,7 +143,7 @@
+ EXTRA_sd_baratinoo_DEPENDENCIES = libbaratinoo.so
+ 
+ libbaratinoo.so: $(srcdir)/baratinoo_shim.c
+-	$(CC) -fPIC -shared $< -o $@
++	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+ 
+ CLEANFILES += $(EXTRA_sd_baratinoo_DEPENDENCIES)
+ endif
+@@ -168,7 +168,7 @@
+ EXTRA_sd_kali_DEPENDENCIES = libKali.so libKGlobal.so libKTrans.so libKParle.so libKAnalyse.so
+ 
+ lib%.so: $(srcdir)/kali_%_shim.cpp
+-	$(CXX) -fPIC -shared $< -o $@ -I$(srcdir)/kali_shim
++	$(CXX) $(CFLAGS) -fPIC -shared $< -o $@ -I$(srcdir)/kali_shim
+ 
+ CLEANFILES += $(EXTRA_sd_kali_DEPENDENCIES)
+ endif
+@@ -191,7 +191,7 @@
+ EXTRA_sd_voxin_DEPENDENCIES = libvoxin.so
+ 
+ libvoxin.so: $(srcdir)/voxin_shim.c
+-	$(CC) -fPIC -shared $< -o $@
++	$(CC) $(CFLAGS) -fPIC -shared $< -o $@
+ 
+ CLEANFILES += $(EXTRA_sd_voxin_DEPENDENCIES)
+ endif
