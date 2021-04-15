@@ -16,15 +16,16 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= faac
-COMPONENT_VERSION= 1.28
-COMPONENT_REVISION= 2
+COMPONENT_VERSION= 1.29
+COMPONENT_REVISION= 0
 COMPONENT_SUMMARY= Reference encoder and encoding library for MPEG2/4 AAC
+# COMPONENT_SRC= $(COMPONENT_NAME)-$(subst .,_,$(COMPONENT_VERSION))
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.gz
 COMPONENT_ARCHIVE_HASH= \
-  sha256:c5141199f4cfb17d749c36ba8cfe4b25f838da67c22f0fec40228b6b9c3d19df
+#	sha256:adc387ce588cca16d98c03b6ec1e58f0ffd9fc6eadb00e254157d6b16203b2d2  
 COMPONENT_ARCHIVE_URL= \
-  http://downloads.sourceforge.net/project/faac/faac-src/$(COMPONENT_SRC)/$(COMPONENT_ARCHIVE)
+  http://downloads.sourceforge.net/project/faac/faac-src/$(COMPONENT_NAME)-$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = http://www.audiocoding.com/faac.html
 COMPONENT_LICENSE = LGPLv2
 COMPONENT_LICENSE_FILE = COPYING
@@ -37,13 +38,16 @@ include $(WS_MAKE_RULES)/configure.mk
 include $(WS_MAKE_RULES)/ips.mk
 
 # Missing files in build dir for configure without this.
-COMPONENT_PRE_CONFIGURE_ACTION = ($(CLONEY) $(SOURCE_DIR) $(@D))
+COMPONENT_PRE_CONFIGURE_ACTION = ( \
+	cd  $(SOURCE_DIR) && autoreconf -i; \
+	$(CLONEY) $(SOURCE_DIR) $(@D); \
+	)
 
 CONFIGURE_SCRIPT = $(@D)/configure
 
 CFLAGS += $(CPP_LARGEFILES)
 
-CONFIGURE_OPTIONS += --disable-static
+# CONFIGURE_OPTIONS += --disable-static
 CONFIGURE_OPTIONS += --enable-drm
 CONFIGURE_OPTIONS += --with-mp4v2
 
