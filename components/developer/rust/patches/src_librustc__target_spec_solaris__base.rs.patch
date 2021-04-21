@@ -1,0 +1,16 @@
+$NetBSD: patch-src_librustc__target_spec_solaris__base.rs,v 1.1 2019/05/31 14:11:23 jperkin Exp $
+
+Enable frame pointers on SunOS.
+
+diff --git a/src/librustc_target/spec/solaris_base.rs b/components/developer/rust/rustc-1.47.0-src/src/librustc_target/spec/solaris_base.rs
+index 3d7f0034b..3081b3db9 100644
+--- a/src/librustc_target/spec/solaris_base.rs
++++ b/src/librustc_target/spec/solaris_base.rs
+@@ -9,6 +9,7 @@ pub fn opts() -> TargetOptions {
+         is_like_solaris: true,
+         limit_rdylib_exports: false, // Linker doesn't support this
+         eh_frame_header: false,
++        eliminate_frame_pointer: false,
+ 
+         ..Default::default()
+     }

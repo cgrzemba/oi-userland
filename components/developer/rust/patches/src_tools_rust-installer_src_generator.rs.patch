@@ -1,0 +1,23 @@
+diff --git a/src/tools/rust-installer/src/generator.rs b/src/tools/rust-installer/src/generator.rs
+index ecf73ca..9839a89 100644
+--- a/src/tools/rust-installer/src/generator.rs
++++ b/src/tools/rust-installer/src/generator.rs
+@@ -1,5 +1,4 @@
+ use super::Scripter;
+-use super::Tarballer;
+ use crate::util::*;
+ use anyhow::{bail, format_err, Context, Result};
+ use std::io::Write;
+@@ -91,12 +90,6 @@ impl Generator {
+         // Make the tarballs
+         create_dir_all(&self.output_dir)?;
+         let output = Path::new(&self.output_dir).join(&self.package_name);
+-        let mut tarballer = Tarballer::default();
+-        tarballer
+-            .work_dir(self.work_dir)
+-            .input(self.package_name)
+-            .output(path_to_str(&output)?);
+-        tarballer.run()?;
+ 
+         Ok(())
+     }
