@@ -58,9 +58,7 @@ include $(WS_MAKE_RULES)/common.mk
 #PATH=$(USRBINDIR.64):$(PATH.illumos)
 # /usr/gnu/bin needed to pick up the GNU version of tail and readelf.
 # /usr/sbin needed for dtrace.
-PATH = /usr/gnu/bin:/usr/bin:/usr/sbin
-
-GCC_VERSION= 7
+PATH = $(PATH.gnu):$(BUILD_DIR)/cargo/bin
 
 MOZCONFIG = $(SOURCE_DIR)/mozconfig
 GNU_ARCH=		x86_64-sun-solaris
@@ -139,7 +137,12 @@ LD_Z_IGNORE=
 LD_B_DIRECT=
 
 # because we touched old-configure.in and js/src/old-configure.in
-COMPONENT_PRE_CONFIGURE_ACTION += (cd $(COMPONENT_NAME)-$(COMPONENT_VERSION); autoreconf-2.13; touch configure; cd js/src; autoreconf-2.13; touch configure);
+COMPONENT_PRE_CONFIGURE_ACTION += ( \
+	cd $(COMPONENT_NAME)-$(COMPONENT_VERSION); \
+	autoconf-2.13; touch configure; \
+	cd js/src; autoconf-2.13; touch configure; \
+        cargo install --root=$(BUILD_DIR)/cargo cbindgen \
+);
 
 
 #FIREFOX_LIBDIR =	$(CONFIGURE_LIBDIR.$(BITS))
