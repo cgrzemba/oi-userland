@@ -24,7 +24,7 @@ include ../../../make-rules/shared-macros.mk
 # ESR = esr
 
 COMPONENT_NAME =	firefox
-COMPONENT_VERSION =	86.0.1
+COMPONENT_VERSION =	88.0
 COMPONENT_REVISION=     0
 COMPONENT_SUMMARY=      Mozilla Firefox Web browser
 COMPONENT_PROJECT_URL =	http://www.mozilla.com/firefox
@@ -32,7 +32,7 @@ COMPONENT_SRC_NAME =	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_SRC = 	$(COMPONENT_SRC_NAME)
 COMPONENT_ARCHIVE =	$(COMPONENT_SRC_NAME)$(ESR).source.tar.xz
 COMPONENT_ARCHIVE_HASH= \
-	
+	sha256:6b50dbfb393f843e4401e23965a1d8f7fd44b5a7628d95138294094094eee297
 ifndef CANDIDATE_BUILD
 MOZILLA_FTP =		http://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)$(ESR)
 else
@@ -190,7 +190,7 @@ COMPONENT_POST_INSTALL_ACTION  = \
         /usr/bin/elfedit -e 'dyn:value -s  RPATH   "$(GCC_LIBDIR):$(FIREFOX_LIBDIR)/firefox:$$ORIGIN"' $$file ; \
     done ;
 
-donothave_SIGNED_LIST = libsoftokn3.so libnssdbm3.so libfreebl3.so
+SIGNED_LIST = libsoftokn3.so libfreebl3.so
 
 
 COMPONENT_POST_INSTALL_ACTION += \

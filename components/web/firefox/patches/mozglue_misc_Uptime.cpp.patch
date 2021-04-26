@@ -1,0 +1,15 @@
+Bug: 1686405 - Unbreak build on Tier3 platforms after bug 1205985 
+
+diff --git a/mozglue/misc/Uptime.cpp b/mozglue/misc/Uptime.cpp
+index bded401..dc809c7 100644
+--- a/mozglue/misc/Uptime.cpp
++++ b/mozglue/misc/Uptime.cpp
+@@ -79,7 +79,7 @@ Maybe<uint64_t> NowIncludingSuspendMs() {
+ }
+ #endif  // XP_WIN
+ 
+-#if defined(XP_LINUX)  // including Android
++#if defined(XP_LINUX) || defined(XP_SOLARIS) // including Android
+ #  include <time.h>
+ 
+ // Number of nanoseconds in a millisecond.

@@ -11,3 +11,16 @@ index 67df8f0..3a439e8 100644
  
  
  class HostSharedLibrary(HostMixin, Library):
+diff --git a/python/mozbuild/mozbuild/frontend/data.py b/python/mozbuild/mozbuild/frontend/data.py
+index 3a439e8..96a6c93 100644
+--- a/python/mozbuild/mozbuild/frontend/data.py
++++ b/python/mozbuild/mozbuild/frontend/data.py
+@@ -917,7 +917,7 @@ class SharedLibrary(Library):
+                 )
+             elif os_target == "SunOS":
+                 self.symbols_link_arg = (
+-                    "-z gnu-version-script-compat -Wl,--version-script,"
++                    "-Wl,-M,"
+                     + self.symbols_file
+                 )
+             elif os_target == "WINNT":
