@@ -17,7 +17,6 @@
         "library/desktop/xdg/libcanberra",
         "library/glib2",
         "library/gnome/libgnomekbd",
-        "library/libunique",
         "library/libxml2",
         "shell/ksh93",
         "system/library",

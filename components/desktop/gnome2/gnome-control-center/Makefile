@@ -17,7 +17,7 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnome-control-center
 COMPONENT_VERSION=	2.32.1
-COMPONENT_REVISION=	3
+COMPONENT_REVISION=	4
 COMPONENT_PROJECT_URL=	https://www.gnome.org
 COMPONENT_SUMMARY=	GNOME desktop wide preference configuration tools
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -70,10 +70,7 @@ REQUIRED_PACKAGES += gnome/theme/gnome-icon-theme
 # Auto-generated dependencies
 REQUIRED_PACKAGES += desktop/gksu
 REQUIRED_PACKAGES += gnome/config/gconf
-REQUIRED_PACKAGES += gnome/gnome-menus
 REQUIRED_PACKAGES += gnome/window-manager/metacity
-REQUIRED_PACKAGES += image/library/librsvg
-REQUIRED_PACKAGES += library/desktop/atk
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
 REQUIRED_PACKAGES += library/desktop/gnome-desktop
@@ -83,7 +80,6 @@ REQUIRED_PACKAGES += library/desktop/pango
 REQUIRED_PACKAGES += library/desktop/xdg/libcanberra
 REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += library/gnome/libgnomekbd
-REQUIRED_PACKAGES += library/libunique
 REQUIRED_PACKAGES += library/libxml2
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
