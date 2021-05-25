@@ -1,3 +1,4 @@
+#
 # This file and its contents are supplied under the terms of the
 # Common Development and Distribution License ("CDDL"). You may
 # only use this file in accordance with the terms of the CDDL.
@@ -8,9 +9,11 @@
 #
 
 #
-# Copyright 2017 <contributor name>
+# Copyright 2020 <contributor name>
 #
 
+BUILD_BITS=32
+BUILD_STYLE=ant
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=
@@ -25,12 +28,5 @@ COMPONENT_ARCHIVE_URL=
 COMPONENT_ARCHIVE_HASH=
 COMPONENT_LICENSE=
 
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/ant.mk
-include $(WS_MAKE_RULES)/ips.mk
+include $(WS_MAKE_RULES)/common.mk
 
-build: $(BUILD_32)
-
-install: $(INSTALL_32)
-
-test: $(NO_TESTS)

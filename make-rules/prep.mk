@@ -24,12 +24,12 @@
 #
 
 include $(WS_MAKE_RULES)/prep-download.mk
+
 include $(WS_MAKE_RULES)/prep-hg.mk
+include $(WS_MAKE_RULES)/prep-git.mk
 include $(WS_MAKE_RULES)/prep-svn.mk
 include $(WS_MAKE_RULES)/prep-unpack.mk
 include $(WS_MAKE_RULES)/prep-patch.mk
-
-$(eval $(call eval-hg-rules))
 
 download::
 
@@ -37,7 +37,7 @@ unpack::	download
 
 patch::		unpack
 
-$(SOURCE_DIR)/.prep:	download unpack patch
+$(SOURCE_DIR)/.prep:	component-environment-prep download unpack patch
 	$(COMPONENT_PREP_ACTION)
 	$(TOUCH) $@
 

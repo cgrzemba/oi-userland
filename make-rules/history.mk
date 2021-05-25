@@ -30,7 +30,7 @@
 COMPONENT_SRC=nonexistent
 
 PKGSEND =	/usr/bin/pkgsend
-PKGLINT =	/usr/bin/pkglint
+PKGLINT =	/usr/bin/python3.5 /usr/bin/pkglint
 PKGMOGRIFY =	/usr/bin/pkgmogrify
 
 GENERATE_HISTORY=	$(WS_TOOLS)/generate-history
@@ -99,6 +99,9 @@ $(BUILD_DIR)/.published-$(MACH): $(BUILD_DIR)/.linted-$(MACH) $(PUBLISHED)
 	$(TOUCH) $@
 
 publish: $(BUILD_DIR)/.published-$(MACH)
+
+print-package-names:
+	@cat history | cut -f 1 -d '@'
 
 %.p5m: 	%.p5m.$(MACH)
 	$(CP) $< $@

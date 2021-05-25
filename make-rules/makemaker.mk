@@ -1,4 +1,4 @@
-#
+
 # CDDL HEADER START
 #
 # The contents of this file are subject to the terms of the
@@ -27,7 +27,7 @@ COMMON_PERL_ENV +=	MAKE=$(GMAKE)
 COMMON_PERL_ENV +=	PATH=$(dir $(CC)):$(SPRO_VROOT)/bin:$(PATH)
 COMMON_PERL_ENV +=	LANG=""
 COMMON_PERL_ENV +=	CC="$(CC)"
-COMMON_PERL_ENV +=	CFLAGS="$(PERL_OPTIMIZE)"
+COMMON_PERL_ENV +=	CFLAGS="$(CC_BITS) $(PERL_OPTIMIZE)"
 
 # Yes.  Perl is just scripts, for now, but we need architecture
 # directories so that it populates all architecture prototype
@@ -101,7 +101,7 @@ COMPONENT_TEST_DIFFS =  $(COMPONENT_TEST_BUILD_DIR)/test-$(PERL_VERSION)-$(BITS)
 COMPONENT_TEST_SNAPSHOT = $(COMPONENT_TEST_BUILD_DIR)/results-$(PERL_VERSION)-$(BITS).snapshot
 COMPONENT_TEST_TRANSFORM_CMD = $(COMPONENT_TEST_BUILD_DIR)/transform-$(PERL_VERSION)-$(BITS)-results
 
-COMPONENT_TEST_TARGETS =	check
+COMPONENT_TEST_TARGETS =	test
 COMPONENT_TEST_ENV +=	$(COMMON_PERL_ENV)
 
 # determine the type of tests we want to run.

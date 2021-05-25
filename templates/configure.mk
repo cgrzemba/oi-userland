@@ -9,9 +9,10 @@
 #
 
 #
-# Copyright 2017 <contributor name>
+# Copyright 2020 <contributor name>
 #
 
+BUILD_BITS=64 # for binaries or 32_and_64 for libraries
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=
@@ -26,12 +27,10 @@ COMPONENT_ARCHIVE_URL=
 COMPONENT_ARCHIVE_HASH=
 COMPONENT_LICENSE=
 
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/configure.mk
-include $(WS_MAKE_RULES)/ips.mk
+TEST_TARGET=$(NO_TESTS) # if no testsuite enabled
+include $(WS_MAKE_RULES)/common.mk
 
-build:		$(BUILD_32)
+CONFIGURE_OPTIONS+= # add configuration options here
 
-install:	$(INSTALL_32)
-
-test:		$(TEST_32)
+# Build dependencies
+REQUIRED_PACKAGES+= 
