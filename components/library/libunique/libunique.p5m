@@ -28,17 +28,14 @@ file path=usr/include/unique-1.0/unique/uniquebackend.h
 file path=usr/include/unique-1.0/unique/uniqueenumtypes.h
 file path=usr/include/unique-1.0/unique/uniquemessage.h
 file path=usr/include/unique-1.0/unique/uniqueversion.h
-file path=usr/lib/$(MACH64)/girepository-1.0/Unique-1.0.typelib
 link path=usr/lib/$(MACH64)/libunique-1.0.so target=libunique-1.0.so.0.100.6
 link path=usr/lib/$(MACH64)/libunique-1.0.so.0 target=libunique-1.0.so.0.100.6
 file path=usr/lib/$(MACH64)/libunique-1.0.so.0.100.6
 file path=usr/lib/$(MACH64)/pkgconfig/unique-1.0.pc
-file path=usr/lib/girepository-1.0/Unique-1.0.typelib
 link path=usr/lib/libunique-1.0.so target=libunique-1.0.so.0.100.6
 link path=usr/lib/libunique-1.0.so.0 target=libunique-1.0.so.0.100.6
 file path=usr/lib/libunique-1.0.so.0.100.6
 file path=usr/lib/pkgconfig/unique-1.0.pc
-file path=usr/share/gir-1.0/Unique-1.0.gir
 file path=usr/share/gtk-doc/html/unique/UniqueApp.html
 file path=usr/share/gtk-doc/html/unique/UniqueBackend.html
 file path=usr/share/gtk-doc/html/unique/home.png

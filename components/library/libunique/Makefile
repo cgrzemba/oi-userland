@@ -46,7 +46,7 @@ COMPONENT_PREP_ACTION =        ( cd $(@D) && \
 
 
 CONFIGURE_OPTIONS+= --sysconfdir=/etc
-CONFIGURE_OPTIONS+= --enable-introspection=yes
+CONFIGURE_OPTIONS+= --enable-introspection=no
 CONFIGURE_OPTIONS+= --enable-maintainer-flags=no
 
 # CFLAGS are not passed to compiler when g-ir-scanner is used
