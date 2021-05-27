@@ -16,15 +16,18 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnome-menus
-COMPONENT_VERSION=	2.30.5
+# COMPONENT_VERSION=	2.30.5
+# COMPONENT_REVISION=	3
+COMPONENT_VERSION=	2.91.91
 COMPONENT_REVISION=	3
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	Implementation of Desktop Menu Specification for GNOME
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:6dcc565006d6e8c2025ae83ab1f82edf6bd04d61c804c0dc9bf5ea50629c4caa
-COMPONENT_ARCHIVE_URL=	http://ftp.gnome.org/pub/GNOME/sources/$(COMPONENT_NAME)/2.30/$(COMPONENT_ARCHIVE)
+
+#    sha256:6dcc565006d6e8c2025ae83ab1f82edf6bd04d61c804c0dc9bf5ea50629c4caa
+COMPONENT_ARCHIVE_URL=	http://ftp.gnome.org/pub/GNOME/sources/$(COMPONENT_NAME)/2.91/$(COMPONENT_ARCHIVE)
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -49,6 +52,8 @@ LDFLAGS += -lsecdb -lsocket -lnsl -ltsol
 CONFIGURE_OPTIONS+=	--sysconfdir=/etc
 CONFIGURE_OPTIONS+=	--disable-static
 
+PYTHON_VERSION = 3.5
+CONFIGURE_ENV+= CPPFLAGS="-m$(BITS)"
 CONFIGURE_ENV+= PYTHON=$(PYTHON)
 CONFIGURE_ENV+= am_cv_python_pythondir="$(PYTHON_VENDOR_PACKAGES)"
 CONFIGURE_ENV+= am_cv_python_pyexecdir="$(PYTHON_VENDOR_PACKAGES)"
@@ -57,9 +62,9 @@ COMPONENT_BUILD_ENV+= CC="$(CC)"
 COMPONENT_BUILD_ENV+= CFLAGS="$(CFLAGS)"
 
 # common targets
-build:		$(BUILD_32)
+build:		$(BUILD_64)
 
-install:	$(INSTALL_32)
+install:	$(INSTALL_64)
 
 test:		$(NO_TESTS)
 

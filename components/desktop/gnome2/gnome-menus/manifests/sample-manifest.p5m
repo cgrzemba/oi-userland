@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2016 <contributor>
+# Copyright 2020 <contributor>
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
@@ -25,20 +25,20 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 file path=etc/xdg/menus/applications.menu
 file path=etc/xdg/menus/quickstart.menu
 file path=etc/xdg/menus/settings.menu
-file path=usr/bin/gmenu-simple-editor
+file path=usr/bin/$(MACH64)/gmenu-simple-editor
 file path=usr/include/gnome-menus/gmenu-tree.h
-file path=usr/lib/girepository-1.0/GMenu-2.0.typelib
-link path=usr/lib/libgnome-menu.so target=libgnome-menu.so.2.4.10
-link path=usr/lib/libgnome-menu.so.2 target=libgnome-menu.so.2.4.10
-file path=usr/lib/libgnome-menu.so.2.4.10
-file path=usr/lib/pkgconfig/libgnome-menu.pc
-file path=usr/lib/python2.7/vendor-packages/GMenuSimpleEditor/__init__.py
-file path=usr/lib/python2.7/vendor-packages/GMenuSimpleEditor/config.py
-file path=usr/lib/python2.7/vendor-packages/GMenuSimpleEditor/main.py
-file path=usr/lib/python2.7/vendor-packages/GMenuSimpleEditor/maindialog.py
-file path=usr/lib/python2.7/vendor-packages/GMenuSimpleEditor/menufilewriter.py
-file path=usr/lib/python2.7/vendor-packages/GMenuSimpleEditor/menutreemodel.py
-file path=usr/lib/python2.7/vendor-packages/gmenu.so
+file path=usr/lib/$(MACH64)/girepository-1.0/GMenu-2.0.typelib
+link path=usr/lib/$(MACH64)/libgnome-menu.so target=libgnome-menu.so.2.4.10
+link path=usr/lib/$(MACH64)/libgnome-menu.so.2 target=libgnome-menu.so.2.4.10
+file path=usr/lib/$(MACH64)/libgnome-menu.so.2.4.10
+file path=usr/lib/$(MACH64)/pkgconfig/libgnome-menu.pc
+file path=usr/lib/python2.7/vendor-packages/64/GMenuSimpleEditor/__init__.py
+file path=usr/lib/python2.7/vendor-packages/64/GMenuSimpleEditor/config.py
+file path=usr/lib/python2.7/vendor-packages/64/GMenuSimpleEditor/main.py
+file path=usr/lib/python2.7/vendor-packages/64/GMenuSimpleEditor/maindialog.py
+file path=usr/lib/python2.7/vendor-packages/64/GMenuSimpleEditor/menufilewriter.py
+file path=usr/lib/python2.7/vendor-packages/64/GMenuSimpleEditor/menutreemodel.py
+file path=usr/lib/python2.7/vendor-packages/64/gmenu.so
 file path=usr/share/applications/gmenu-simple-editor.desktop
 file path=usr/share/desktop-directories/AudioVideo.directory
 file path=usr/share/desktop-directories/Development.directory
