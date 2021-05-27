@@ -1,0 +1,13 @@
+diff --git a/applets/clock/clock-location.h b/applets/clock/clock-location.h
+index 88e4877..e970762 100644
+--- a/applets/clock/clock-location.h
++++ b/applets/clock/clock-location.h
+@@ -4,7 +4,7 @@
+ #include <time.h>
+ #include <glib.h>
+ #include <glib-object.h>
+-#include <libgweather/weather.h>
++#include <libmateweather/weather.h>
+ 
+ G_BEGIN_DECLS
+ 

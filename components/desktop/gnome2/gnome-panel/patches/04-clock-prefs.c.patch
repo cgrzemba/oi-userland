@@ -1,0 +1,151 @@
+diff --git a/applets/clock/clock-prefs.c b/applets/clock/clock-prefs.c
+new file mode 100644
+index 0000000..9519003
+--- /dev/null
++++ b/applets/clock/clock-prefs.c
+@@ -0,0 +1,145 @@
++#include <gconf/gconf-client.h>
++
++#include "mateweather-prefs.h"
++
++#define N_(x) x
++#define _(x) x
++
++static GConfEnumStringPair temp_unit_enum_map [] = {
++    { TEMP_UNIT_DEFAULT,    N_("Default") },
++    /* translators: Kelvin */
++    { TEMP_UNIT_KELVIN,     N_("K")       },
++    /* translators: Celsius */
++    { TEMP_UNIT_CENTIGRADE, N_("C")       },
++    /* translators: Fahrenheit */
++    { TEMP_UNIT_FAHRENHEIT, N_("F")       },
++    { 0, NULL }
++};
++
++static GConfEnumStringPair speed_unit_enum_map [] = {
++    { SPEED_UNIT_DEFAULT, N_("Default")        },
++    /* translators: meters per second */
++    { SPEED_UNIT_MS,      N_("m/s")            },
++    /* translators: kilometers per hour */
++    { SPEED_UNIT_KPH,     N_("km/h")           },
++    /* translators: miles per hour */
++    { SPEED_UNIT_MPH,     N_("mph")            },
++    /* translators: knots (speed unit) */
++    { SPEED_UNIT_KNOTS,   N_("knots")          },
++    /* translators: wind speed */
++    { SPEED_UNIT_BFT,     N_("Beaufort scale") },
++    { 0, NULL }
++};
++
++static void
++parse_temp_string (const gchar *gconf_str, MateWeatherPrefs *prefs)
++{
++    gint value = 0;
++#ifdef HAVE__NL_MEASUREMENT_MEASUREMENT
++    char *imperial = NULL;
++#endif
++
++    prefs->temperature_unit = TEMP_UNIT_INVALID;
++
++    if ( gconf_str && gconf_string_to_enum (temp_unit_enum_map, gconf_str, &value) ) {
++        prefs->temperature_unit = value;
++
++        if ((prefs->temperature_unit == TEMP_UNIT_DEFAULT) &&
++            (gconf_string_to_enum (temp_unit_enum_map, _("DEFAULT_TEMP_UNIT"), &value)) ) {
++            prefs->temperature_unit = value;
++        }
++    } else {
++        /* TRANSLATOR: This is the default unit to use for temperature measurements. */
++        /* Valid values are: "K" (Kelvin), "C" (Celsius) and "F" (Fahrenheit) */
++        if (gconf_string_to_enum (temp_unit_enum_map, _("DEFAULT_TEMP_UNIT"), &value) ) {
++            prefs->temperature_unit = value;
++        }
++    }
++    if (!prefs->temperature_unit || prefs->temperature_unit == TEMP_UNIT_DEFAULT ) {
++#ifdef HAVE__NL_MEASUREMENT_MEASUREMENT
++        imperial = nl_langinfo (_NL_MEASUREMENT_MEASUREMENT);
++        if ( imperial && imperial[0] == 2 )  {
++            /* imperial */
++            prefs->temperature_unit = TEMP_UNIT_FAHRENHEIT;
++        } else
++#endif
++            prefs->temperature_unit = TEMP_UNIT_CENTIGRADE;
++    }
++}
++
++static void
++parse_speed_string (const gchar *gconf_str, MateWeatherPrefs *prefs)
++{
++    gint value = 0;
++#ifdef HAVE__NL_MEASUREMENT_MEASUREMENT
++    char *imperial = NULL;
++#endif
++
++    prefs->speed_unit = SPEED_UNIT_INVALID;
++
++    if (gconf_str && gconf_string_to_enum (speed_unit_enum_map, gconf_str, &value) ) {
++        prefs->speed_unit = value;
++        if ((prefs->speed_unit == SPEED_UNIT_DEFAULT) &&
++            (gconf_string_to_enum (speed_unit_enum_map, _("DEFAULT_SPEED_UNIT"), &value)) ) {
++            prefs->speed_unit = value;
++        }
++    }
++    else {
++        /* TRANSLATOR: This is the default unit to use for wind speed. */
++        /* Valid values are: "m/s" (meters per second), "km/h" (kilometers per hour), */
++        /* "mph" (miles per hour) and "knots"  */
++        if (gconf_string_to_enum (speed_unit_enum_map, _("DEFAULT_SPEED_UNIT"), &value) ) {
++            prefs->speed_unit = value;
++        }
++    }
++    if ((!prefs->speed_unit) || prefs->speed_unit == SPEED_UNIT_DEFAULT) {
++#ifdef HAVE__NL_MEASUREMENT_MEASUREMENT
++        imperial = nl_langinfo (_NL_MEASUREMENT_MEASUREMENT);
++        if (imperial && imperial[0] == 2)  {
++            /* imperial */
++            prefs->speed_unit = SPEED_UNIT_KNOTS;
++        } else
++#endif
++            prefs->speed_unit = SPEED_UNIT_MS;
++    }
++}
++
++SpeedUnit
++mateweather_prefs_parse_speed (const char *str, gboolean *is_default)
++{
++    MateWeatherPrefs prefs;
++
++    g_return_val_if_fail (str != NULL, SPEED_UNIT_INVALID);
++    g_return_val_if_fail (is_default != NULL, SPEED_UNIT_INVALID);
++
++    parse_speed_string (str, &prefs);
++    *is_default = TRUE;
++    return prefs.speed_unit;
++}
++
++TempUnit
++mateweather_prefs_parse_temperature (const char *str, gboolean *is_default)
++{
++    MateWeatherPrefs prefs;
++
++    g_return_val_if_fail (str != NULL, TEMP_UNIT_INVALID);
++    g_return_val_if_fail (is_default != NULL, TEMP_UNIT_INVALID);
++
++    parse_temp_string (str, &prefs);
++    *is_default = TRUE;
++    return prefs.temperature_unit;
++}
++
++const char *
++mateweather_prefs_temp_enum_to_string (TempUnit temp)
++{
++    return gconf_enum_to_string (temp_unit_enum_map, temp);
++}
++
++const char *
++mateweather_prefs_speed_enum_to_string (SpeedUnit speed)
++{
++    return gconf_enum_to_string (speed_unit_enum_map, speed);
++}
++
++

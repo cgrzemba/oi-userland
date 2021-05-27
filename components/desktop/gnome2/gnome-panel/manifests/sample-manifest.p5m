@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2016 <contributor>
+# Copyright 2020 <contributor>
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
@@ -43,7 +43,6 @@ file path=usr/include/panel-2.0/panel-applet-enums.h
 file path=usr/include/panel-2.0/panel-applet-gconf.h
 file path=usr/include/panel-2.0/panel-applet.h
 file path=usr/lib/clock-applet
-file path=usr/lib/girepository-1.0/PanelApplet-3.0.typelib
 file path=usr/lib/gnome-panel-add
 file path=usr/lib/gnome-panel/modules/libpanel-applets-bonobo.so
 link path=usr/lib/libpanel-applet-2.so target=libpanel-applet-2.so.0.2.73
@@ -60,7 +59,6 @@ file path=usr/share/applications/gnome-panel.desktop
 file path=usr/share/dbus-1/services/org.gnome.panel.applet.ClockAppletFactory.service
 file path=usr/share/dbus-1/services/org.gnome.panel.applet.NotificationAreaAppletFactory.service
 file path=usr/share/dbus-1/services/org.gnome.panel.applet.WnckletFactory.service
-file path=usr/share/gir-1.0/PanelApplet-3.0.gir
 file path=usr/share/gnome-2.0/ui/GNOME_Panel_Popup.xml
 file path=usr/share/gnome-panel/applets/org.gnome.panel.ClockApplet.panel-applet
 file path=usr/share/gnome-panel/applets/org.gnome.panel.NotificationAreaApplet.panel-applet

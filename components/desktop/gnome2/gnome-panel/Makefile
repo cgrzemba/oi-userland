@@ -16,7 +16,7 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnome-panel
 COMPONENT_VERSION=	2.32.1
-COMPONENT_REVISION=	8
+COMPONENT_REVISION=	9
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	The GNOME Panel
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -39,7 +39,7 @@ COMPONENT_PREP_ACTION =        ( cp $(COMPONENT_DIR)/files/*.png $(@D)/icons && 
 					automake -c -f -a &&\
 					autoconf )
 
-COMPONENT_PRE_CONFIGURE_ACTION =        (chmod -R u+r $(SOURCE_DIR) && cp -rp $(SOURCE_DIR)/* $(@D) && \
+COMPONENT_PRE_CONFIGURE_ACTION =        (chmod -R u+r $(SOURCE_DIR) && $(CLONEY) $(SOURCE_DIR) $(@D) && \
                                         cp -r $(COMPONENT_DIR)/files/po-sun $(@D) && \
                                         cd $(@D)/po-sun && $(MAKE) all )
 
@@ -49,6 +49,11 @@ CONFIGURE_OPTIONS+=	--sysconfdir=/etc
 CONFIGURE_OPTIONS+=	--libexecdir=/usr/lib
 CONFIGURE_OPTIONS+=	--disable-static
 CONFIGURE_OPTIONS+=	--disable-scrollkeeper
+CONFIGURE_OPTIONS+=	--disable-eds
+CONFIGURE_OPTIONS+=	--disable-bonobo
+CONFIGURE_OPTIONS+=	--disable-network-manager
+CONFIGURE_OPTIONS+=	--disable-introspection
+CONFIGURE_OPTIONS+=	--disable-gtk-doc
 
 CONFIGURE_ENV+= PYTHON=$(PYTHON)
 
@@ -65,32 +70,5 @@ install:	$(INSTALL_32)
 
 test:		$(NO_TESTS)
 
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += developer/gnome/gnome-doc-utils
-REQUIRED_PACKAGES += gnome/config/gconf
-REQUIRED_PACKAGES += gnome/gnome-menus
-REQUIRED_PACKAGES += image/library/librsvg
-REQUIRED_PACKAGES += library/desktop/atk
-REQUIRED_PACKAGES += library/desktop/cairo
-REQUIRED_PACKAGES += library/desktop/evolution-data-server
-REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
-REQUIRED_PACKAGES += library/desktop/gnome-desktop
-REQUIRED_PACKAGES += library/desktop/gtk2
-REQUIRED_PACKAGES += library/desktop/libbonoboui
-REQUIRED_PACKAGES += library/desktop/libgweather
-REQUIRED_PACKAGES += library/desktop/libwnck
-REQUIRED_PACKAGES += library/desktop/pango
-REQUIRED_PACKAGES += library/desktop/xdg/libcanberra
-REQUIRED_PACKAGES += library/glib2
-REQUIRED_PACKAGES += library/libbonobo
-REQUIRED_PACKAGES += library/libical
-REQUIRED_PACKAGES += library/orbit2
-REQUIRED_PACKAGES += library/python/gnome-python-27
-REQUIRED_PACKAGES += runtime/python-27
-REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/libdbus-glib
-REQUIRED_PACKAGES += system/library/math
-REQUIRED_PACKAGES += x11/library/libice
-REQUIRED_PACKAGES += x11/library/libsm
-REQUIRED_PACKAGES += x11/library/libx11
-REQUIRED_PACKAGES += x11/library/libxrandr
+# Auto-generated dependencies

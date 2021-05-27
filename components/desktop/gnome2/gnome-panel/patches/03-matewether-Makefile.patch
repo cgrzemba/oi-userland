@@ -1,0 +1,26 @@
+diff --git a/applets/clock/Makefile.am b/applets/clock/Makefile.am
+index 52a6865..b3a5c16 100644
+--- a/applets/clock/Makefile.am
++++ b/applets/clock/Makefile.am
+@@ -56,7 +56,8 @@ CLOCK_CPPFLAGS =						\
+ 	-DCLOCK_MENU_UI_DIR=\""$(xmluidir)"\"			\
+ 	-DICONDIR=\""$(datadir)/gnome-panel/pixmaps"\"		\
+ 	-DCLOCK_EDS_ICONDIR="\"$(CLOCK_EDS_ICONDIR)\""		\
+-	-DGWEATHER_I_KNOW_THIS_IS_UNSTABLE
++	-DMATEWEATHER_I_KNOW_THIS_IS_UNSTABLE	\
++	-I/usr/include/libmateweather
+ 
+ CLOCK_LDADD =						\
+ 	../../libpanel-applet/libpanel-applet-3.la	\
+diff --git a/applets/clock/Makefile.am b/applets/clock/Makefile.am
+index b3a5c16..c8ce997 100644
+--- a/applets/clock/Makefile.am
++++ b/applets/clock/Makefile.am
+@@ -42,6 +42,7 @@ CLOCK_SOURCES = 		\
+ 	clock-utils.h		\
+ 	set-timezone.c		\
+ 	set-timezone.h		\
++	clock-prefs.c		\
+ 	$(BUILT_SOURCES)	\
+ 	$(CALENDAR_SOURCES)
+ 
