@@ -107,7 +107,7 @@ ROOT =			/
 # to determine the distribution version
 # (it should look like OpenIndiana Hipster YYYY.MM).
 DISTRIBUTION_NAME = OpenIndiana Hipster
-DISTRIBUTION_VERSION = 2020.10
+DISTRIBUTION_VERSION = 2021.04
 # Native OS version
 OS_VERSION :=		$(shell uname -r)
 SOLARIS_VERSION =	$(OS_VERSION:5.%=2.%)
@@ -815,7 +815,7 @@ PKG_MACROS +=   PERL_VERSION=$(PERL_VERSION)
 
 # Config magic for Postgres/EnterpriseDB/...
 # Default DB version is the oldest one, for hopefully best built complatibility
-PG_VERSION ?=   9.5
+PG_VERSION ?=   9.6
 PG_IMPLEM ?=    postgres
 PG_VERNUM =     $(subst .,,$(PG_VERSION))
 # For dependencies, including REQUIRED_PACKAGES if needed
@@ -827,8 +827,8 @@ REQUIRED_PACKAGES_SUBST+= PG_DEVELOPER_PKG
 REQUIRED_PACKAGES_SUBST+= PG_LIBRARY_PKG
 
 PG_HOME =       $(USRDIR)/$(PG_IMPLEM)/$(PG_VERSION)
-PG_BINDIR.32 =  $(PG_HOME)/bin
-PG_BINDIR.64 =  $(PG_HOME)/bin/$(MACH64)
+PG_BINDIR.32 =  $(PG_HOME)/bin/$(MACH32)
+PG_BINDIR.64 =  $(PG_HOME)/bin
 PG_BINDIR =     $(PG_BINDIR.$(BITS))
 PG_INCDIR =     $(PG_HOME)/include
 PG_MANDIR =     $(PG_HOME)/man
@@ -1394,6 +1394,9 @@ component-hook:
 
 # Add default dependency to SUNWcs
 REQUIRED_PACKAGES += SUNWcs
+
+# Add default dependency to shell/ksh93 which has been separated from SUNWcs
+REQUIRED_PACKAGES += shell/ksh93
 
 #
 # Packages with tools that are required to build Userland components

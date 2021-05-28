@@ -12,6 +12,7 @@
 # Copyright 2012-2013, EveryCity Ltd. All rights reserved.
 # Copyright 2019 Alexander Pyhalov
 # Copyright 2019 Michal Nowak
+# Copyright 2021 Gary Mills
 #
 
 BUILD_BITS=32_and_64
@@ -20,15 +21,18 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=			postgresql
 COMPONENT_MJR_VERSION=	12
-COMPONENT_MNR_VERSION=	5
+COMPONENT_MNR_VERSION=	7
 COMPONENT_VERSION=		$(COMPONENT_MJR_VERSION).$(COMPONENT_MNR_VERSION)
 COMPONENT_SRC=			$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=		$(COMPONENT_SRC).tar.bz2
-COMPONENT_ARCHIVE_HASH=	sha256:bd0d25341d9578b5473c9506300022de26370879581f5fddd243a886ce79ff95
+COMPONENT_ARCHIVE_HASH=	sha256:8490741f47c88edc8b6624af009ce19fda4dc9b31c4469ce2551d84075d5d995
 COMPONENT_ARCHIVE_URL=	http://ftp.postgresql.org/pub/source/v$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL=	https://www.postgresql.org
 
 TEST_TARGET=$(TEST_64)
+
+# Set python version used by this product
+PYTHON_VERSION=3.7
 
 include $(WS_MAKE_RULES)/common.mk
 
@@ -83,6 +87,8 @@ CONFIGURE_ENV.32     += PERL=$(PERL)
 CONFIGURE_ENV.64     += PERL=$(PERL.5.24)
 
 COMPONENT_BUILD_ENV += MAKELEVEL=0
+COMPONENT_BUILD_ENV += PATH=$(PATH)
+COMPONENT_INSTALL_ENV += PATH=$(PATH)
 
 COMPONENT_BUILD_TARGETS = world
 COMPONENT_INSTALL_TARGETS = install-world
@@ -113,8 +119,9 @@ REQUIRED_PACKAGES += library/libxslt
 REQUIRED_PACKAGES += library/security/openssl
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += runtime/perl-524
-REQUIRED_PACKAGES += runtime/python-27
+REQUIRED_PACKAGES += runtime/python-37
 REQUIRED_PACKAGES += runtime/tcl-8
+REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/security/gss

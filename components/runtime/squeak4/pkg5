@@ -8,6 +8,7 @@
         "library/glib2",
         "library/libffi",
         "library/security/openssl",
+        "shell/ksh93",
         "system/library",
         "system/library/dbus",
         "system/library/freetype-2",
@@ -19,9 +20,9 @@
         "x11/library/mesa"
     ],
     "fmris": [
-        "runtime/squeak-4",
-        "runtime/squeak-4-display-X11",
-        "runtime/squeak-4-nodisplay"
+        "runtime/smalltalk/squeak",
+        "runtime/smalltalk/squeak-display-X11",
+        "runtime/smalltalk/squeak-nodisplay"
     ],
-    "name": "squeak-4"
+    "name": "squeak"
 }
