@@ -10,7 +10,7 @@
 #
 
 #
-# Copyright 2016 <contributor>
+# Copyright 2020 <contributor>
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
@@ -32,11 +32,6 @@ file path=usr/include/libgweather/gweather-xml.h
 file path=usr/include/libgweather/location-entry.h
 file path=usr/include/libgweather/timezone-menu.h
 file path=usr/include/libgweather/weather.h
-file path=usr/lib/$(MACH64)/libgweather.a
-link path=usr/lib/$(MACH64)/libgweather.so target=libgweather.so.1.6.10
-link path=usr/lib/$(MACH64)/libgweather.so.1 target=libgweather.so.1.6.10
-file path=usr/lib/$(MACH64)/libgweather.so.1.6.10
-file path=usr/lib/$(MACH64)/pkgconfig/gweather.pc
 file path=usr/lib/libgweather.a
 link path=usr/lib/libgweather.so target=libgweather.so.1.6.10
 link path=usr/lib/libgweather.so.1 target=libgweather.so.1.6.10

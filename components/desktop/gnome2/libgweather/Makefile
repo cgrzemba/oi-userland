@@ -34,19 +34,28 @@ PATH=$(PATH.gnu)
 
 CONFIGURE_OPTIONS += --sysconfdir=/etc
 CONFIGURE_OPTIONS += --localstatedir=/var/lib
-CONFIGURE_OPTIONS.32 += --libexecdir=/usr/lib
-CONFIGURE_OPTIONS.64 += --libexecdir=/usr/lib/$(MACH64)
+CONFIGURE_OPTIONS += --libexecdir=/usr/lib
 CONFIGURE_OPTIONS += --enable-all-translations-in-one-xml
 CONFIGURE_OPTIONS += --with-zoneinfo-dir=/usr/share/lib/zoneinfo
+CONFIGURE_OPTIONS += --enable-gtk-doc=no
 
 COMPONENT_INSTALL_ENV+=  GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
-build: $(BUILD_32_and_64)
+build: $(BUILD_32)
 
-install: $(INSTALL_32_and_64)
+install: $(INSTALL_32)
 
 test: $(NO_TESTS)
 
+# Auto-generated dependencies
+REQUIRED_PACKAGES += gnome/config/gconf
+REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
+REQUIRED_PACKAGES += library/desktop/gtk2
+REQUIRED_PACKAGES += library/glib2
+REQUIRED_PACKAGES += library/libsoup
+REQUIRED_PACKAGES += library/libxml2
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/math
 # Auto-generated dependencies
 REQUIRED_PACKAGES += gnome/config/gconf
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf

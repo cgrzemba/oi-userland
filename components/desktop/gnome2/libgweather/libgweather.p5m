@@ -37,32 +37,10 @@ file path=usr/include/libgweather/gweather-xml.h
 file path=usr/include/libgweather/location-entry.h
 file path=usr/include/libgweather/timezone-menu.h
 file path=usr/include/libgweather/weather.h
-link path=usr/lib/$(MACH64)/libgweather.so target=libgweather.so.1.6.10
-link path=usr/lib/$(MACH64)/libgweather.so.1 target=libgweather.so.1.6.10
-file path=usr/lib/$(MACH64)/libgweather.so.1.6.10
-file path=usr/lib/$(MACH64)/pkgconfig/gweather.pc
 link path=usr/lib/libgweather.so target=libgweather.so.1.6.10
 link path=usr/lib/libgweather.so.1 target=libgweather.so.1.6.10
 file path=usr/lib/libgweather.so.1.6.10
 file path=usr/lib/pkgconfig/gweather.pc
-file path=usr/share/gtk-doc/html/libgweather/GWeatherLocationEntry.html
-file path=usr/share/gtk-doc/html/libgweather/GWeatherTimezoneMenu.html
-file path=usr/share/gtk-doc/html/libgweather/ch01.html
-file path=usr/share/gtk-doc/html/libgweather/home.png
-file path=usr/share/gtk-doc/html/libgweather/index.html
-file path=usr/share/gtk-doc/html/libgweather/index.sgml
-file path=usr/share/gtk-doc/html/libgweather/left.png
-file path=usr/share/gtk-doc/html/libgweather/libgweather-gweather-gconf.html
-file path=usr/share/gtk-doc/html/libgweather/libgweather-gweather-location.html
-file path=usr/share/gtk-doc/html/libgweather/libgweather-gweather-prefs.html
-file path=usr/share/gtk-doc/html/libgweather/libgweather-gweather-timezone.html
-file path=usr/share/gtk-doc/html/libgweather/libgweather-gweather-xml.html
-file path=usr/share/gtk-doc/html/libgweather/libgweather-weather.html
-file path=usr/share/gtk-doc/html/libgweather/libgweather.devhelp
-file path=usr/share/gtk-doc/html/libgweather/libgweather.devhelp2
-file path=usr/share/gtk-doc/html/libgweather/right.png
-file path=usr/share/gtk-doc/html/libgweather/style.css
-file path=usr/share/gtk-doc/html/libgweather/up.png
 file path=usr/share/icons/gnome/16x16/status/weather-clear-night-000.png
 file path=usr/share/icons/gnome/16x16/status/weather-clear-night-010.png
 file path=usr/share/icons/gnome/16x16/status/weather-clear-night-020.png
