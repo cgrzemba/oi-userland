@@ -1,0 +1,13 @@
+diff --git a/tools/clang/lib/Driver/ToolChains/Solaris.cpp b/tools/clang/lib/Driver/ToolChains/Solaris.cpp
+index 4ed4d83..c9ff53d 100644
+--- a/tools/clang/lib/Driver/ToolChains/Solaris.cpp
++++ b/tools/clang/lib/Driver/ToolChains/Solaris.cpp
+@@ -40,7 +40,7 @@ void solaris::Assembler::ConstructJob(Compilation &C, const JobAction &JA,
+   for (const auto &II : Inputs)
+     CmdArgs.push_back(II.getFilename());
+ 
+-  const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("as"));
++  const char *Exec = Args.MakeArgString(getToolChain().GetProgramPath("gas"));
+   C.addCommand(std::make_unique<Command>(JA, *this, ResponseFileSupport::None(),
+                                          Exec, CmdArgs, Inputs, Output));
+ }
