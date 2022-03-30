@@ -19,24 +19,22 @@ BUILD_STYLE = meson
 
 include ../../../make-rules/shared-macros.mk
 
-COMPONENT_NAME=         glib
-COMPONENT_MJR_VERSION=	2.62
-COMPONENT_MNR_VERSION=	6
-COMPONENT_REVISION=     3
-# Note: When updating this component make sure that it still works with our HAL.
-# Version 2.66.x is known for its problems eg. when plugging/unplugging USB devices under X11.
-# 2.62.6 is the last known working version (2.63.x, 2.64.x untested).
-COMPONENT_VERSION=      $(COMPONENT_MJR_VERSION).$(COMPONENT_MNR_VERSION)
-# We need to have a fake version because we had delivered non-working versions before:
-IPS_COMPONENT_VERSION=	2.70.0
-COMPONENT_SUMMARY=      GNOME core libraries
-COMPONENT_CLASSIFICATION=Desktop (GNOME)/Libraries
-COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH= sha256:104fa26fbefae8024ff898330c671ec23ad075c1c0bce45c325c6d5657d58b9c
-COMPONENT_ARCHIVE_URL=  https://download.gnome.org/sources/$(COMPONENT_NAME)/$(COMPONENT_MJR_VERSION)/$(COMPONENT_ARCHIVE)
-COMPONENT_PROJECT_URL=  https://www.gtk.org/
-COMPONENT_FMRI=         library/glib2
+COMPONENT_NAME=		glib
+COMPONENT_MJR_VERSION=	2.70
+COMPONENT_MNR_VERSION=	5
+COMPONENT_VERSION=	$(COMPONENT_MJR_VERSION).$(COMPONENT_MNR_VERSION)
+COMPONENT_SUMMARY=	GNOME core libraries
+COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
+COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
+COMPONENT_ARCHIVE_HASH=	
+COMPONENT_ARCHIVE_URL=	https://download.gnome.org/sources/$(COMPONENT_NAME)/$(COMPONENT_MJR_VERSION)/$(COMPONENT_ARCHIVE)
+COMPONENT_PROJECT_URL=	https://wiki.gnome.org/Projects/GLib/
+COMPONENT_FMRI=		library/glib2
+COMPONENT_CLASSIFICATION= Desktop (GNOME)/Libraries
+COMPONENT_LICENSE=	GPLv2
+COMPONENT_LICENSE_FILE=	COPYING
+
+PATH=$(PATH.gnu)
 
 include $(WS_MAKE_RULES)/common.mk
 
@@ -54,13 +52,28 @@ LDFLAGS += -lsocket -lnsl
 CFLAGS += -std=gnu99
 
 # We need standard conforming getpwnam_r()/getpwuid_r()
+#CFLAGS += -Wno-error=format-nonliteral
 CPPFLAGS += $(CPP_XPG6MODE)
+CFLAGS += $(CPP_XPG6MODE)
+CFLAGS += -std=gnu11
 
 # Some warnings are treated as errors by default but we do not want that
 CFLAGS += -Wno-error=format-nonliteral
 CFLAGS += -Wno-error=format-security
 
 # We do not have getxattr() so disable xattr
+# Assumes GNU msgfmt in PATH.
+CONFIGURE_ENV += PATH="$(PATH)"
+COMPONENT_BUILD_ENV += PATH="$(PATH)"
+COMPONENT_INSTALL_ENV += PATH="$(PATH)"
+
+CONFIGURE_OPTIONS += -Druntime_libdir=$(USRLIBDIR)
+CONFIGURE_OPTIONS += -Dcharsetalias_dir=$(USRLIBDIR)
+CONFIGURE_OPTIONS += -Dselinux=disabled
+CONFIGURE_OPTIONS += -Dlibmount=disabled
+CONFIGURE_OPTIONS += -Dbsymbolic_functions=false
+CONFIGURE_OPTIONS.32 = --sysconfdir=/etc
+CONFIGURE_OPTIONS.64 = --sysconfdir=/etc/$(MACH64)
 CONFIGURE_OPTIONS += -Dxattr=false
 CONFIGURE_OPTIONS += -Dfam=true
 CONFIGURE_OPTIONS += -Dman=true
@@ -75,6 +88,38 @@ COMPONENT_TEST_TRANSFORMER = $(NAWK)
 COMPONENT_TEST_TRANSFORMS = "'/^(Fail|Ok|Expected Fail|Unexpected Pass|Skipped|Timeout)/'"
 
 # dbus-daemon is needed for testing
+CONFIGURE_ENV    += PERL=$(PERL)
+CONFIGURE_ENV    += PYTHON=$(PYTHON)
+CONFIGURE_ENV    += CPPFLAGS="$(CPPFLAGS)"
+CONFIGURE_ENV    += CFLAGS="$(CFLAGS)"
+
+# Dtrace flags
+DFLAGS.64 = -64
+COMPONENT_BUILD_ENV += DFLAGS=$(DFLAGS.$(BITS))
+
+COMPONENT_POST_CONFIGURE_ACTION= \
+  ( cd $(@D); $(GSED) -i "s/_FILE_OFFSET_BITS=64/_FILE_OFFSET_BITS=$(BITS)/g" ./build.ninja )
+
+# Otherwise tests fail
+unexport SHELLOPTS
+
+# We need to install libraries and set correct LD_LIBRARY_PATH before test
+$(TEST_TARGET): $(INSTALL_TARGET)
+
+COMPONENT_TEST_ENV.32 = LD_LIBRARY_PATH=$(PROTO_DIR)/usr/lib PATH=$(PATH):/usr/lib
+COMPONENT_TEST_ENV.64 = LD_LIBRARY_PATH=$(PROTO_DIR)/usr/lib/$(MACH64) PATH=$(PATH)/usr/lib/$(MACH64)
+COMPONENT_TEST_ENV = $(COMPONENT_TEST_ENV.$(BITS))
+COMPONENT_TEST_ENV += LC_ALL=C.UTF-8
+
+COMPONENT_TEST_MASTER = $(COMPONENT_TEST_RESULTS_DIR)/results-all.master
+COMPONENT_TEST_TRANSFORMER = $(NAWK)
+COMPONENT_TEST_TRANSFORMS = "'/^(Fail|Ok|Expected Fail|Unexpected Pass|Skipped|Timeout)/'"
+
+# Manually added runtime dependencies
+REQUIRED_PACKAGES += runtime/python-35
+
+# Manually add build dependencies
+REQUIRED_PACKAGES += runtime/perl-522
 REQUIRED_PACKAGES += system/library/dbus
 
 # update-desktop-database is needed for testing
@@ -85,6 +130,5 @@ REQUIRED_PACKAGES += library/file-monitor/gamin
 REQUIRED_PACKAGES += library/libffi
 REQUIRED_PACKAGES += library/pcre
 REQUIRED_PACKAGES += library/zlib
-REQUIRED_PACKAGES += runtime/python-35
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
