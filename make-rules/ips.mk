@@ -252,7 +252,7 @@ NORUBY_MANIFESTS = $(filter-out %-RUBYVER.p5m,$(NOPERL_MANIFESTS))
 RUBY_MANIFESTS = $(filter %-RUBYVER.p5m,$(NOPERL_MANIFESTS))
 RUBYV_VALUES = $(RUBY_VERSIONS)
 RUBYV_FMRI_VERSION = RUBYV
-RUBYV_MANIFESTS = $(foreach v,$(RUBYV_VERSIONS),\
+RUBYV_MANIFESTS = $(foreach v,$(RUBY_VERSIONS),\
                       $(shell echo $(RUBY_MANIFESTS) |\
                       sed -e 's/-RUBYVER.p5m/-$(shell echo $(v) |\
                       cut -d. -f1,2 | tr -d .).p5m/g'))
@@ -302,7 +302,7 @@ $(GENERATED).p5m:	install
 	[ ! -d $(SAMPLE_MANIFEST_DIR) ] && $(MKDIR) $(SAMPLE_MANIFEST_DIR) || true
 	$(PKGSEND) generate $(PKG_HARDLINKS:%=--target %) $(PROTO_DIR) | \
 	$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 $(GENERATE_TRANSFORMS) | \
-		sed -e '/^$$/d' -e '/^#.*$$/d' -e '/^dir .*$$/d' \
+		sed -e '/^$$/d' -e '/^#.*$$/d' \
 		-e '/\.la$$/d' -e '/\.pyo$$/d' -e '/usr\/lib\/python[23]\..*\.pyc$$/d' \
 		-e '/usr\/lib\/python3\..*\/__pycache__\/.*/d'  | \
 		$(PKGFMT) | \
@@ -324,6 +324,12 @@ mkgeneric = \
 	echo "<transform set name=pkg.fmri value=(?:pkg:/)?(.+)-\#\#\#@(.*)" \
 		"-> emit depend nodrop=true type=conditional" \
 		"predicate=$(1)-$(2) fmri=%<1>-$(2)@%<2>>" >> $@;
+
+mkgenericdep = \
+	( echo -n "<transform set name=pkg.fmri value=(?:pkg:/)?(.+)-\#\#\#@(.*)" \
+		"-> emit depend nodrop=true type=require-any " ;  \
+        for i in $(2); do echo -n "fmri=%<1>-$$i@%<2> " ; done ; \
+        echo ">" ) >> $@
 
 # Define and execute a macro that generates a rule to create a manifest for a
 # python module specific to a particular version of the python runtime.
@@ -347,6 +353,7 @@ $(BUILD_DIR)/mkgeneric-python: $(WS_TOP)/make-rules/shared-macros.mk $(MAKEFILE_
 	$(RM) $@
 	$(foreach ver,$(shell echo $(PYTHON_VERSIONS) | tr -d .), \
 		$(call mkgeneric,runtime/python,$(ver)))
+	$(call mkgenericdep,runtime/python,$(shell echo $(PYTHON_VERSIONS) | tr -d .))
 
 # Build Python version-wrapping manifests from the generic version.
 $(MANIFEST_BASE)-%.p5m: %-PYVER.p5m $(BUILD_DIR)/mkgeneric-python
@@ -371,6 +378,7 @@ $(BUILD_DIR)/mkgeneric-perl: $(WS_TOP)/make-rules/shared-macros.mk $(MAKEFILE_PR
 	$(RM) $@
 	$(foreach ver,$(shell echo $(PERL_VERSIONS) | tr -d .), \
 		$(call mkgeneric,runtime/perl,$(ver)))
+	$(call mkgenericdep,runtime/perl,$(shell echo $(PERL_VERSIONS) | tr -d .))
 
 # Build Perl version-wrapping manifests from the generic version.
 $(MANIFEST_BASE)-%.p5m: %-PERLVER.p5m $(BUILD_DIR)/mkgeneric-perl
@@ -415,6 +423,7 @@ $(BUILD_DIR)/mkgeneric-ruby: $(WS_TOP)/make-rules/shared-macros.mk $(MAKEFILE_PR
 	$(foreach ver,$(RUBY_VERSIONS),\
 	        $(call mkgeneric,runtime/ruby,$(shell echo $(ver) | \
 	            cut -d. -f1,2 | tr -d .)))
+	$(call mkgenericdep,runtime/ruby,$(shell echo $(RUBY_VERSIONS) | cut -d. -f1,2 | tr -d .))
 
 # Build Ruby version-wrapping manifests from the generic version.
 # Creates build/manifest-*-modulename.p5m file.
@@ -497,18 +506,19 @@ $(BUILD_DIR)/.resolved-$(MACH):	$(DEPENDED) $(RESOLVE_DEPS)
 REQUIRED_PACKAGES_TRANSFORM=$(foreach p,$(REQUIRED_PACKAGES_SUBST), -e 's|$($(p))|$$($(p))|')
 
 #
-# Generate a set of REQUIRED_PACKAGES based on what is needed to for pkgdepend
-# to resolve properly.  Automatically append this to your Makefile for the truly
-# lazy among us.  This is only a piece of the REQUIRED_PACKAGES puzzle.
+# Generate a set of REQUIRED_PACKAGES based on what is needed for pkgdepend to
+# resolve properly.  Automatically update the list in your Makefile for the
+# truly lazy among us.  This is only a piece of the REQUIRED_PACKAGES puzzle.
 # You must still include packages for tools you build and test with.
 #
 REQUIRED_PACKAGES::     $(RESOLVED)
 	$(GMAKE) RESOLVE_DEPS= $(BUILD_DIR)/.resolved-$(MACH)
+	@$(GSED) -i -e '/^# Auto-generated dependencies$$/,$$d' Makefile
 	@echo "# Auto-generated dependencies" >>Makefile
 	@$(PKGMOGRIFY) $(WS_TRANSFORMS)/$@ $(RESOLVED) | \
 		$(GSED) -e '/^[\t ]*$$/d' -e '/^#/d' $(REQUIRED_PACKAGES_TRANSFORM) \
 			| sort -u >>Makefile
-	@echo "*** Please edit your Makefile and verify the new content at the end ***"
+	@echo "*** Please edit your Makefile and verify the new or updated content at the end ***"
 
 
 # lint the manifests all at once

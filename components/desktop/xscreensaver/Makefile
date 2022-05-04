@@ -20,15 +20,15 @@
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		xscreensaver
-COMPONENT_VERSION=	5.42
-COMPONENT_REVISION=     1
+COMPONENT_VERSION=	6.03
+COMPONENT_REVISION=     0
 COMPONENT_PROJECT_URL=	https://www.jwz.org/xscreensaver/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	\
-	sha256:441daa033b214bfdd82b1991fbf7dc9360466bff542ce0f6002d0071a4d5cbe1
+COMPONENT_ARCHIVE_HASH=	
 COMPONENT_ARCHIVE_URL=	https://www.jwz.org/xscreensaver/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI=		desktop/xscreensaver
+IPS_COMPONENT_VERSION= 6.3
 
 PATCH_LEVEL=		0
 
@@ -41,24 +41,28 @@ COMPONENT_POST_UNPACK_ACTION=	( cp $(COMPONENT_DIR)/files/*.p5i.in $(SOURCE_DIR)
 					mkdir -p $(SOURCE_DIR)/mesa/GL && \
 					ln -s /usr/include/mesa/*.h $(SOURCE_DIR)/mesa/GL )
 
-COMPONENT_PREP_ACTION = ( cd $(@D) && autoreconf -if )
+# COMPONENT_PREP_ACTION = ( cd $(@D) && autoconf --force )
 
 PATH=$(PATH.gnu)
 
-COMPONENT_PRE_CONFIGURE_ACTION += chmod -R u+r $(SOURCE_DIR)/ && \
-					cp -rpP $(SOURCE_DIR)/* $(@D)
+COMPONENT_PRE_CONFIGURE_ACTION += ( chmod -R u+r $(SOURCE_DIR)/ ; \
+					cp -rpP $(SOURCE_DIR)/* $(@D) ; \
+					echo )
 
 
 CONFIGURE_SCRIPT=	$(@D)/configure
 
-CFLAGS+=	-funsafe-math-optimizations -Wall -I$(SOURCE_DIR)/mesa/GL  -std=c99 -D_FILE_OFFSET_BITS=64
-CXXFLAGS+=	-funsafe-math-optimizations -Wall -I$(SOURCE_DIR)/mesa/GL -D_FILE_OFFSET_BITS=64
-LDFLAGS+=	-I$(@D)/mesa/GL 
+gcc_OPT.i386.32 = 
+
+# CFLAGS+=	-funsafe-math-optimizations -Wall -I$(SOURCE_DIR)/mesa/GL  -std=c99 -D_FILE_OFFSET_BITS=64
+# CXXFLAGS+=	-funsafe-math-optimizations -Wall -I$(SOURCE_DIR)/mesa/GL -D_FILE_OFFSET_BITS=64
+# LDFLAGS+=	-I$(@D)/mesa/GL 
 
 # build with the distribution preferred libjpeg implementation
-CFLAGS   += $(JPEG_CPPFLAGS) $(JPEG_CFLAGS)
-CXXFLAGS += $(JPEG_CPPFLAGS) $(JPEG_CXXFLAGS)
-LDFLAGS  += $(JPEG_LDFLAGS)
+# CFLAGS   += $(JPEG_CPPFLAGS) $(JPEG_CFLAGS)
+# CXXFLAGS += $(JPEG_CPPFLAGS) $(JPEG_CXXFLAGS)
+# LDFLAGS  += $(JPEG_LDFLAGS)
+CFLAGS += -g -Wconversion
 
 CONFIGURE_ENV+=	"XGETTEXT=/usr/gnu/bin/xgettext"
 
@@ -79,6 +83,7 @@ CONFIGURE_OPTIONS+=	--with-text-file=/etc/motd
 CONFIGURE_OPTIONS+=	--with-x-app-defaults=/usr/share/X11/app-defaults
 
 COMPONENT_INSTALL_ENV += MAKEFLAGS=-e install_prefix=$(PROTO_DIR)
+COMPONENT_INSTALL_ENV += "XGETTEXT=/usr/gnu/bin/xgettext"
 
 # common targets
 build:		$(BUILD_32)

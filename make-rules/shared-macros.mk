@@ -18,7 +18,7 @@
 #
 # CDDL HEADER END
 #
-# Copyright 2017 Gary Mills
+# Copyright 2017,2022 Gary Mills
 # Copyright (c) 2010, 2016, Oracle and/or its affiliates. All rights reserved.
 #
 
@@ -107,7 +107,7 @@ ROOT =			/
 # to determine the distribution version
 # (it should look like OpenIndiana Hipster YYYY.MM).
 DISTRIBUTION_NAME = OpenIndiana Hipster
-DISTRIBUTION_VERSION = 2020.10
+DISTRIBUTION_VERSION = 2021.10
 # Native OS version
 OS_VERSION :=		$(shell uname -r)
 SOLARIS_VERSION =	$(OS_VERSION:5.%=2.%)
@@ -732,10 +732,10 @@ F77 =		$(F77.$(COMPILER).$(BITS))
 FC =		$(FC.$(COMPILER).$(BITS))
 
 RUBY_VERSION =  2.3
-RUBY_LIB_VERSION.2.2 = 2.2.0
 RUBY_LIB_VERSION.2.3 = 2.3.0
-RUBY.2.2 =	/usr/ruby/2.2/bin/ruby
+RUBY_LIB_VERSION.2.6 = 2.6.0
 RUBY.2.3 =	/usr/ruby/2.3/bin/ruby
+RUBY.2.6 =	/usr/ruby/2.6/bin/ruby
 RUBY =          $(RUBY.$(RUBY_VERSION))
 RUBY_LIB_VERSION = $(RUBY_LIB_VERSION.$(RUBY_VERSION))
 
@@ -786,17 +786,25 @@ JAVA_HOME = $(JAVA8_HOME)
 # Not necessarily the system's default version, i.e. /usr/bin/perl
 PERL_VERSION =  5.22
 
+# Do *not* add 5.34 to PERL_VERSIONS/PERL_64_ONLY_VERSIONS yet.  We'll
+# enable it system-wide once all existing perl modules have been rebuilt
+# with support for all three current perl versions.
 PERL_VERSIONS = 5.22 5.24
+
+PERL_64_ONLY_VERSIONS = 5.24
 
 PERL.5.22 =	/usr/perl5/5.22/bin/perl
 PERL.5.24 =	/usr/perl5/5.24/bin/perl
+PERL.5.34 =	/usr/perl5/5.34/bin/perl
 
 POD2MAN.5.22 =	/usr/perl5/5.22/bin/pod2man
 POD2MAN.5.24 =	/usr/perl5/5.24/bin/pod2man
+POD2MAN.5.34 =	/usr/perl5/5.34/bin/pod2man
 
 # Location of pod2man, etc
 PERL5BINDIR.5.22 =	/usr/perl5/5.22/bin
 PERL5BINDIR.5.24 =	/usr/perl5/5.24/bin
+PERL5BINDIR.5.34 =	/usr/perl5/5.34/bin
 
 PERL5BINDIR = 	$(PERL5BINDIR.$(PERL_VERSION))
 PERL =		$(PERL.$(PERL_VERSION))
@@ -815,7 +823,7 @@ PKG_MACROS +=   PERL_VERSION=$(PERL_VERSION)
 
 # Config magic for Postgres/EnterpriseDB/...
 # Default DB version is the oldest one, for hopefully best built complatibility
-PG_VERSION ?=   9.5
+PG_VERSION ?=   12
 PG_IMPLEM ?=    postgres
 PG_VERNUM =     $(subst .,,$(PG_VERSION))
 # For dependencies, including REQUIRED_PACKAGES if needed
@@ -827,8 +835,8 @@ REQUIRED_PACKAGES_SUBST+= PG_DEVELOPER_PKG
 REQUIRED_PACKAGES_SUBST+= PG_LIBRARY_PKG
 
 PG_HOME =       $(USRDIR)/$(PG_IMPLEM)/$(PG_VERSION)
-PG_BINDIR.32 =  $(PG_HOME)/bin
-PG_BINDIR.64 =  $(PG_HOME)/bin/$(MACH64)
+PG_BINDIR.32 =  $(PG_HOME)/bin/$(MACH32)
+PG_BINDIR.64 =  $(PG_HOME)/bin
 PG_BINDIR =     $(PG_BINDIR.$(BITS))
 PG_INCDIR =     $(PG_HOME)/include
 PG_MANDIR =     $(PG_HOME)/man
@@ -968,12 +976,16 @@ OPENSSL_PREFIX= $(USRDIR)/openssl/$(OPENSSL_VERSION)
 OPENSSL_BINDIR.64=$(OPENSSL_PREFIX)/bin
 OPENSSL_BINDIR.32=$(OPENSSL_PREFIX)/bin/$(MACH32)
 OPENSSL_BINDIR=$(OPENSSL_BINDIR.$(BITS))
+OPENSSL_LIBDIR.64=$(OPENSSL_PREFIX)/lib/64
+OPENSSL_LIBDIR.32=$(OPENSSL_PREFIX)/lib/32
 OPENSSL_PKG_CONFIG_PATH= $(OPENSSL_PREFIX)/lib/$(BITS)/pkgconfig
+OPENSSL_INCDIR=$(OPENSSL_PREFIX)/include
 
 # Pkg-config paths
 PKG_CONFIG_PATH.32 = /usr/lib/pkgconfig
 PKG_CONFIG_PATH.64 = /usr/lib/$(MACH64)/pkgconfig
-PKG_CONFIG_PATH = $(OPENSSL_PKG_CONFIG_PATH):$(PKG_CONFIG_PATH.$(BITS))
+PKG_CONFIG_PATH = \
+    $(OPENSSL_PKG_CONFIG_PATH):$(PKG_CONFIG_PATH.$(BITS)):$(PKG_CONFIG_PATH.32)
 
 # Set default path for environment modules
 MODULE_VERSION =	3.2.10
@@ -1142,8 +1154,8 @@ CFLAGS.studio +=	$(studio_OPT) $(studio_XBITS) $(studio_XREGS) \
 #
 
 # Control the GCC optimization level.
-gcc_OPT.sparc.32 =	-O3
-gcc_OPT.sparc.64 =	-O3
+gcc_OPT.sparc.32 =	-O3 -mcpu=ultrasparc -mvis
+gcc_OPT.sparc.64 =	-O3 -mcpu=ultrasparc -mvis
 gcc_OPT.i386.32 =	-O3
 gcc_OPT.i386.64 =	-O3
 gcc_OPT =		$(gcc_OPT.$(MACH).$(BITS))
@@ -1394,6 +1406,9 @@ component-hook:
 
 # Add default dependency to SUNWcs
 REQUIRED_PACKAGES += SUNWcs
+
+# Add default dependency to shell/ksh93 which has been separated from SUNWcs
+REQUIRED_PACKAGES += shell/ksh93
 
 #
 # Packages with tools that are required to build Userland components
