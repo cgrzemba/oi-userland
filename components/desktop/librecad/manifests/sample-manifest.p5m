@@ -10,10 +10,11 @@
 #
 
 #
-# Copyright 2020 <contributor>
+# Copyright 2022 <contributor>
 #
 
 set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.human-version value=$(HUMAN_VERSION)
 set name=pkg.summary value="$(COMPONENT_SUMMARY)"
 set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
 set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
@@ -26,6 +27,7 @@ file path=usr/bin/librecad
 file path=usr/bin/ttf2lff
 file path=usr/lib/librecad/plugins/$(MACH64)/libalign.so
 file path=usr/lib/librecad/plugins/$(MACH64)/libasciifile.so
+file path=usr/lib/librecad/plugins/$(MACH64)/libdivide.so
 file path=usr/lib/librecad/plugins/$(MACH64)/libgear.so
 file path=usr/lib/librecad/plugins/$(MACH64)/libimportshp.so
 file path=usr/lib/librecad/plugins/$(MACH64)/liblist.so
@@ -1422,6 +1424,7 @@ file path=usr/share/librecad/patterns/hound.dxf
 file path=usr/share/librecad/patterns/iso03w100.dxf
 file path=usr/share/librecad/patterns/iso03w100a.dxf
 file path=usr/share/librecad/patterns/kerpele.dxf
+file path=usr/share/librecad/patterns/millstone.dxf
 file path=usr/share/librecad/patterns/misc01.dxf
 file path=usr/share/librecad/patterns/misc02.dxf
 file path=usr/share/librecad/patterns/misc03.dxf

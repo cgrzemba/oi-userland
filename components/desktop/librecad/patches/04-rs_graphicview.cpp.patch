@@ -1,0 +1,13 @@
+diff --git a/librecad/src/lib/gui/rs_graphicview.cpp b/librecad/src/lib/gui/rs_graphicview.cpp
+index f77f4c7..258fb97 100644
+--- a/librecad/src/lib/gui/rs_graphicview.cpp
++++ b/librecad/src/lib/gui/rs_graphicview.cpp
+@@ -1448,7 +1448,7 @@ void RS_GraphicView::drawPaper(RS_Painter *painter) {
+ 					  RS_Color(255,255,255));
+ 
+ 	// don't paint boundaries if zoom is to small
+-	if (qMin(fabs(printAreaW/numX), fabs(printAreaH/numY)) > 2) {
++	if (qMin(fabs(printAreaW/(double)numX), fabs(printAreaH/(double)numY)) > 2) {
+ 		// boundaries between pages:
+ 		for (int pX = 1; pX < numX; pX++) {
+ 			double offset = ((double)printAreaW*pX)/numX;
