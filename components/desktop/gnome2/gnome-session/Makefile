@@ -17,7 +17,7 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= gnome-session
 COMPONENT_VERSION= 2.32.1
-COMPONENT_REVISION= 3
+COMPONENT_REVISION= 0
 COMPONENT_SUMMARY= GNOME session manager
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
@@ -29,7 +29,7 @@ COMPONENT_PROJECT_URL = http://www.gnome.org
 COMPONENT_FMRI = gnome/gnome-session
 COMPONENT_CLASSIFICATION = Desktop (GNOME)/Sessions
 COMPONENT_LICENSE = GPLv2, LGPLv2
-COMPONENT_LICENSE_FILE = gnome-session.license
+COMPONENT_LICENSE_FILE = COPYING
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -43,6 +43,7 @@ COMPONENT_PREP_ACTION = 	( cd  $(@D) &&\
 					aclocal -I . &&\
 					autoheader &&\
 					automake -a -c -f &&\
+					autoupdate && \
 					autoconf )
 
 # Missing files in build dir for configure without this.
@@ -55,16 +56,16 @@ CONFIGURE_OPTIONS += --libexecdir=/usr/lib
 
 COMPONENT_INSTALL_ENV += GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
-build: $(BUILD_32)
+build: $(BUILD_64)
 
-install: $(INSTALL_32)
+install: $(INSTALL_64)
 
 # Auto-generated dependencies
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += gnome/config/gconf
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
 REQUIRED_PACKAGES += library/desktop/gtk2
 REQUIRED_PACKAGES += library/glib2
+REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/libdbus
 REQUIRED_PACKAGES += system/library/libdbus-glib
