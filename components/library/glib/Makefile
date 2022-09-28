@@ -56,6 +56,7 @@ CFLAGS += -std=gnu99
 CPPFLAGS += $(CPP_XPG6MODE)
 CFLAGS += $(CPP_XPG6MODE)
 CFLAGS += -std=gnu11
+CFLAGS += -g
 
 # Some warnings are treated as errors by default but we do not want that
 CFLAGS += -Wno-error=format-nonliteral
@@ -119,7 +120,7 @@ COMPONENT_TEST_TRANSFORMS = "'/^(Fail|Ok|Expected Fail|Unexpected Pass|Skipped|T
 REQUIRED_PACKAGES += runtime/python-35
 
 # Manually add build dependencies
-REQUIRED_PACKAGES += runtime/perl-522
+REQUIRED_PACKAGES += runtime/perl-524
 REQUIRED_PACKAGES += system/library/dbus
 
 # update-desktop-database is needed for testing
