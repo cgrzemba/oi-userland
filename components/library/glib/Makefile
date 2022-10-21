@@ -20,13 +20,13 @@ BUILD_STYLE = meson
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		glib
-COMPONENT_MJR_VERSION=	2.70
-COMPONENT_MNR_VERSION=	5
+COMPONENT_MJR_VERSION=	2.73
+COMPONENT_MNR_VERSION=	3
 COMPONENT_VERSION=	$(COMPONENT_MJR_VERSION).$(COMPONENT_MNR_VERSION)
 COMPONENT_SUMMARY=	GNOME core libraries
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	
+COMPONENT_ARCHIVE_HASH=	sha256:df1a2b841667d6b48b2ef6969ebda4328243829f6e45866726f806f90f64eead
 COMPONENT_ARCHIVE_URL=	https://download.gnome.org/sources/$(COMPONENT_NAME)/$(COMPONENT_MJR_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL=	https://wiki.gnome.org/Projects/GLib/
 COMPONENT_FMRI=		library/glib2
@@ -38,7 +38,7 @@ PATH=$(PATH.gnu)
 
 include $(WS_MAKE_RULES)/common.mk
 
-PYTHON_VERSION = 3.5
+PYTHON_VERSION = 3.9
 
 # dbus-daemon is in /usr/lib
 PATH = $(PATH.gnu):/usr/lib
@@ -76,7 +76,6 @@ CONFIGURE_OPTIONS += -Dbsymbolic_functions=false
 CONFIGURE_OPTIONS.32 = --sysconfdir=/etc
 CONFIGURE_OPTIONS.64 = --sysconfdir=/etc/$(MACH64)
 CONFIGURE_OPTIONS += -Dxattr=false
-CONFIGURE_OPTIONS += -Dfam=true
 CONFIGURE_OPTIONS += -Dman=true
 
 COMPONENT_POST_CONFIGURE_ACTION= \
@@ -117,7 +116,7 @@ COMPONENT_TEST_TRANSFORMER = $(NAWK)
 COMPONENT_TEST_TRANSFORMS = "'/^(Fail|Ok|Expected Fail|Unexpected Pass|Skipped|Timeout)/'"
 
 # Manually added runtime dependencies
-REQUIRED_PACKAGES += runtime/python-35
+REQUIRED_PACKAGES += runtime/python-39
 
 # Manually add build dependencies
 REQUIRED_PACKAGES += runtime/perl-524
@@ -127,9 +126,8 @@ REQUIRED_PACKAGES += system/library/dbus
 REQUIRED_PACKAGES += library/desktop/desktop-file-utils
 
 # Auto-generated dependencies
-REQUIRED_PACKAGES += library/file-monitor/gamin
 REQUIRED_PACKAGES += library/libffi
-REQUIRED_PACKAGES += library/pcre
+REQUIRED_PACKAGES += library/pcre2
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library

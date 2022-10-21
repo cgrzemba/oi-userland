@@ -50,18 +50,6 @@ Not suitable for upstream
            goto out;
          }
  
---- a/tests/mapping-test.c	2019-11-03 19:08:23.363841674 -0800
-+++ b/tests/mapping-test.c	2019-11-03 19:08:56.870701385 -0800
-@@ -208,7 +208,9 @@
-   signal (SIGUSR1, handle_usr1);
- #endif
- 
-+#pragma GCC diagnostic warning "-Wformat"
-   g_snprintf (pid, sizeof(pid), "%d", getpid ());
-+#pragma GCC diagnostic pop
-   child_argv[0] = argv0;
-   child_argv[1] = "mapchild";
-   child_argv[2] = pid;
 --- a/gio/tests/file.c	2020-09-17 16:33:33.060284970 -0700
 +++ b/gio/tests/file.c	2020-09-17 16:34:24.747513461 -0700
 @@ -881,7 +881,10 @@
