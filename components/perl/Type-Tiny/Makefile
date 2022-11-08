@@ -19,11 +19,11 @@ BUILD_STYLE = makemaker
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_PERL_MODULE =		Type::Tiny
-HUMAN_VERSION =			1.016010
+HUMAN_VERSION =			2.000001
 COMPONENT_SUMMARY =		Type::Tiny - tiny, yet Moo(se)-compatible type constraint
 COMPONENT_CPAN_AUTHOR =		TOBYINK
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:e3fee77753a0abc636c5a57595cfb1c8e1ac11d7c8ff3b216e599091abe3e368
+	sha256:63f942e1d6f5104fa90acbfc435e69e570d8b3374fe0c733f8419e31a6331920
 COMPONENT_LICENSE =		Artistic-1.0 OR GPL-1.0-or-later
 COMPONENT_LICENSE_FILE =	LICENSE
 

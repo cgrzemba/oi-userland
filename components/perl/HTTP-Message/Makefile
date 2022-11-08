@@ -19,17 +19,18 @@ BUILD_STYLE = makemaker
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_PERL_MODULE =		HTTP::Message
-HUMAN_VERSION =			6.37
+HUMAN_VERSION =			6.44
 COMPONENT_SUMMARY =		HTTP::Message - HTTP style message (base class)
 COMPONENT_CPAN_AUTHOR =		OALDERS
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:0e59da0a85e248831327ebfba66796314cb69f1bfeeff7a9da44ad766d07d802
+	sha256:398b647bf45aa972f432ec0111f6617742ba32fc773c6612d21f64ab4eacbca1
 COMPONENT_LICENSE =		Artistic-1.0 OR GPL-1.0-or-later
 COMPONENT_LICENSE_FILE =	LICENSE
 
 include $(WS_MAKE_RULES)/common.mk
 
 # Auto-generated dependencies
+PERL_REQUIRED_PACKAGES += library/perl-5/clone
 PERL_REQUIRED_PACKAGES += library/perl-5/encode-locale
 PERL_REQUIRED_PACKAGES += library/perl-5/http-date
 PERL_REQUIRED_PACKAGES += library/perl-5/io-html

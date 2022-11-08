@@ -1,48 +1,36 @@
 #
-# CDDL HEADER START
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
 #
-# The contents of this file are subject to the terms of the
-# Common Development and Distribution License (the "License").
-# You may not use this file except in compliance with the License.
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
 #
-# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
-# or http://www.opensolaris.org/os/licensing.
-# See the License for the specific language governing permissions
-# and limitations under the License.
+
 #
-# When distributing Covered Code, include this CDDL HEADER in each
-# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
-# If applicable, add the following below this CDDL HEADER, with the
-# fields enclosed by brackets "[]" replaced with your own identifying
-# information: Portions Copyright [yyyy] [name of copyright owner]
+# This file was automatically generated using the following command:
+#   $WS_TOOLS/python-integrate-project click
 #
-# CDDL HEADER END
-#
-# Copyright 2016, Aurelien Larcher.
-#
+
+BUILD_STYLE = setup.py
+
 include ../../../make-rules/shared-macros.mk
 
+COMPONENT_NAME =		click
+COMPONENT_VERSION =		8.1.3
+COMPONENT_SUMMARY =		click - Composable command line interface toolkit
+COMPONENT_PROJECT_URL =		https://palletsprojects.com/p/click/
+COMPONENT_ARCHIVE_URL =		\
+	https://files.pythonhosted.org/packages/59/87/84326af34517fca8c58418d148f2403df25303e02736832403587318e9e8/click-8.1.3.tar.gz
+COMPONENT_ARCHIVE_HASH =	\
+	sha256:7682dc8afb30297001674575ea00d1814d808d6a36af415a82bd481d37ba7b8e
+COMPONENT_LICENSE =		BSD-3-Clause
+COMPONENT_LICENSE_FILE =	LICENSE.rst
 
-COMPONENT_NAME= click
-COMPONENT_VERSION= 6.6
-COMPONENT_FMRI= library/python/click
-COMPONENT_PROJECT_URL= http://click.pocoo.org
-COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	\
-    sha256:cc6a19da8ebff6e7074f731447ef7e112bd23adf3de5c597cf9989f2fd8defe9
-COMPONENT_ARCHIVE_URL= $(call pypi_url)
+TEST_TARGET = $(NO_TESTS)
 
-PYTHON_VERSIONS=	2.7
+include $(WS_MAKE_RULES)/common.mk
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/setup.py.mk
-include $(WS_TOP)/make-rules/ips.mk
-
-build:		$(BUILD_NO_ARCH)
-
-install:	$(INSTALL_NO_ARCH)
-
-test:		$(NO_TESTS)
-
-REQUIRED_PACKAGES += runtime/python-27
+# Auto-generated dependencies

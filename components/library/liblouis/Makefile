@@ -12,18 +12,19 @@
 #
 # Copyright 2016 Alexander Pyhalov
 # Copyright 2021 Andreas Wacknitz
+# Copyright 2022 Niklas Poslovski
 #
 
-BUILD_BITS=	64_and_32
+USE_DEFAULT_TEST_TRANSFORMS= yes
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= liblouis
-COMPONENT_VERSION= 3.13.0
-COMPONENT_REVISION =	1
-COMPONENT_SUMMARY= Support for contracted braille
+COMPONENT_VERSION= 3.23.0
+COMPONENT_REVISION=	1
+COMPONENT_SUMMARY= The Liblouis software suite provides an open-source braille translator, back-translator and formatter for a large number of languages and braille codes
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	sha256:f9be5bd83f1de5d218f7dd2d7f0f9c4af08af3dc8f282a342f2c83cbb1799267
+COMPONENT_ARCHIVE_HASH=	sha256:3e7ed315d8ec993efa1d6111cad13fcbcf4e53d32d1a4504687d6fdde4a3ada3
 COMPONENT_ARCHIVE_URL=	https://github.com/liblouis/liblouis/archive/refs/tags/v$(COMPONENT_VERSION).tar.gz
 COMPONENT_PROJECT_URL = http://liblouis.org/
 COMPONENT_CLASSIFICATION = System/Libraries
@@ -31,13 +32,9 @@ COMPONENT_FMRI = library/liblouis
 COMPONENT_LICENSE = LGPLv3,GPLv3
 COMPONENT_LICENSE_FILE = liblouis.license
 
-USE_DEFAULT_TEST_TRANSFORMS = yes
-
 include $(WS_MAKE_RULES)/common.mk
 
 PATH=$(PATH.gnu)
-
-PYTHON_VERSION=	3.7
 
 COMPONENT_BUILD_ARGS =
 
@@ -79,10 +76,10 @@ COMPONENT_TEST_TRANSFORMS += \
         '-e "/expected/p" '
 
 # Manually added build dependencies
-REQUIRED_PACKAGES += runtime/python-37
+PYTHON_REQUIRED_PACKAGES += runtime/python
 
 # Auto-generated dependencies
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += library/libyaml
 REQUIRED_PACKAGES += runtime/perl
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library

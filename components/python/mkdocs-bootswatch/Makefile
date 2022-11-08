@@ -1,49 +1,34 @@
 #
-# CDDL HEADER START
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
 #
-# The contents of this file are subject to the terms of the
-# Common Development and Distribution License (the "License").
-# You may not use this file except in compliance with the License.
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
 #
-# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
-# or http://www.opensolaris.org/os/licensing.
-# See the License for the specific language governing permissions
-# and limitations under the License.
+
 #
-# When distributing Covered Code, include this CDDL HEADER in each
-# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
-# If applicable, add the following below this CDDL HEADER, with the
-# fields enclosed by brackets "[]" replaced with your own identifying
-# information: Portions Copyright [yyyy] [name of copyright owner]
+# This file was automatically generated using the following command:
+#   $WS_TOOLS/python-integrate-project mkdocs-bootswatch
 #
-# CDDL HEADER END
-#
-# Copyright 2016, Aurelien Larcher.
-#
+
+BUILD_STYLE = setup.py
+
 include ../../../make-rules/shared-macros.mk
 
+COMPONENT_NAME =		mkdocs-bootswatch
+COMPONENT_VERSION =		1.1
+COMPONENT_SUMMARY =		mkdocs-bootswatch - Bootswatch themes for MkDocs
+COMPONENT_PROJECT_URL =		http://www.mkdocs.org
+COMPONENT_ARCHIVE_HASH =	\
+	sha256:cc999ba15a3ce2a46eab35fcaabea9907f5c74bc49e79d9c866b51d4b0fa7f33
+COMPONENT_LICENSE =		BSD-2-Clause
+COMPONENT_LICENSE_FILE =	LICENSE
 
-COMPONENT_NAME= mkdocs-bootswatch
-COMPONENT_VERSION= 1.0
-COMPONENT_FMRI= library/python/mkdocs-bootswatch
-COMPONENT_PROJECT_URL= http://mkdocs.github.io/mkdocs-bootswatch/
-COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH=	\
-    sha256:2d6d7eb430e8d5438ab8763db6df6154b4071c7599b0b99dfdb15cd1a80d3462
-COMPONENT_ARCHIVE_URL= \
-    https://github.com/mkdocs/mkdocs-bootswatch/archive/$(COMPONENT_VERSION).tar.gz
+TEST_TARGET = $(NO_TESTS)
 
-PYTHON_VERSIONS=	2.7
+include $(WS_MAKE_RULES)/common.mk
 
-include $(WS_TOP)/make-rules/prep.mk
-include $(WS_TOP)/make-rules/setup.py.mk
-include $(WS_TOP)/make-rules/ips.mk
-
-build:		$(BUILD_NO_ARCH)
-
-install:	$(INSTALL_NO_ARCH)
-
-test:		$(NO_TESTS)
-
-REQUIRED_PACKAGES += runtime/python-27
+# Auto-generated dependencies

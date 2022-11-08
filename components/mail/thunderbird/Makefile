@@ -26,21 +26,19 @@
 # Copyright 2021, Carsten Grzemba
 #
 
-BUILD_BITS = 64
-
 include ../../../make-rules/shared-macros.mk
 
 # unfortunatly I see -m32 in CFLAGS despite that BUILD_BITS = 64 is set
 BITS = 64
 
 COMPONENT_NAME =	thunderbird
-COMPONENT_VERSION =	102.2.2
+COMPONENT_VERSION =	102.4.2
 COMPONENT_SUMMARY = Mozilla Thunderbird Email Application
 COMPONENT_PROJECT_URL =	https://www.thunderbird.net/
 COMPONENT_SRC = $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE = 	$(COMPONENT_SRC).source.tar.xz
 COMPONENT_ARCHIVE_HASH= \
-	 sha256:5d5f327ea450572ef2a135e5c849b3f38f7d54e897f41a1dec5223e184558f2b
+	 sha256:ffc4a0499ccef41dccd99a683715199e9c839d628240dfb4b5f52bf1e6c902d5
 ifndef CANDIDATE_BUILD
 MOZILLA_FTP = 		https://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)
 else
@@ -50,6 +48,10 @@ COMPONENT_ARCHIVE_URL =	$(MOZILLA_FTP)/source/$(COMPONENT_ARCHIVE)
 
 RUST_VERSION = 1.61.0
 
+# TODO: use remote hashfile to verify
+ALLOW_UNVERIFIED_DOWNLOADS=yes
+export ALLOW_UNVERIFIED_DOWNLOADS
+
 # There are a set of .xpi files (as given in the LANG_LIST definition
 # below) that we need. We could download and unpack them individually, but
 # they doesn't contain version in its file name and there is lot of them.
@@ -57,15 +59,15 @@ RUST_VERSION = 1.61.0
 # one file with version number.
 
 LANG_LIST = af ar ast be bg br ca cak cs cy \
-       da de dsb el en-CA en-GB en-US es-AR es-ES et \
+       da de dsb el en-CA en-GB en-US es-AR es-ES es-MX et \
        eu fi fr fy-NL ga-IE gd gl he hr hsb hu \
        hy-AM id is it ja ka kab kk ko lt lv ms \
        nb-NO nl nn-NO pa-IN pl pt-BR pt-PT rm ro ru sk sl \
        sq sr sv-SE th tr uk uz vi zh-CN zh-TW
 
 LANG_FILES_LOCATION= \
-        http://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)$(ESR)/linux-x86_64/xpi
-
+        https://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)/linux-x86_64/xpi
+#        https://ftp.mozilla.org/pub/$(COMPONENT_NAME)/releases/$(COMPONENT_VERSION)$(ESR)/linux-x86_64/xpi
 CLEAN_PATHS += $(COMPONENT_DIR)/xpi
 
 CONFIGURE_DEFAULT_DIRS=no

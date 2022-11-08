@@ -1,52 +1,64 @@
 #
-# CDDL HEADER START
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
 #
-# The contents of this file are subject to the terms of the
-# Common Development and Distribution License (the "License").
-# You may not use this file except in compliance with the License.
-#
-# You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
-# or http://www.opensolaris.org/os/licensing.
-# See the License for the specific language governing permissions
-# and limitations under the License.
-#
-# When distributing Covered Code, include this CDDL HEADER in each
-# file and include the License file at usr/src/OPENSOLARIS.LICENSE.
-# If applicable, add the following below this CDDL HEADER, with the
-# fields enclosed by brackets "[]" replaced with your own identifying
-# information: Portions Copyright [yyyy] [name of copyright owner]
-#
-# CDDL HEADER END
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
 #
 
 #
-# Copyright 2022 Daniel Chan
+# This file was automatically generated using the following command:
+#   $WS_TOOLS/python-integrate-project pep517
 #
 
-BUILD_BITS=			64
-BUILD_STYLE=		setup.py
+BUILD_STYLE = pyproject
+
 include ../../../make-rules/shared-macros.mk
 
-COMPONENT_NAME=		pep517
-COMPONENT_VERSION=	0.12.0
-COMPONENT_SUMMARY=	Wrappers to build Python packages using PEP 517 hooks
-COMPONENT_PROJECT_URL=	https://pypi.org/project/pep517/
-COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH= sha256:931378d93d11b298cf511dd634cf5ea4cb249a28ef84160b3247ee9afb4e8ab0
-COMPONENT_ARCHIVE_URL=	$(call pypi_url)
-COMPONENT_FMRI=	library/python/pep517
-COMPONENT_CLASSIFICATION=	Development/Python
-COMPONENT_LICENSE=      MIT
-COMPONENT_LICENSE_FILE= LICENSE
+COMPONENT_NAME =		pep517
+COMPONENT_VERSION =		0.13.0
+COMPONENT_SUMMARY =		pep517 - Wrappers to build Python packages using PEP 517 hooks
+COMPONENT_PROJECT_URL =		https://github.com/pypa/pep517
+COMPONENT_ARCHIVE_URL =		\
+	https://files.pythonhosted.org/packages/4d/19/e11fcc88288f68ae48e3aa9cf5a6fd092a88e629cb723465666c44d487a0/pep517-0.13.0.tar.gz
+COMPONENT_ARCHIVE_HASH =	\
+	sha256:ae69927c5c172be1add9203726d4b84cf3ebad1edcd5f71fcdc746e66e829f59
+COMPONENT_LICENSE =		MIT
+COMPONENT_LICENSE_FILE =	LICENSE
 
-PYTHON_VERSIONS=	3.7 3.9
+# This component is required by following bootstrapped components so it must be
+# bootstrapped too.
+# - build
+PYTHON_BOOTSTRAP = yes
+
+# Disable tests because required packages are not available during bootstrap
+TEST_STYLE = none
 
 include $(WS_MAKE_RULES)/common.mk
 
+# This components does not support setup.py build style so we cannot defer to
+# it for bootstrapping Python 3.7.  Use 'build' and 'installer' instead
+# (because pyproject_installer does not support Python 3.7).  Strictly speaking
+# this is not true bootstrap, but since we do not need to bootstrap Python 3.7
+# from scratch we can afford this fake bootstrap keeping in mind that Python
+# 3.7 should be EOLed in June 2023.
+$(BUILD_DIR)/%-3.7/.built:	COMPONENT_BUILD_CMD =		$(PYTHON) -m build
+$(BUILD_DIR)/%-3.7/.built:	COMPONENT_BUILD_ARGS =
+$(BUILD_DIR)/%-3.7/.built:	COMPONENT_BUILD_ARGS +=		--wheel
+$(BUILD_DIR)/%-3.7/.built:	COMPONENT_BUILD_ARGS +=		--no-isolation
+
+$(BUILD_DIR)/%-3.7/.installed:	COMPONENT_INSTALL_CMD =		$(PYTHON) -m installer
+$(BUILD_DIR)/%-3.7/.installed:	COMPONENT_INSTALL_ARGS =
+$(BUILD_DIR)/%-3.7/.installed:	COMPONENT_INSTALL_ARGS +=	--destdir $(PROTO_DIR)
+$(BUILD_DIR)/%-3.7/.installed:	COMPONENT_INSTALL_ARGS +=	$(@D)/dist/*.whl
+
+USERLAND_REQUIRED_PACKAGES += library/python/build-37
+USERLAND_REQUIRED_PACKAGES += library/python/installer-37
+
+BOOTSTRAP_TRANSFORMS =
+
 # Auto-generated dependencies
-REQUIRED_PACKAGES += runtime/python-37
-REQUIRED_PACKAGES += runtime/python-39
-REQUIRED_PACKAGES += shell/ksh93
-REQUIRED_PACKAGES += SUNWcs
-REQUIRED_PACKAGES += system/library
+PYTHON_REQUIRED_PACKAGES += library/python/flit-core

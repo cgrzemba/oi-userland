@@ -101,11 +101,11 @@ $(BUILD_DIR)/%/.installed:	$(BUILD_DIR)/%/.built
 	$(COMPONENT_POST_INSTALL_ACTION)
 	$(TOUCH) $@
 
-# Define bit specific and Perl version specific filenames.
+# Define Perl version specific filenames for tests.
 ifeq ($(strip $(USE_COMMON_TEST_MASTER)),no)
 COMPONENT_TEST_MASTER = $(COMPONENT_TEST_RESULTS_DIR)/results-$(PERL_VERSION).master
 endif
-COMPONENT_TEST_BUILD_DIR = $(BUILD_DIR)/test
+COMPONENT_TEST_BUILD_DIR = $(BUILD_DIR)/test-$(PERL_VERSION)
 COMPONENT_TEST_OUTPUT = $(COMPONENT_TEST_BUILD_DIR)/test-$(PERL_VERSION)-results
 COMPONENT_TEST_DIFFS =  $(COMPONENT_TEST_BUILD_DIR)/test-$(PERL_VERSION)-diffs
 COMPONENT_TEST_SNAPSHOT = $(COMPONENT_TEST_BUILD_DIR)/results-$(PERL_VERSION).snapshot
@@ -118,7 +118,7 @@ COMPONENT_TEST_TRANSFORMS += '-e "/^\#/d"'			# delete comments
 COMPONENT_TEST_TRANSFORMS += '-e "/^make\[/d"'			# delete make logs
 
 # Add the expected 'test_harness' line if it is missing in the test results.
-$(BUILD_DIR)/%/.tested-and-compared:	COMPONENT_POST_TEST_ACTION += \
+COMPONENT_POST_TEST_ACTION += \
 	$(GNU_GREP) -q test_harness $(COMPONENT_TEST_OUTPUT) \
 	|| $(GSED) -i -e '1i\test_harness' $(COMPONENT_TEST_OUTPUT) ;
 
@@ -153,20 +153,26 @@ $(BUILD_DIR)/%/.tested-and-compared:    $(BUILD_DIR)/%/.built
 	$(COMPONENT_TEST_CLEANUP)
 	$(TOUCH) $@
 
+$(BUILD_DIR)/%/.tested:    SHELLOPTS=pipefail
 $(BUILD_DIR)/%/.tested:    $(BUILD_DIR)/%/.built
+	$(RM) -rf $(COMPONENT_TEST_BUILD_DIR)
+	$(MKDIR) $(COMPONENT_TEST_BUILD_DIR)
 	$(COMPONENT_PRE_TEST_ACTION)
 	(cd $(COMPONENT_TEST_DIR) ; \
 		$(COMPONENT_TEST_ENV_CMD) $(COMPONENT_TEST_ENV) \
 		$(COMPONENT_TEST_CMD) \
-		$(COMPONENT_TEST_ARGS) $(COMPONENT_TEST_TARGETS))
+		$(COMPONENT_TEST_ARGS) $(COMPONENT_TEST_TARGETS)) \
+		|& $(TEE) $(COMPONENT_TEST_OUTPUT)
 	$(COMPONENT_POST_TEST_ACTION)
+	$(COMPONENT_TEST_CREATE_TRANSFORMS)
+	$(COMPONENT_TEST_PERFORM_TRANSFORM)
 	$(COMPONENT_TEST_CLEANUP)
 	$(TOUCH) $@
 
 
 # We need to add -$(PLV) to package fmri and generate runtime dependencies based on META.json
 GENERATE_EXTRA_DEPS += $(BUILD_DIR)/META.json
-GENERATE_EXTRA_CMD ?= \
+GENERATE_EXTRA_CMD += | \
 	$(GSED) -e 's/^\(set name=pkg.fmri [^@]*\)\(.*\)$$/\1-$$(PLV)\2/' | \
 	$(CAT) - <( \
 		echo "" ; \
@@ -198,13 +204,6 @@ USERLAND_REQUIRED_PACKAGES += text/jq
 # pyyaml is needed to convert META.yml to META.json
 USERLAND_REQUIRED_PACKAGES += library/python/pyyaml
 
-
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-parfait: build
-else
-parfait:
-	$(MAKE) PARFAIT_BUILD=yes parfait
-endif
 
 clean:: 
 	$(RM) -r $(BUILD_DIR) $(PROTO_DIR)

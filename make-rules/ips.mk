@@ -35,6 +35,7 @@
 #
 # This set of rules makes the "publish" target the default target for make(1)
 #
+.NOTPARALLEL:
 
 PKGDEPEND =	/usr/bin/pkgdepend
 PKGFMT =	/usr/bin/pkgfmt
@@ -75,6 +76,7 @@ LICENSE_TRANSFORMS =		$(WS_TOP)/transforms/license-changes
 PUBLISH_TRANSFORMS +=	$(LICENSE_TRANSFORMS)
 PUBLISH_TRANSFORMS +=	$(WS_TOP)/transforms/variant-cleanup
 PUBLISH_TRANSFORMS +=	$(WS_TOP)/transforms/autopyc
+PUBLISH_TRANSFORMS +=	$(WS_TOP)/transforms/python
 PUBLISH_TRANSFORMS +=	$(WS_TOP)/transforms/perl
 PUBLISH_TRANSFORMS +=	$(WS_TOP)/transforms/defaults
 PUBLISH_TRANSFORMS +=	$(WS_TOP)/transforms/actuators
@@ -226,10 +228,19 @@ PYV_FMRI_VERSION = PYV
 PYV_MANIFESTS = $(foreach v,$(PYV_VALUES),$(shell echo $(PY_MANIFESTS) | sed -e 's/-PYVER.p5m/-$(v).p5m/g'))
 PYNV_MANIFESTS = $(shell echo $(PY_MANIFESTS) | sed -e 's/-PYVER//')
 MKGENERIC_SCRIPTS += $(BUILD_DIR)/mkgeneric-python
-GENERATE_GENERIC_TRANSFORMS+=$(foreach v,$(PYTHON_VERSIONS), -e 's/$(subst .,\.,$(v))/\$$\(PYVER\)/g')
 else
 NOPY_MANIFESTS = $(UNVERSIONED_MANIFESTS)
 endif
+
+# PYTHON_PYV_VALUES contains list of all possible PYV values we could encounter:
+# - for all currently supported python versions (from PYTHON_VERSIONS)
+# - for all python versions we are currently obsoleting (from PYTHON_VERSIONS_OBSOLETING)
+# - the $(PYV) string itself
+PYTHON_PYV_VALUES = $(shell echo $(PYTHON_VERSIONS) $(PYTHON_VERSIONS_OBSOLETING) | tr -d .) $$(PYV)
+# Convert REQUIRED_PACKAGES to PYTHON_REQUIRED_PACKAGES for runtime/python
+REQUIRED_PACKAGES_TRANSFORM += $(foreach v,$(PYTHON_PYV_VALUES), -e 's|^\(.*runtime/python\)-$(v)$$|PYTHON_\1|g')
+# Convert REQUIRED_PACKAGES to PYTHON_REQUIRED_PACKAGES for library/python/*
+REQUIRED_PACKAGES_TRANSFORM += $(foreach v,$(PYTHON_PYV_VALUES), -e 's|^\(.*library/python/.*\)-$(v)$$|PYTHON_\1|g')
 
 # Look for manifests which need to be duplicated for each version of perl.
 ifeq ($(findstring -PERLVER,$(UNVERSIONED_MANIFESTS)),-PERLVER)
@@ -310,21 +321,15 @@ publish:		pre-publish update-metadata $(PUBLISH_STAMP)
 
 sample-manifest:	$(GENERATED).p5m
 
-# By default GENERATE_EXTRA_CMD is a no-op.
-# Since it is used in pipeline it needs to copy input to output.
-GENERATE_EXTRA_CMD ?= $(CAT)
-
 $(GENERATED).p5m:	install $(GENERATE_EXTRA_DEPS)
 	[ ! -d $(SAMPLE_MANIFEST_DIR) ] && $(MKDIR) $(SAMPLE_MANIFEST_DIR) || true
 	$(PKGSEND) generate $(PKG_HARDLINKS:%=--target %) $(PROTO_DIR) | \
 	$(PKGMOGRIFY) $(PKG_OPTIONS) /dev/fd/0 $(GENERATE_TRANSFORMS) | \
 		sed -e '/^$$/d' -e '/^#.*$$/d' \
-		-e '/\.la$$/d' -e '/\.pyo$$/d' -e '/usr\/lib\/python[23]\..*\.pyc$$/d' \
-		-e '/usr\/lib\/python3\..*\/__pycache__\/.*/d'  | \
+		-e '/\.la$$/d' | \
 		$(PKGFMT) | \
 		uniq | \
-		cat $(METADATA_TEMPLATE) - | \
-		$(GENERATE_EXTRA_CMD) | \
+		cat $(METADATA_TEMPLATE) - $(GENERATE_EXTRA_CMD) | \
 		$(TEE) $@ $(SAMPLE_MANIFEST_FILE) >/dev/null
 	if [ "$(GENERATE_GENERIC_TRANSFORMS)X" != "X" ]; \
 	then sed $(GENERATE_GENERIC_TRANSFORMS) $(SAMPLE_MANIFEST_FILE) \

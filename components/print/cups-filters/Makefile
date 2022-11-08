@@ -14,15 +14,16 @@
 # Copyright 2022 Andreas Wacknitz
 #
 
-BUILD_BITS= 64
+USE_OPENSSL11= yes
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=	cups-filters
-COMPONENT_VERSION=	1.28.15
+COMPONENT_VERSION=	1.28.16
+COMPONENT_REVISION= 1
 COMPONENT_SUMMARY=	Additional backends, filters and other software for CUPS
 COMPONENT_SRC=	$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=	sha256:a907ec769fbb72efbfbf9b540b250a08e33b6e373a8a7c343f9840fba4d0478b
+COMPONENT_ARCHIVE_HASH=	sha256:3a400bfa751da2020775cd7d48d1647448551ff051f9345abc1df6357b199ac0
 COMPONENT_ARCHIVE_URL=	https://www.openprinting.org/download/$(COMPONENT_NAME)/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL=	https://openprinting.github.io/
 COMPONENT_FMRI=	print/$(COMPONENT_NAME)
@@ -30,14 +31,12 @@ COMPONENT_CLASSIFICATION=	System/Printing
 COMPONENT_LICENSE=	GPLv2,GPLv3,LGPLv2,LGPLv2.1
 COMPONENT_LICENSE_FILE= COPYING
 
-TEST_TARGET=	$(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
 
 PATH= $(PATH.gnu)
 
 COMPONENT_PREP_ACTION += (cd $(@D) ; \
    PATH=$(PATH.gnu) $(CONFIG_SHELL) autogen.sh )
-#COMPONENT_PREP_ACTION +=(cd $(@D); autoreconf -fiv)
 
 # Missing files in build dir for configure without this.
 COMPONENT_PRE_CONFIGURE_ACTION = \
@@ -53,8 +52,6 @@ LDFLAGS  += $(JPEG_LDFLAGS)
 LDFLAGS  += -lldap_r -lsocket
 
 CONFIGURE_OPTIONS += CPPFLAGS="$(CPPFLAGS)"
-#CPPFLAGS += -I/usr/include/cups/private
-#CPPFLAGS += -I/usr/include/cups/private/cups
 CONFIGURE_ENV += CPPFLAGS="$(CPPFLAGS)"
 # Ensure dynamic shared objects are linked using same LDFLAGS as executables.
 CONFIGURE_ENV += DSOFLAGS="$(LDFLAGS)"
@@ -102,11 +99,10 @@ $(SOURCE_DIR)/cups-filters.license:
 		$(COMPONENT_DIR)/LGPL-2.0.txt \
 		$(COMPONENT_DIR)/LGPL-2.1.txt > $@
 
-#$(INSTALL_64):	$(SOURCE_DIR)/cups-filters.license
-
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
+REQUIRED_PACKAGES += image/library/libexif
 REQUIRED_PACKAGES += image/library/libjpeg8-turbo
 REQUIRED_PACKAGES += image/library/libpng16
 REQUIRED_PACKAGES += image/library/libtiff

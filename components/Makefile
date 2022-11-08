@@ -156,7 +156,7 @@ tools:
 	echo "export PATH WS_TOP" >>$@
 
 $(COMPONENT_DIRS):	$(WS_LOGS) setup FORCE
-	@cd $@ && echo "$(TARGET) $@" && \
+	@+cd $@ && echo "$(TARGET) $@" && \
 	 $(BASS_O_MATIC) --make $(TARGET) $(LOG)
 
 incorporation:
@@ -180,7 +180,7 @@ ifdef CANONICAL_REPO
 endif
 
 $(COMPONENT_DIRS.nosetup):	$(WS_LOGS) FORCE
-	@cd $(@:%.nosetup=%) && echo "$(TARGET) $(@:%.nosetup=%)" && \
+	@+cd $(@:%.nosetup=%) && echo "$(TARGET) $(@:%.nosetup=%)" && \
 	 $(BASS_O_MATIC) --make $(TARGET) $(LOG)
 
 .PHONY:

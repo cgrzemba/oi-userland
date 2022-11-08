@@ -152,15 +152,6 @@ $(BUILD_DIR_32)/.configured:	BITS=32
 $(BUILD_DIR_64)/.configured:	BITS=64
 
 CONFIGURE_ENV += $(CONFIGURE_ENV.$(BITS))
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-# parfait creates '*.bc' files which can confuse configure's
-# object/exe extension detection. which we really don't need it
-# to do anyway, so we'll just tell it what they are.
-CONFIGURE_ENV += ac_cv_objext=o
-CONFIGURE_ENV += ac_cv_exeext=""
-# this is fixed in the clang compiler but we can't use it yet
-CONFIGURE_ENV += ac_cv_header_stdbool_h=yes
-endif
 
 
 # temporarily work around some issues
@@ -184,9 +175,6 @@ $(BUILD_DIR)/%/.built:	$(BUILD_DIR)/%/.configured
 		$(GMAKE) $(COMPONENT_BUILD_GMAKE_ARGS) $(COMPONENT_BUILD_ARGS) \
 		$(COMPONENT_BUILD_TARGETS))
 	$(COMPONENT_POST_BUILD_ACTION)
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-	-$(PARFAIT) build
-endif
 	$(TOUCH) $@
 
 # install the built source into a prototype area
@@ -227,23 +215,21 @@ $(BUILD_DIR)/%/.tested-and-compared:    $(BUILD_DIR)/%/.built
 	$(COMPONENT_TEST_CLEANUP)
 	$(TOUCH) $@
 
+$(BUILD_DIR)/%/.tested:    SHELLOPTS=pipefail
 $(BUILD_DIR)/%/.tested:    $(BUILD_DIR)/%/.built
+	$(RM) -rf $(COMPONENT_TEST_BUILD_DIR)
+	$(MKDIR) $(COMPONENT_TEST_BUILD_DIR)
 	$(COMPONENT_PRE_TEST_ACTION)
 	(cd $(COMPONENT_TEST_DIR) ; \
 		$(COMPONENT_TEST_ENV_CMD) $(COMPONENT_TEST_ENV) \
 		$(COMPONENT_TEST_CMD) \
-		$(COMPONENT_TEST_ARGS) $(COMPONENT_TEST_TARGETS))
+		$(COMPONENT_TEST_ARGS) $(COMPONENT_TEST_TARGETS)) \
+		|& $(TEE) $(COMPONENT_TEST_OUTPUT)
 	$(COMPONENT_POST_TEST_ACTION)
+	$(COMPONENT_TEST_CREATE_TRANSFORMS)
+	$(COMPONENT_TEST_PERFORM_TRANSFORM)
 	$(COMPONENT_TEST_CLEANUP)
 	$(TOUCH) $@
-
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-parfait: install
-	-$(PARFAIT) build
-else
-parfait:
-	$(MAKE) PARFAIT_BUILD=yes parfait
-endif
 
 clean::
 	$(RM) -r $(BUILD_DIR) $(PROTO_DIR)

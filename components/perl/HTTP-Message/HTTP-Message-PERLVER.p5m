@@ -33,7 +33,6 @@ file path=usr/perl5/$(PERLVER)/man/man3perl/HTTP::Request.3perl
 file path=usr/perl5/$(PERLVER)/man/man3perl/HTTP::Request::Common.3perl
 file path=usr/perl5/$(PERLVER)/man/man3perl/HTTP::Response.3perl
 file path=usr/perl5/$(PERLVER)/man/man3perl/HTTP::Status.3perl
-file path=usr/perl5/vendor_perl/$(PERLVER)/$(PERL_ARCH)/auto/HTTP/Message/.packlist
 file path=usr/perl5/vendor_perl/$(PERLVER)/HTTP/Config.pm
 file path=usr/perl5/vendor_perl/$(PERLVER)/HTTP/Headers.pm
 file path=usr/perl5/vendor_perl/$(PERLVER)/HTTP/Headers/Auth.pm
@@ -50,6 +49,7 @@ depend type=require fmri=__TBD pkg.debug.depend.file=perl \
     pkg.debug.depend.path=usr/perl5/$(PERLVER)/bin
 
 # Automatically generated dependencies based on distribution metadata
+depend type=require fmri=pkg:/library/perl-5/clone-$(PLV)@0.46
 depend type=require fmri=pkg:/library/perl-5/encode-locale-$(PLV)@1
 depend type=require fmri=pkg:/library/perl-5/http-date-$(PLV)@6
 depend type=require fmri=pkg:/library/perl-5/io-html-$(PLV)

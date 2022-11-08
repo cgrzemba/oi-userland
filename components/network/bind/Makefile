@@ -20,18 +20,18 @@
 #
 # Copyright (c) 2011, 2013, Oracle and/or its affiliates. All rights reserved.
 # Copyright (c) 2020, Michal Nowak
+# Copyright (c) 2022, Niklas Poslovski
 #
 
-BUILD_BITS=			64
 USE_OPENSSL11=		yes
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		bind
-COMPONENT_VERSION=	9.16.29
+COMPONENT_VERSION=	9.16.34
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_PROJECT_URL=	https://www.isc.org/software/bind/
-COMPONENT_ARCHIVE_HASH=	sha256:c8408f98ebbd566fc396a28cbda2d94d57efcb98a359618866dec229c8907466
+COMPONENT_ARCHIVE_HASH=	sha256:513d2efcf5d526c14a0b33af698b6df17d21cd2e011a43f4a94a4f0c84472f16
 COMPONENT_ARCHIVE_URL=	https://ftp.isc.org/isc/bind9/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI=			network/dns/$(COMPONENT_NAME)
 COMPONENT_CLASSIFICATION=	Applications/Internet
@@ -40,7 +40,7 @@ COMPONENT_LICENSE_FILE=	COPYRIGHT
 
 include $(WS_MAKE_RULES)/common.mk
 
-PYTHON_VERSION=3.5
+PKG_MACROS += PYVER=$(PYTHON_VERSION)
 
 COMPONENT_PREP_ACTION =	(cd $(@D) && autoreconf -fi)
 
@@ -87,11 +87,11 @@ COMPONENT_INSTALL_ENV += PYTHON_VENDOR_DIR=$(PYTHON_VENDOR_PACKAGES)
 # prototype directory, they are simply referenced in relevant manifest
 # (p5m) file.
 
-install: $(INSTALL_64)
-
 COMPONENT_TEST_ENV += PATH=$(PATH.gnu)
 COMPONENT_TEST_ENV += LC_ALL=C.UTF-8
-COMPONENT_PRE_TEST_ACTION=	cd $(BUILD_DIR_64)/bin/tests/system ; pfexec sh ./ifconfig.sh up ;
+# The user running the test needs an profiles=Network Management entry in /etc/user_attr in order to successfully run the following ifconfig.sh up script:
+COMPONENT_PRE_TEST_ACTION=      ( cd $(BUILD_DIR_64)/bin/tests/system && pfexec sh ./ifconfig.sh up )
+COMPONENT_POST_TEST_ACTION=     ( cd $(BUILD_DIR_64)/bin/tests/system && pfexec sh ./ifconfig.sh down )
 COMPONENT_TEST_TARGETS=		test
 COMPONENT_TEST_TRANSFORMS += \
 	' -n ' \
@@ -102,11 +102,8 @@ COMPONENT_TEST_TRANSFORMS += \
 	' -e "/^I:.* SKIPPED$$/p"' \
 	' -e "/^I:.* UNTESTED$$/p"'
 
-# Use COMPONENT_TEST_ARGS to parallelize the task.
-# Note: The tests need additional privileges.
-$(TEST_64):	$(INSTALL_64)
-
 # Auto-generated dependencies
+PYTHON_REQUIRED_PACKAGES += runtime/python
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += database/lmdb
 REQUIRED_PACKAGES += library/json-c
@@ -115,8 +112,6 @@ REQUIRED_PACKAGES += library/libuv
 REQUIRED_PACKAGES += library/libxml2
 REQUIRED_PACKAGES += library/security/openssl-11
 REQUIRED_PACKAGES += library/zlib
-#REQUIRED_PACKAGES += network/dns/bind
-REQUIRED_PACKAGES += runtime/python-35
 REQUIRED_PACKAGES += service/security/kerberos-5
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library

@@ -21,10 +21,8 @@
 # Copyright (c) 2010, 2016, Oracle and/or its affiliates. All rights reserved.
 #
 
-# Set default PyPI name
-COMPONENT_PYPI?=$(COMPONENT_NAME)
-# Set default to PyPI url
-COMPONENT_ARCHIVE_URL?=$(call pypi_url)
+# Particular python runtime is always required (at least to run setup.py)
+PYTHON_REQUIRED_PACKAGES += runtime/python
 
 define python-rule
 $(BUILD_DIR)/%-$(1)/.built:		PYTHON_VERSION=$(1)
@@ -66,69 +64,74 @@ COMPONENT_BUILD_ENV += $(PYTHON_ENV)
 COMPONENT_INSTALL_ENV += $(PYTHON_ENV)
 COMPONENT_TEST_ENV += $(PYTHON_ENV)
 
-# Reset arguments specified as environmnent variables
-COMPONENT_BUILD_ARGS =
+# Make sure the default Python version is installed last and so is the
+# canonical version.  This is needed for components that keep PYTHON_VERSIONS
+# set to more than single value, but deliver unversioned binaries in usr/bin or
+# other overlapping files.
+define python-order-rule
+$(BUILD_DIR)/%-$(PYTHON_VERSION)/.installed:	$(BUILD_DIR)/%-$(1)/.installed
+endef
+$(foreach pyver,$(filter-out $(PYTHON_VERSION),$(PYTHON_VERSIONS)),$(eval $(call python-order-rule,$(pyver))))
 
-# If we are building Python 3.5 support, build it and install it
-# before Python 2.7, so 2.7 is installed last and is the canonical version.
-# When we change the default, the new default should go last.
-ifneq ($(findstring 3.5,$(PYTHON_VERSIONS)),)
-$(BUILD_DIR)/%-2.7/.built:     $(BUILD_DIR)/%-3.5/.built
-$(BUILD_DIR)/%-2.7/.installed: $(BUILD_DIR)/%-3.5/.installed
-endif
+# We need to copy the source dir to avoid its modification by install target
+# where egg-info is re-generated
+CLONEY_ARGS = CLONEY_MODE="copy"
 
-# Create a distutils config file specific to the combination of build
-# characteristics (bittedness x Python version), and put it in its own
-# directory.  We can set $HOME to point distutils at it later, allowing
-# the install phase to find the temporary build directories.
-CFG=.pydistutils.cfg
-$(BUILD_DIR)/config-%/$(CFG):
-	$(MKDIR) $(@D)
-	echo "[build]\nbuild_base = $(BUILD_DIR)/$*" > $@
+COMPONENT_BUILD_CMD = $(PYTHON) setup.py --no-user-cfg build
 
 # build the configured source
-$(BUILD_DIR)/%/.built:	$(SOURCE_DIR)/.prep $(BUILD_DIR)/config-%/$(CFG)
+$(BUILD_DIR)/%/.built:	$(SOURCE_DIR)/.prep
 	$(RM) -r $(@D) ; $(MKDIR) $(@D)
+	$(ENV) $(CLONEY_ARGS) $(CLONEY) $(SOURCE_DIR) $(@D)
 	$(COMPONENT_PRE_BUILD_ACTION)
-	(cd $(SOURCE_DIR) ; $(ENV) HOME=$(BUILD_DIR)/config-$* $(COMPONENT_BUILD_ENV) \
-		$(PYTHON) ./setup.py build $(COMPONENT_BUILD_ARGS))
+	(cd $(@D) ; $(ENV) $(COMPONENT_BUILD_ENV) \
+		$(COMPONENT_BUILD_CMD) $(COMPONENT_BUILD_ARGS))
 	$(COMPONENT_POST_BUILD_ACTION)
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-	-$(PARFAIT) $(SOURCE_DIR)/$(@D:$(BUILD_DIR)/%=%)
-endif
 	$(TOUCH) $@
 
+
+COMPONENT_INSTALL_CMD = $(PYTHON) setup.py --no-user-cfg install
 
 COMPONENT_INSTALL_ARGS +=	--root $(PROTO_DIR) 
 COMPONENT_INSTALL_ARGS +=	--install-lib=$(PYTHON_LIB)
-COMPONENT_INSTALL_ARGS +=	--install-purelib=$(PYTHON_LIB)
-COMPONENT_INSTALL_ARGS +=	--install-platlib=$(PYTHON_LIB)
 COMPONENT_INSTALL_ARGS +=	--install-data=$(PYTHON_DATA)
+COMPONENT_INSTALL_ARGS +=	--skip-build
 COMPONENT_INSTALL_ARGS +=	--force
 
 # install the built source into a prototype area
-$(BUILD_DIR)/%/.installed:	$(BUILD_DIR)/%/.built $(BUILD_DIR)/config-%/$(CFG)
+$(BUILD_DIR)/%/.installed:	$(BUILD_DIR)/%/.built
 	$(COMPONENT_PRE_INSTALL_ACTION)
-	(cd $(SOURCE_DIR) ; $(ENV) HOME=$(BUILD_DIR)/config-$* $(COMPONENT_INSTALL_ENV) \
-		$(PYTHON) ./setup.py install $(COMPONENT_INSTALL_ARGS))
+	(cd $(@D) ; $(ENV) $(COMPONENT_INSTALL_ENV) \
+		$(COMPONENT_INSTALL_CMD) $(COMPONENT_INSTALL_ARGS))
 	$(COMPONENT_POST_INSTALL_ACTION)
 	$(TOUCH) $@
 
-# Define bit specific and Python version specific filenames.
-ifeq ($(strip $(USE_COMMON_TEST_MASTER)),no)
-COMPONENT_TEST_MASTER =	$(COMPONENT_TEST_RESULTS_DIR)/results-$(PYTHON_VERSION)-$(BITS).master
+ifeq ($(strip $(SINGLE_PYTHON_VERSION)),no)
+# Rename binaries in /usr/bin to contain version number
+COMPONENT_POST_INSTALL_ACTION += \
+	for f in $(PROTOUSRBINDIR)/* ; do \
+		[[ -f $$f ]] || continue ; \
+		for v in $(PYTHON_VERSIONS) ; do \
+			[[ "$$f" == "$${f%%-$$v}" ]] || continue 2 ; \
+		done ; \
+		$(MV) $$f $$f-$(PYTHON_VERSION) ; \
+	done ;
 endif
-COMPONENT_TEST_OUTPUT =	$(COMPONENT_TEST_BUILD_DIR)/test-$(PYTHON_VERSION)-$(BITS)-results
-COMPONENT_TEST_DIFFS =	$(COMPONENT_TEST_BUILD_DIR)/test-$(PYTHON_VERSION)-$(BITS)-diffs
-COMPONENT_TEST_SNAPSHOT = $(COMPONENT_TEST_BUILD_DIR)/results-$(PYTHON_VERSION)-$(BITS).snapshot
-COMPONENT_TEST_TRANSFORM_CMD = $(COMPONENT_TEST_BUILD_DIR)/transform-$(PYTHON_VERSION)-$(BITS)-results
 
-COMPONENT_TEST_DEP =	$(BUILD_DIR)/%/.installed
-COMPONENT_TEST_DIR =	$(COMPONENT_SRC)/test
-COMPONENT_TEST_ENV_CMD =	$(ENV)
-COMPONENT_TEST_ENV +=	PYTHONPATH=$(PROTO_DIR)$(PYTHON_VENDOR_PACKAGES)
-COMPONENT_TEST_CMD =	$(PYTHON)
-COMPONENT_TEST_ARGS +=	./runtests.py
+# Define Python version specific filenames for tests.
+ifeq ($(strip $(USE_COMMON_TEST_MASTER)),no)
+COMPONENT_TEST_MASTER =	$(COMPONENT_TEST_RESULTS_DIR)/results-$(PYTHON_VERSION).master
+endif
+COMPONENT_TEST_BUILD_DIR = $(BUILD_DIR)/test-$(PYTHON_VERSION)
+COMPONENT_TEST_OUTPUT =	$(COMPONENT_TEST_BUILD_DIR)/test-$(PYTHON_VERSION)-results
+COMPONENT_TEST_DIFFS =	$(COMPONENT_TEST_BUILD_DIR)/test-$(PYTHON_VERSION)-diffs
+COMPONENT_TEST_SNAPSHOT = $(COMPONENT_TEST_BUILD_DIR)/results-$(PYTHON_VERSION).snapshot
+COMPONENT_TEST_TRANSFORM_CMD = $(COMPONENT_TEST_BUILD_DIR)/transform-$(PYTHON_VERSION)-results
+
+# Normalize Python test results.
+COMPONENT_TEST_TRANSFORMS += "-e 's/^\(Ran [0-9]\{1,\} tests\) in .*$$/\1/'"	# delete timing from test results
+
+COMPONENT_TEST_DEP =	$(BUILD_DIR)/%/.built
 
 # determine the type of tests we want to run.
 ifeq ($(strip $(wildcard $(COMPONENT_TEST_RESULTS_DIR)/results-*.master)),)
@@ -141,6 +144,99 @@ TEST_64 = $(PYTHON_VERSIONS:%=$(BUILD_DIR)/$(MACH64)-%/.tested-and-compared)
 TEST_NO_ARCH = $(PYTHON_VERSIONS:%=$(BUILD_DIR)/$(MACH)-%/.tested-and-compared)
 endif
 
+#
+# Testing in the Python world is complex.  Python projects usually do not
+# support Makefile with common 'check' or 'test' target to get built bits
+# tested.
+#
+# De facto standard way to test Python projects these days is tox which is
+# designed and used primarily for release testing; to make sure the released
+# python project runs on all supported Python versions, platforms, etc.  tox
+# does so using virtualenv and creates isolated test environments where the
+# tested package together with all its dependencies is automatically installed
+# (using pip) and tested.  This is great for Python projects developers but it
+# is hardly usable for operating system distributions like OpenIndiana.
+#
+# We do not need such release testing.  Instead we need something closer to
+# integration testing: we need to test the built component in our real
+# environment without automatic installation of any dependencies using pip.  In
+# addition, we need to run tests only for Python versions we actually support
+# and the component is built for.
+#
+# To achieve that we do few things.  First, to avoid isolated environments
+# (virtualenv) we run tox with the tox-current-env plugin.  Second, to test
+# only Python versions we are interested in we use -e option for tox to select
+# single Python version only.  Since we run separate test target per Python
+# version this will make sure we test all needed Python versions.
+#
+# The tox tool itself uses some other tools under the hood to run tests, for
+# example pytest.  Some projects could even support pytest testing directly
+# without support for tox.  For such projects we offer separate "pytest"-style
+# testing.
+#
+# For projects that do not support testing using neither tox nor pytest we
+# offer (deprecated) "setup.py test" testing too.
+#
+# The TEST_STYLE variable is used to select (or force) particular test style
+# for Python projects.  Valid values are:
+#
+# 	tox		- "tox"-style testing
+# 	pytest		- "pytest"-style testing
+# 	setup.py	- "setup.py test"-style testing
+# 	none		- no testing is supported at all
+#
+
+TEST_STYLE ?= tox
+ifeq ($(strip $(TEST_STYLE)),tox)
+COMPONENT_TEST_CMD =		$(TOX)
+COMPONENT_TEST_ARGS =		--current-env --no-provision --recreate
+COMPONENT_TEST_TARGETS =	-e py$(shell echo $(PYTHON_VERSION) | tr -d .)
+
+# Normalize tox test results.
+COMPONENT_TEST_TRANSFORMS += "-e '0,/^py[0-9]\{1,\} run-test: /d'"		# strip initial header
+COMPONENT_TEST_TRANSFORMS += "-e '/^cachedir: /d'"				# depends on Python version and is useless
+COMPONENT_TEST_TRANSFORMS += "-e '/^  py[0-9]\{1,\}: commands succeeded$$/d'"	# remove line with Python version
+
+# tox package together with the tox-current-env plugin is needed
+USERLAND_REQUIRED_PACKAGES += library/python/tox
+USERLAND_REQUIRED_PACKAGES += library/python/tox-current-env
+else ifeq ($(strip $(TEST_STYLE)),pytest)
+COMPONENT_TEST_CMD =		$(PYTHON) -m pytest
+COMPONENT_TEST_ARGS =
+COMPONENT_TEST_TARGETS =
+
+USERLAND_REQUIRED_PACKAGES += library/python/pytest
+else ifeq ($(strip $(TEST_STYLE)),setup.py)
+# Old and deprecated "setup.py test"-style testing
+COMPONENT_TEST_CMD =		$(PYTHON) setup.py
+COMPONENT_TEST_ARGS =		--no-user-cfg
+COMPONENT_TEST_TARGETS =	test
+
+# Normalize setup.py test results.
+COMPONENT_TEST_TRANSFORMS += "-e '/SetuptoolsDeprecationWarning:/,+1d'"		# depends on Python version and is useless
+else ifeq ($(strip $(TEST_STYLE)),none)
+TEST_TARGET = $(NO_TESTS)
+endif
+
+# Normalize pytest test results.  The pytest framework could be used either
+# directly or via tox or setup.py so add these transforms for all test styles
+# unconditionally.
+COMPONENT_TEST_TRANSFORMS += "-e '/^platform sunos5 --/d'"			# line with version details
+COMPONENT_TEST_TRANSFORMS += "-e '/^Using --randomly-seed=[0-9]\{1,\}$$/d'"	# this is random
+COMPONENT_TEST_TRANSFORMS += "-e '/^benchmark: /d'"				# line with version details
+COMPONENT_TEST_TRANSFORMS += "-e '/^plugins: /d'"				# order of listed plugins could vary
+COMPONENT_TEST_TRANSFORMS += "-e '/^-\{1,\} coverage: /,/^TOTAL/d'"		# remove coverage report
+# sort list of pytest unit tests and drop percentage
+COMPONENT_TEST_TRANSFORMS += \
+	"| ( \
+		$(GSED) -u -e '/^=\{1,\} test session starts /q' ; \
+		$(GSED) -u -e '/^$$/q' ; \
+		$(GSED) -u -e 's/ *\[...%\]$$//' -e '/^$$/Q' | LC_ALL=C $(GSORT) | $(NAWK) '{print}END{if(NR>0)printf(\"\\\\n\")}' ; \
+		$(CAT) \
+	) | $(COMPONENT_TEST_TRANSFORMER)"
+COMPONENT_TEST_TRANSFORMS += \
+	"-e 's/=\{1,\} \(.*\) in [0-9]\{1,\}\.[0-9]\{1,\}s =\{1,\}$$/======== \1 ========/'"	# remove timing
+
 # test the built source
 $(BUILD_DIR)/%/.tested-and-compared:    $(COMPONENT_TEST_DEP)
 	$(RM) -rf $(COMPONENT_TEST_BUILD_DIR)
@@ -148,7 +244,8 @@ $(BUILD_DIR)/%/.tested-and-compared:    $(COMPONENT_TEST_DEP)
 	$(COMPONENT_PRE_TEST_ACTION)
 	-(cd $(COMPONENT_TEST_DIR) ; \
 		$(COMPONENT_TEST_ENV_CMD) $(COMPONENT_TEST_ENV) \
-		$(COMPONENT_TEST_CMD) $(COMPONENT_TEST_ARGS)) \
+		$(COMPONENT_TEST_CMD) \
+		$(COMPONENT_TEST_ARGS) $(COMPONENT_TEST_TARGETS)) \
 		&> $(COMPONENT_TEST_OUTPUT)
 	$(COMPONENT_POST_TEST_ACTION)
 	$(COMPONENT_TEST_CREATE_TRANSFORMS)
@@ -157,22 +254,29 @@ $(BUILD_DIR)/%/.tested-and-compared:    $(COMPONENT_TEST_DEP)
 	$(COMPONENT_TEST_CLEANUP)
 	$(TOUCH) $@
 
+$(BUILD_DIR)/%/.tested:    SHELLOPTS=pipefail
 $(BUILD_DIR)/%/.tested:    $(COMPONENT_TEST_DEP)
+	$(RM) -rf $(COMPONENT_TEST_BUILD_DIR)
+	$(MKDIR) $(COMPONENT_TEST_BUILD_DIR)
 	$(COMPONENT_PRE_TEST_ACTION)
 	(cd $(COMPONENT_TEST_DIR) ; \
 		$(COMPONENT_TEST_ENV_CMD) $(COMPONENT_TEST_ENV) \
-		$(COMPONENT_TEST_CMD) $(COMPONENT_TEST_ARGS))
+		$(COMPONENT_TEST_CMD) \
+		$(COMPONENT_TEST_ARGS) $(COMPONENT_TEST_TARGETS)) \
+		|& $(TEE) $(COMPONENT_TEST_OUTPUT)
 	$(COMPONENT_POST_TEST_ACTION)
+	$(COMPONENT_TEST_CREATE_TRANSFORMS)
+	$(COMPONENT_TEST_PERFORM_TRANSFORM)
 	$(COMPONENT_TEST_CLEANUP)
 	$(TOUCH) $@
 
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-parfait: install
-	-$(PARFAIT) build
-else
-parfait:
-	$(MAKE) PARFAIT_BUILD=yes parfait
+
+ifeq ($(strip $(SINGLE_PYTHON_VERSION)),no)
+# We need to add -$(PYV) to package fmri
+GENERATE_EXTRA_CMD += | \
+	$(GSED) -e 's/^\(set name=pkg.fmri [^@]*\)\(.*\)$$/\1-$$(PYV)\2/'
 endif
+
 
 clean::
 	$(RM) -r $(SOURCE_DIR) $(BUILD_DIR)

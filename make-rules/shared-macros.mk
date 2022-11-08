@@ -107,7 +107,7 @@ ROOT =			/
 # to determine the distribution version
 # (it should look like OpenIndiana Hipster YYYY.MM).
 DISTRIBUTION_NAME = OpenIndiana Hipster
-DISTRIBUTION_VERSION = 2021.10
+DISTRIBUTION_VERSION = 2022.10
 # Native OS version
 OS_VERSION :=		$(shell uname -r)
 SOLARIS_VERSION =	$(OS_VERSION:5.%=2.%)
@@ -156,41 +156,31 @@ else
 MK_BITS=$(strip $(BUILD_BITS))
 endif
 
-PYTHON_VERSION =	2.7
-PYTHON_VERSIONS =	2.7
+PYTHON_VERSION = 3.9
+PYTHON_VERSIONS = 3.7 3.9
 
-PYTHON2_VERSIONS = 2.7
-PYTHON2_VERSION = 2.7
-PYTHON2_RUNTIME_PKG = runtime/python-$(subst .,,$(PYTHON2_VERSION))
-
-PYTHON3_VERSIONS = 3.5 3.7 3.9
-PYTHON3_VERSION	= 3.5
+# These variables are for backward compatibility only.  Components should stop
+# to use them.  Once they do so these vars should be removed.
+PYTHON3_VERSION	= $(PYTHON_VERSION)
+PYTHON3_VERSIONS = $(PYTHON_VERSIONS)
 PYTHON3_RUNTIME_PKG = runtime/python-$(subst .,,$(PYTHON3_VERSION))
+PYTHON_ALL_VERSIONS = $(PYTHON_VERSIONS)
+PYTHON_VERSIONS_ALL= $(PYTHON_VERSIONS)
 
-PYTHON_DEFAULT_VERSIONS = $(PYTHON2_VERSION) $(PYTHON3_VERSION)
-PYTHON_ALL_VERSIONS = $(PYTHON2_VERSIONS) $(PYTHON3_VERSIONS)
+# Python up to 2.7 was built both 32-bit and 64-bit.  Starting with Python 3.x
+# the python package is built 64-bit only.  So now all PYTHON_VERSIONS are
+# 64-bit only.
+PYTHON_64_ONLY_VERSIONS = $(PYTHON_VERSIONS)
 
-PYTHON_64_ONLY_VERSIONS = 3.5 3.7 3.9
-
-PYTHON_VERSIONS_ALL= $(PYTHON2_VERSIONS) $(PYTHON3_VERSIONS)
-
-PYTHON2_ONLY?=no
-PYTHON3_ONLY?=no
-PYTHON_ALL?=no
-
-ifneq ($(strip $(PYTHON2_ONLY)),no)
-PYTHON_VERSION	=	$(PYTHON2_VERSION)
-PYTHON_VERSIONS	=	$(PYTHON2_VERSIONS)
-else
-ifneq ($(strip $(PYTHON3_ONLY)),no)
-PYTHON_VERSION	=	$(PYTHON3_VERSION)
-PYTHON_VERSIONS	=	$(PYTHON3_VERSIONS)
-else
-ifneq ($(strip $(PYTHON_ALL)),no)
-PYTHON_VERSIONS	=	$(PYTHON_VERSIONS_ALL)
-endif
-endif
-endif
+# List of python versions we are currently obsoleting.  We no longer build any
+# packages for these python versions, but there still might be hanging some not
+# obsoleted yet versioned packages built for PYTHON_VERSIONS_OBSOLETING python
+# versions.  Or there is just the versioned runtime/python package still
+# available.
+#
+# This list should be usually empty.  Intersection of
+# PYTHON_VERSIONS_OBSOLETING and PYTHON_VERSIONS lists MUST be always empty.
+PYTHON_VERSIONS_OBSOLETING = 2.7 3.5
 
 # PYTHON3_SOABI variable defines the naming scheme
 # of python3 extension libraries: cpython or abi3.
@@ -482,16 +472,17 @@ COMPONENT_TEST_TRANSFORMS = \
 	'-e "s|$(@D)|\\$$(@D)|g" ' \
 	'-e "s|$(PERL)|\\$$(PERL)|g" ' \
 	'-e "s|$(SOURCE_DIR)|\\$$(SOURCE_DIR)|g" '
+COMPONENT_TEST_TRANSFORMS +=	"-e 's|$(PYTHON_DIR)|\$$(PYTHON_DIR)|g'"
 
 # set the default commands used to generate the file containing the set
 # of transforms to be applied to the test results to try to normalize them.
 COMPONENT_TEST_CREATE_TRANSFORMS = \
 	print "\#!/bin/sh" > $(COMPONENT_TEST_TRANSFORM_CMD); \
+	print '$(CAT) $(COMPONENT_TEST_OUTPUT) | \\' \
+		>> $(COMPONENT_TEST_TRANSFORM_CMD); \
 	print '$(COMPONENT_TEST_TRANSFORMER) ' \
 		$(COMPONENT_TEST_TRANSFORMS) \
 		' \\' >> $(COMPONENT_TEST_TRANSFORM_CMD); \
-	print '$(COMPONENT_TEST_OUTPUT) \\' \
-		>> $(COMPONENT_TEST_TRANSFORM_CMD); \
 	print '> $(COMPONENT_TEST_SNAPSHOT)' \
 		>> $(COMPONENT_TEST_TRANSFORM_CMD); \
 
@@ -553,11 +544,6 @@ $(BUILD_DIR_64)/.tested-and-compared:	BITS=64
 
 # BUILD_TOOLS is the root of all tools not normally installed on the system.
 BUILD_TOOLS ?=	/opt
-
-PARFAIT_ROOT =	$(BUILD_TOOLS)/parfait/parfait-tools-1.0.1/
-PARFAIT= $(PARFAIT_ROOT)/bin/parfait
-export PARFAIT_NATIVEGCC=$(GCC_ROOT)/bin/gcc
-export PARFAIT_NATIVEGXX=$(GCC_ROOT)/bin/g++
 
 #
 # The CCACHE makefile variable should evaluate to empty string or a pathname
@@ -670,14 +656,6 @@ endif
 
 LD =		/usr/bin/ld
 
-PYTHON.2.7.VENDOR_PACKAGES.32 = /usr/lib/python2.7/vendor-packages
-PYTHON.2.7.VENDOR_PACKAGES.64 = /usr/lib/python2.7/vendor-packages/64
-PYTHON.2.7.VENDOR_PACKAGES = $(PYTHON.2.7.VENDOR_PACKAGES.$(BITS))
-
-PYTHON.3.5.VENDOR_PACKAGES.64 = /usr/lib/python3.5/vendor-packages
-PYTHON.3.5.VENDOR_PACKAGES.32 = /usr/lib/python3.5/vendor-packages
-PYTHON.3.5.VENDOR_PACKAGES = $(PYTHON.3.5.VENDOR_PACKAGES.$(BITS))
-
 PYTHON.3.7.VENDOR_PACKAGES.64 = /usr/lib/python3.7/vendor-packages
 PYTHON.3.7.VENDOR_PACKAGES.32 = /usr/lib/python3.7/vendor-packages
 PYTHON.3.7.VENDOR_PACKAGES = $(PYTHON.3.7.VENDOR_PACKAGES.$(BITS))
@@ -685,14 +663,6 @@ PYTHON.3.7.VENDOR_PACKAGES = $(PYTHON.3.7.VENDOR_PACKAGES.$(BITS))
 PYTHON.3.9.VENDOR_PACKAGES.64 = /usr/lib/python3.9/vendor-packages
 PYTHON.3.9.VENDOR_PACKAGES.32 = /usr/lib/python3.9/vendor-packages
 PYTHON.3.9.VENDOR_PACKAGES = $(PYTHON.3.9.VENDOR_PACKAGES.$(BITS))
-
-ifeq   ($(strip $(PARFAIT_BUILD)),yes)
-CC.gcc.32 =	$(WS_TOOLS)/parfait/gcc
-CXX.gcc.32 =	$(WS_TOOLS)/parfait/g++
-CC.gcc.64 =	$(WS_TOOLS)/parfait/gcc
-CXX.gcc.64 =	$(WS_TOOLS)/parfait/g++
-LD =		$(WS_TOOLS)/parfait/ld
-endif
 
 CC =		$(CC.$(COMPILER).$(BITS))
 CXX =		$(CXX.$(COMPILER).$(BITS))
@@ -727,29 +697,54 @@ PYTHON_VENDOR_PACKAGES = $(PYTHON_VENDOR_PACKAGES.$(BITS))
 # python2 was built for both 32- and 64-bits.
 # python3 is built for 64-bits only.
 
-PYTHON.2.7 =	/usr/bin/python2.7
-PYTHON.2.7.32 =	/usr/bin/python2.7
-PYTHON.2.7.64 =	/usr/bin/$(MACH64)/python2.7
-
-PYTHON.3.5 =	/usr/bin/python3.5
-PYTHON.3.5.64 =	$(PYTHON.3.5)
-
 PYTHON.3.7 =	/usr/bin/python3.7
 PYTHON.3.7.64 =	$(PYTHON.3.7)
 
 PYTHON.3.9 =	/usr/bin/python3.9
 PYTHON.3.9.64 =	$(PYTHON.3.9)
 
-PYTHON.32 =	$(PYTHON.$(PYTHON_VERSION).32)
 PYTHON.64 =	$(PYTHON.$(PYTHON_VERSION).64)
 PYTHON =	$(PYTHON.$(PYTHON_VERSION))
+
+TOX.3.7 =	/usr/bin/tox-3.7
+TOX.3.9 =	/usr/bin/tox-3.9
+TOX =		$(TOX.$(PYTHON_VERSION))
 
 # The default is site-packages, but that directory belongs to the end-user.
 # Modules which are shipped by the OS but not with the core Python distribution
 # belong in vendor-packages.
 PYTHON_DIR= /usr/lib/python$(PYTHON_VERSION)
-PYTHON_LIB= /usr/lib/python$(PYTHON_VERSION)/vendor-packages
+PYTHON_LIB= $(PYTHON_DIR)/vendor-packages
 PYTHON_DATA= $(PYTHON_LIB)
+
+# If the component has python scripts then the first line should probably
+# point at the python version currently set by the $(PYTHON) variable so
+# as not to be influenced by the ips python mediator.
+# In the component's Makefile define PYTHON_SCRIPTS with a list of files
+# to be edited.
+
+# Edit the leading #!/usr/bin/python line in python scripts to use the
+# BUILD's $(PYTHON). The source file must be recompiled after that, as
+# the corresponding .pyc file is outdated now.
+PYTHON_SCRIPT_SHEBANG_FIX_FUNC = \
+    $(GSED) -i \
+        -e '1s@/usr/bin/python$$@$(PYTHON)@' \
+        -e '1s@/usr/bin/python\ @$(PYTHON) @' \
+        -e '1s@/usr/bin/env\ $(PYTHON)@$(PYTHON)@' \
+        -e '1s@/usr/bin/env\ python[23]@$(PYTHON)@' \
+        -e '1s@/usr/bin/env\ python@$(PYTHON)@' $(1); \
+    $(PYTHON) -m compileall $(1);
+
+# PYTHON_SCRIPTS is a list of files from the calling Makefile.
+PYTHON_SCRIPTS_PROCESS= \
+    $(foreach s,$(PYTHON_SCRIPTS), \
+            $(call PYTHON_SCRIPT_SHEBANG_FIX_FUNC,$(s)))
+
+# Finally if PYTHON_SCRIPTS is defined in a Makefile then process them here.
+# If multiple installs in the component then clear
+# COMPONENT_POST_INSTALL_ACTION =
+# and re-add $(PYTHON_SCRIPTS_PROCESS)
+COMPONENT_POST_INSTALL_ACTION += $(PYTHON_SCRIPTS_PROCESS)
 
 JAVA8_HOME =	/usr/jdk/instances/openjdk1.8.0
 JAVA11_HOME =	/usr/jdk/instances/openjdk11.0.10
@@ -860,12 +855,21 @@ PKG_MACROS +=   PG_BASEPKG=$(PG_BASEPKG)
 MYSQL_VERSION ?=   10.6
 MYSQL_IMPLEM ?=    mariadb
 MYSQL_VERNUM =     $(subst .,,$(MYSQL_VERSION))
+MYSQL_MINOR =      $(word 2,$(subst .,$(space),$(MYSQL_VERSION)))
+# Beginning with mariadb 10.6 we only ship 64 bit versions. That changes the paths.
+$(if $(shell [ $(MYSQL_MINOR) -ge 6 ] && echo "OK"), \
+    $(eval MYSQL_64_BIT_ONLY := true), \
+    $(eval MYSQL_64_BIT_ONLY := false))
 # For dependencies, including REQUIRED_PACKAGES if needed
 MYSQL_BASEPKG =    database/$(MYSQL_IMPLEM)-$(MYSQL_VERNUM)
 
 MYSQL_HOME =       $(USRDIR)/$(MYSQL_IMPLEM)/$(MYSQL_VERSION)
+ifeq ($(strip $(MYSQL_64_BIT_ONLY)),false)
 MYSQL_BINDIR.32 =  $(MYSQL_HOME)/bin
 MYSQL_BINDIR.64 =  $(MYSQL_HOME)/bin/$(MACH64)
+else
+MYSQL_BINDIR.64 =  $(MYSQL_HOME)/bin
+endif
 MYSQL_BINDIR =     $(MYSQL_BINDIR.$(BITS))
 MYSQL_INCDIR =     $(MYSQL_HOME)/include
 MYSQL_MANDIR =     $(MYSQL_HOME)/man
@@ -1260,7 +1264,7 @@ COMPONENT_INSTALL_ENV += $(COMPONENT_INSTALL_ENV.$(BITS))
 COMPONENT_INSTALL_ARGS += $(COMPONENT_INSTALL_ARGS.$(BITS))
 
 # declare these phony so that we avoid filesystem conflicts.
-.PHONY:	prep build install publish test clean clobber parfait
+.PHONY:	prep build install publish test clean clobber
 
 # If there are no tests to execute
 NO_TESTS =	test-nothing
@@ -1300,6 +1304,10 @@ REQUIRED_PACKAGES_SUBST+= GCC_RUNTIME_PKG
 REQUIRED_PACKAGES_SUBST+= GXX_RUNTIME_PKG
 REQUIRED_PACKAGES_SUBST+= GFORTRAN_RUNTIME_PKG
 REQUIRED_PACKAGES_SUBST+= GOBJC_RUNTIME_PKG
+
+# Generate requirements on all built python version variants for given packages
+USERLAND_REQUIRED_PACKAGES += $(foreach ver,$(PYTHON_VERSIONS),$(PYTHON_USERLAND_REQUIRED_PACKAGES:%=%-$(shell echo $(ver) | tr -d .)))
+REQUIRED_PACKAGES += $(foreach ver,$(PYTHON_VERSIONS),$(PYTHON_REQUIRED_PACKAGES:%=%-$(shell echo $(ver) | tr -d .)))
 
 # Generate requirements on all built perl version variants for given packages
 REQUIRED_PACKAGES += $(foreach ver,$(PERL_VERSIONS),$(PERL_REQUIRED_PACKAGES:%=%-$(shell echo $(ver) | tr -d .)))
