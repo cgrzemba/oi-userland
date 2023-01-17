@@ -33,6 +33,7 @@ file path=usr/lib/$(MACH64)/mate/mate-screensaver-dialog mode=0555
 file path=usr/lib/$(MACH64)/mate/mate-screensaver-gl-helper pkg.depend.bypass-generate=libGL.so.1 mode=0555
 file path=usr/lib/$(MACH64)/mate/mate-screensaver/floaters mode=0555
 file path=usr/lib/$(MACH64)/mate/mate-screensaver/mate-screensaver-pam-helper mode=4555
+file path=usr/lib/mate/mate-screensaver/mate-screensaver-pam-helper mode=4555
 file path=usr/lib/$(MACH64)/mate/mate-screensaver/popsquares mode=0555
 file path=usr/lib/$(MACH64)/mate/mate-screensaver/slideshow mode=0555
 file path=usr/share/applications/mate-screensaver-preferences.desktop

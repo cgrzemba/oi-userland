@@ -12,6 +12,8 @@
 # Copyright 2022 Carsten Grzemba
 #
 
+# pam helper should shipped in 32bit too
+BUILD_BITS=64_and_32
 MATE_CATEGORY= APP
 BUILD_STYLE= configure
 include ../../../../make-rules/shared-macros.mk
@@ -33,7 +35,16 @@ include $(WS_MAKE_RULES)/common.mk
 
 PATH=$(PATH.gnu)
 
-COMPONENT_PREP_ACTION=  cd $(@D) && NOCONFIGURE=1 ./autogen.sh
+# COMPONENT_PREP_ACTION runs in prep target but we clone in build path and autotools have to run there
+COMPONENT_PREP_ACTION=
+COMPONENT_PRE_CONFIGURE_ACTION_32 = \
+	env && (cd $(@D) && (ls $(COMPONENT_DIR)/patches.32/*patch | xargs -i gpatch -i  {} )) &&
+
+# we clone because 32 and 64 bit should handled differently
+COMPONENT_PRE_CONFIGURE_ACTION += (CLONEY_MODE="copy" $(CLONEY) $(SOURCE_DIR) $(@D));
+# make the autoconf tasks if we have cloned
+COMPONENT_PRE_CONFIGURE_ACTION += $(COMPONENT_PRE_CONFIGURE_ACTION_$(BITS))
+COMPONENT_PRE_CONFIGURE_ACTION += cd $(@D) && NOCONFIGURE=1 ./autogen.sh;
 
 # FLAVOUR = DBG
 

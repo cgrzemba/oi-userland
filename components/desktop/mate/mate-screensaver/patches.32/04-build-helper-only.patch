@@ -1,0 +1,22 @@
+diff --git a/Makefile.am b/Makefile.am
+index eca9048..a311067 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -11,16 +11,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
+ 	CFLAGS='-Wno-deprecated-declarations'
+ 
+ SUBDIRS =
+-if BUILTIN_HELPER
+-SUBDIRS += helper
+-endif
+-
+-SUBDIRS +=	\
+-	po 			\
+-	src			\
+-	savers			\
+-	data			\
+-	doc			\
++SUBDIRS += helper \
+ 	$(NULL)
+ 
+ EXTRA_DIST =			\

@@ -35,6 +35,7 @@ file path=usr/lib/$(MACH64)/mate/mate-screensaver/mate-screensaver-pam-helper
 file path=usr/lib/$(MACH64)/mate/mate-screensaver/popsquares
 file path=usr/lib/$(MACH64)/mate/mate-screensaver/slideshow
 file path=usr/lib/$(MACH64)/pkgconfig/mate-screensaver.pc
+file path=usr/lib/mate/mate-screensaver/mate-screensaver-pam-helper
 file path=usr/share/applications/mate-screensaver-preferences.desktop
 file path=usr/share/applications/screensavers/cosmos-slideshow.desktop
 file path=usr/share/applications/screensavers/footlogo-floaters.desktop
