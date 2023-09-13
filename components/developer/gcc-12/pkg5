@@ -15,7 +15,10 @@
         "system/library/g++-12-runtime",
         "system/library/gcc-12-compat-links",
         "system/library/gcc-12-runtime",
+<<<<<<< HEAD
         "system/library/gccgo-12-runtime",
+=======
+>>>>>>> oi/hipster
         "system/library/gfortran-12-runtime",
         "system/library/gobjc-12-runtime"
     ],

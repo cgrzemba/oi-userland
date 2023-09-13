@@ -344,6 +344,10 @@ COMPONENT_TEST_TRANSFORMS += \
 COMPONENT_TEST_TRANSFORMS += "-e 's/^\(  py\$$(PYV): OK\) (.* seconds)$$/\1/'"
 COMPONENT_TEST_TRANSFORMS += "-e 's/^\(  congratulations :)\) (.* seconds)$$/\1/'"
 
+# Remove useless lines from the "coverage combine" output
+COMPONENT_TEST_TRANSFORMS += "-e '/^Combined data file \.tox\/\.coverage\.py/d'"
+COMPONENT_TEST_TRANSFORMS += "-e '/^Skipping duplicate data \.tox\/\.coverage\.py/d'"
+
 # sort list of Sphinx doctest results
 COMPONENT_TEST_TRANSFORMS += \
 	"| ( \
@@ -423,6 +427,7 @@ $(eval $(call disable-pytest-plugin,checkdocs,pytest-checkdocs))
 $(eval $(call disable-pytest-plugin,cov,pytest-cov))
 $(eval $(call disable-pytest-plugin,flaky,flaky))
 $(eval $(call disable-pytest-plugin,hypothesispytest,hypothesis))	# adds line to test report header
+$(eval $(call disable-pytest-plugin,metadata,pytest-metadata))		# adds line to test report header
 $(eval $(call disable-pytest-plugin,mypy,pytest-mypy))
 $(eval $(call disable-pytest-plugin,randomly,pytest-randomly))
 $(eval $(call disable-pytest-plugin,relaxed,pytest-relaxed))		# https://github.com/bitprophet/pytest-relaxed/issues/28
@@ -565,9 +570,13 @@ $(BUILD_DIR)/META.depend-runtime.res:	$(INSTALL_$(MK_BITS)) $(BUILD_DIR)/META.de
 # Generate raw lists of test dependencies per Python version
 COMPONENT_POST_INSTALL_ACTION += \
 	cd $(@D)$(COMPONENT_SUBDIR:%=/%) ; \
-	for f in $(TEST_REQUIREMENTS) ; do \
+	( for f in $(TEST_REQUIREMENTS) ; do \
 		$(CAT) $$f ; \
-	done | $(WS_TOOLS)/python-resolve-deps \
+	done ; \
+	for e in $(TEST_REQUIREMENTS_EXTRAS) ; do \
+		PYTHONPATH=$(PROTO_DIR)/$(PYTHON_DIR)/site-packages:$(PROTO_DIR)/$(PYTHON_LIB) \
+			$(PYTHON) $(WS_TOOLS)/python-requires $(COMPONENT_NAME) $$e ; \
+	done ) | $(WS_TOOLS)/python-resolve-deps \
 		PYTHONPATH=$(PROTO_DIR)/$(PYTHON_DIR)/site-packages:$(PROTO_DIR)/$(PYTHON_LIB) \
 		$(PYTHON) $(WS_TOOLS)/python-requires $(COMPONENT_NAME) \
 	| $(PYTHON) $(WS_TOOLS)/python-requires - >> $(@D)/.depend-test ;
