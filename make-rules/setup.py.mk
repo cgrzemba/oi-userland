@@ -344,6 +344,10 @@ COMPONENT_TEST_TRANSFORMS += \
 COMPONENT_TEST_TRANSFORMS += "-e 's/^\(  py\$$(PYV): OK\) (.* seconds)$$/\1/'"
 COMPONENT_TEST_TRANSFORMS += "-e 's/^\(  congratulations :)\) (.* seconds)$$/\1/'"
 
+# Remove useless lines from the "coverage combine" output
+COMPONENT_TEST_TRANSFORMS += "-e '/^Combined data file \.tox\/\.coverage\.py/d'"
+COMPONENT_TEST_TRANSFORMS += "-e '/^Skipping duplicate data \.tox\/\.coverage\.py/d'"
+
 # sort list of Sphinx doctest results
 COMPONENT_TEST_TRANSFORMS += \
 	"| ( \
@@ -416,13 +420,17 @@ PYTEST_ADDOPTS += --color=no
 define disable-pytest-plugin
 PYTEST_ADDOPTS += $$(if $$(filter library/python/$(2)-$$(subst .,,$$(PYTHON_VERSION)), $$(REQUIRED_PACKAGES) $$(TEST_REQUIRED_PACKAGES)),,-p no:$(1))
 endef
+$(eval $(call disable-pytest-plugin,asyncio,pytest-asyncio))		# adds line to test report header
+$(eval $(call disable-pytest-plugin,benchmark,pytest-benchmark))	# adds line to test report header; adds benchmark report
 $(eval $(call disable-pytest-plugin,black,pytest-black))
 $(eval $(call disable-pytest-plugin,checkdocs,pytest-checkdocs))
 $(eval $(call disable-pytest-plugin,cov,pytest-cov))
 $(eval $(call disable-pytest-plugin,flaky,flaky))
+$(eval $(call disable-pytest-plugin,hypothesispytest,hypothesis))	# adds line to test report header
+$(eval $(call disable-pytest-plugin,metadata,pytest-metadata))		# adds line to test report header
 $(eval $(call disable-pytest-plugin,mypy,pytest-mypy))
 $(eval $(call disable-pytest-plugin,randomly,pytest-randomly))
-$(eval $(call disable-pytest-plugin,relaxed,pytest-relaxed))		# https://github.com/bitprophet/pytest-relaxed/issues/28
+$(eval $(call disable-pytest-plugin,relaxed,pytest-relaxed))		# produces different test report
 $(eval $(call disable-pytest-plugin,reporter,pytest-reporter))		# https://github.com/christiansandberg/pytest-reporter/issues/8
 $(eval $(call disable-pytest-plugin,salt-factories,pytest-salt-factories))			# requires salt
 $(eval $(call disable-pytest-plugin,salt-factories-event-listener,pytest-salt-factories))	# requires salt
@@ -432,7 +440,7 @@ $(eval $(call disable-pytest-plugin,salt-factories-log-server,pytest-salt-factor
 $(eval $(call disable-pytest-plugin,salt-factories-markers,pytest-salt-factories))		# requires salt
 $(eval $(call disable-pytest-plugin,salt-factories-sysinfo,pytest-salt-factories))		# requires salt
 $(eval $(call disable-pytest-plugin,salt-factories-sysstats,pytest-salt-factories))		# requires salt
-$(eval $(call disable-pytest-plugin,tempdir,pytest-tempdir))		# pollutes output with PytestDeprecationWarning (project is archived at github since 2022-03-25)
+$(eval $(call disable-pytest-plugin,tempdir,pytest-tempdir))		# adds line to test report header
 $(eval $(call disable-pytest-plugin,xprocess,pytest-xprocess))		# adds a reminder line to test output
 
 # By default we are not interested in full list of test failures so exit on
@@ -562,9 +570,13 @@ $(BUILD_DIR)/META.depend-runtime.res:	$(INSTALL_$(MK_BITS)) $(BUILD_DIR)/META.de
 # Generate raw lists of test dependencies per Python version
 COMPONENT_POST_INSTALL_ACTION += \
 	cd $(@D)$(COMPONENT_SUBDIR:%=/%) ; \
-	for f in $(TEST_REQUIREMENTS) ; do \
+	( for f in $(TEST_REQUIREMENTS) ; do \
 		$(CAT) $$f ; \
-	done | $(WS_TOOLS)/python-resolve-deps \
+	done ; \
+	for e in $(TEST_REQUIREMENTS_EXTRAS) ; do \
+		PYTHONPATH=$(PROTO_DIR)/$(PYTHON_DIR)/site-packages:$(PROTO_DIR)/$(PYTHON_LIB) \
+			$(PYTHON) $(WS_TOOLS)/python-requires $(COMPONENT_NAME) $$e ; \
+	done ) | $(WS_TOOLS)/python-resolve-deps \
 		PYTHONPATH=$(PROTO_DIR)/$(PYTHON_DIR)/site-packages:$(PROTO_DIR)/$(PYTHON_LIB) \
 		$(PYTHON) $(WS_TOOLS)/python-requires $(COMPONENT_NAME) \
 	| $(PYTHON) $(WS_TOOLS)/python-requires - >> $(@D)/.depend-test ;

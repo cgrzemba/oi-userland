@@ -218,6 +218,7 @@ CONFIG_SHELL =	/bin/bash
 
 PKG_REPO =	file:$(WS_REPO)
 
+COMPONENT =		$(COMPONENT_DIR:$(WS_TOP)/components/%=%)
 HUMAN_VERSION ?=	$(COMPONENT_VERSION)
 COMPONENT_SRC_NAME =	$(COMPONENT_NAME)
 
@@ -621,7 +622,8 @@ export CCACHE := $(shell \
         fi; \
     fi)
 
-GCC_VERSION =	10
+GCC_DEFAULT =	10
+GCC_VERSION =	$(GCC_DEFAULT)
 GCC_ROOT =	/usr/gcc/$(GCC_VERSION)
 
 GCC_LIBDIR.32 =	$(GCC_ROOT)/lib
@@ -803,7 +805,7 @@ QT5_INCDIR = $(QT5_BASEDIR)/include
 QT5_PKG_CONFIG_PATH = $(QT5_LIBDIR)/pkgconfig
 
 # We deliver version 6 only in a 64-bit variant.
-QT6_VERSION = 6.2
+QT6_VERSION = 6.3
 QT6_BASEDIR = $(USRLIBDIR)/qt/$(QT6_VERSION)
 QT6_BINDIR = $(QT6_BASEDIR)/bin/$(MACH64)
 QT6_LIBDIR = $(QT6_BASEDIR)/lib/$(MACH64)
@@ -835,7 +837,7 @@ QT6_PKG_CONFIG_PATH = $(QT6_LIBDIR)/pkgconfig
 #
 
 # This is the default version of Perl
-PERL_VERSION =  5.36
+PERL_VERSION =  5.38
 
 # The PERL_VERSIONS list should always be in ascending order (newest version
 # last)

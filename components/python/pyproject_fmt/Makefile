@@ -19,23 +19,16 @@ BUILD_STYLE = pyproject
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		pyproject_fmt
-HUMAN_VERSION =			0.13.1
+HUMAN_VERSION =			1.1.0
 COMPONENT_SUMMARY =		pyproject_fmt - Format your pyproject.toml file
 COMPONENT_ARCHIVE_URL =		\
-	https://files.pythonhosted.org/packages/d3/7e/a6b9beecb1632bc8526fcf4a576caf2863d6e9ed4e3df39cde15c63af5b0/pyproject_fmt-0.13.1.tar.gz
+	https://files.pythonhosted.org/packages/14/15/a7972bda756ba9bf803e814bd9d7a6a72472f1f2645eb43492b84ee35b55/pyproject_fmt-1.1.0.tar.gz
 COMPONENT_ARCHIVE_HASH =	\
-	sha256:ab56708a4bb3d8aa946abf9d5477b11441a23bcc574e5cf39fa758926e222805
+	sha256:6149f55a981f6ed3183c953e363afb64e591842604346692ff67be568e0f5931
 COMPONENT_LICENSE =		MIT
 COMPONENT_LICENSE_FILE =	LICENSE.txt
 
 include $(WS_MAKE_RULES)/common.mk
-
-# Turn off coverage because we are not interested in it and it could cause
-# problems
-COMPONENT_TEST_TARGETS += -- tests
-
-# black makes test results not reproducible
-PYTEST_ADDOPTS += -p no:black
 
 # Auto-generated dependencies
 PYTHON_REQUIRED_PACKAGES += library/python/hatch-vcs

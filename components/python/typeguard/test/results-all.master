@@ -1,15 +1,12 @@
-ROOT: tox-gh-actions won't override envlist because tox is not running in GitHub Actions
 py$(PYV): remove tox env folder $(@D)/.tox/py$(PYV)
-py$(PYV): commands[0]> python -m pytest
+py$(PYV): commands[0]> coverage run -m pytest
 ============================= test session starts ==============================
-platform sunos5 -- Python $(PYTHON_VERSION).X -- $(@D)/.tox/py$(PYV)/bin/python
+platform sunos5 -- Python $(PYTHON_VERSION).X -- $(PYTHON)
 cachedir: .tox/py$(PYV)/.pytest_cache
-hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('$(@D)/.hypothesis/examples')
 rootdir: $(@D)
 configfile: pyproject.toml
 testpaths: tests
-asyncio: mode=strict
-collecting ... collected 424 items
+collecting ... collected 433 items
 
 tests/mypy/test_type_annotations.py::test_negative PASSED
 tests/mypy/test_type_annotations.py::test_positive PASSED
@@ -38,6 +35,7 @@ tests/test_checkers.py::TestCallable::test_mandatory_kwonlyargs PASSED
 tests/test_checkers.py::TestCallable::test_partial_bound_method PASSED
 tests/test_checkers.py::TestCallable::test_partial_class PASSED
 tests/test_checkers.py::TestCallable::test_plain PASSED
+tests/test_checkers.py::TestCallable::test_positional_only_arg_with_default PASSED
 tests/test_checkers.py::TestCallable::test_too_few_arguments PASSED
 tests/test_checkers.py::TestCallable::test_too_many_arguments PASSED
 tests/test_checkers.py::TestComplexNumber::test_bad_type PASSED
@@ -321,10 +319,14 @@ tests/test_transformer.py::TestAsyncGenerator::test_no_yield_type_check PASSED
 tests/test_transformer.py::TestGenerator::test_no_return_type_check PASSED
 tests/test_transformer.py::TestGenerator::test_no_send_type_check PASSED
 tests/test_transformer.py::TestGenerator::test_yield PASSED
+tests/test_transformer.py::TestTypeShadowedByArgument::test_pep604_union PASSED
+tests/test_transformer.py::TestTypeShadowedByArgument::test_typing_union PASSED
 tests/test_transformer.py::TestTypecheckingImport::test_collection_parameter PASSED
 tests/test_transformer.py::TestTypecheckingImport::test_direct_references PASSED
 tests/test_transformer.py::TestTypecheckingImport::test_generator_function PASSED
 tests/test_transformer.py::TestTypecheckingImport::test_optional PASSED
+tests/test_transformer.py::TestTypecheckingImport::test_pep604_union PASSED
+tests/test_transformer.py::TestTypecheckingImport::test_subscript_within_union PASSED
 tests/test_transformer.py::TestTypecheckingImport::test_variable_annotations PASSED
 tests/test_transformer.py::test_any_in_nested_dict PASSED
 tests/test_transformer.py::test_any_in_pep_604_union PASSED
@@ -343,15 +345,18 @@ tests/test_transformer.py::test_avoid_local_names PASSED
 tests/test_transformer.py::test_avoid_nonlocal_names PASSED
 tests/test_transformer.py::test_classmethod PASSED
 tests/test_transformer.py::test_dont_leave_empty_ast_container_nodes PASSED
+tests/test_transformer.py::test_dont_leave_empty_ast_container_nodes_2 PASSED
 tests/test_transformer.py::test_dont_parse_annotated_2nd_arg PASSED
 tests/test_transformer.py::test_function_local_class_method PASSED
 tests/test_transformer.py::test_keyword_only_argument PASSED
+tests/test_transformer.py::test_literal PASSED
 tests/test_transformer.py::test_local_ann_assignment_typename_conflicts PASSED
 tests/test_transformer.py::test_local_assignment_typename_conflicts PASSED
 tests/test_transformer.py::test_local_function PASSED
 tests/test_transformer.py::test_local_named_expr_typename_conflicts PASSED
 tests/test_transformer.py::test_method PASSED
-tests/test_transformer.py::test_new PASSED
+tests/test_transformer.py::test_new_with_explicit_class_name PASSED
+tests/test_transformer.py::test_new_with_self PASSED
 tests/test_transformer.py::test_no_type_check_decorator[from typeguard import typeguard_ignore-@typeguard_ignore] PASSED
 tests/test_transformer.py::test_no_type_check_decorator[from typing import no_type_check-@no_type_check] PASSED
 tests/test_transformer.py::test_no_type_check_decorator[import typeguard-@typeguard.typeguard_ignore] PASSED
@@ -359,6 +364,7 @@ tests/test_transformer.py::test_no_type_check_decorator[import typing-@typing.no
 tests/test_transformer.py::test_pass_only PASSED
 tests/test_transformer.py::test_positional_only_argument PASSED
 tests/test_transformer.py::test_respect_docstring PASSED
+tests/test_transformer.py::test_respect_future_import PASSED
 tests/test_transformer.py::test_return_only PASSED
 tests/test_transformer.py::test_staticmethod PASSED
 tests/test_transformer.py::test_variable_keyword_argument PASSED
@@ -437,6 +443,6 @@ tests/test_warn_on_error.py::test_check_type PASSED
 tests/test_warn_on_error.py::test_typechecked PASSED
 
 =========================== short test summary info ============================
-======== 416 passed, 2 skipped, 6 xfailed ========
+======== 425 passed, 2 skipped, 6 xfailed ========
   py$(PYV): OK
   congratulations :)

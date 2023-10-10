@@ -18,12 +18,16 @@
 
 BUILD_STYLE= configure
 BUILD_BITS= 64
-USE_OPENSSL11= yes
+# Virtualbox uses the default openssl. It was not possible to provide configure the include and library paths separately
+# and thus, it doesn't find anything else than the default which is 1.0 at the moment.
+USE_OPENSSL10= yes
 include ../../../make-rules/shared-macros.mk
+GCC_VERSION= 12
+gcc_OPT =
 
 COMPONENT_NAME=         VirtualBox
-COMPONENT_VERSION=      6.1.40
-COMPONENT_REVISION=		1
+COMPONENT_VERSION=      6.1.46
+COMPONENT_REVISION=	0
 COMPONENT_SUMMARY=      VirtualBox - general-purpose full virtualizer
 COMPONENT_PROJECT_URL=  https://www.virtualbox.org/
 COMPONENT_DOWNLOAD_URL= https://download.virtualbox.org/virtualbox/$(COMPONENT_VERSION)
@@ -64,6 +68,10 @@ TEST_TARGET= $(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
 
 PATH=$(PATH.gnu)
+FLAVOUR=release
+#FLAVOUR=debug
+CC= /usr/gcc/$(GCC_VERSION_MAJOR)/bin/gcc
+CXX= /usr/gcc/$(GCC_VERSION_MAJOR)/bin/g++
 
 INSTALL_ADDITIONS = $(BUILD_DIR)/.install_additions
 
@@ -75,8 +83,8 @@ X11_SERVERINP_DIR.32=/usr/lib/xorg/modules/input
 X11_SERVERINP_DIR.64=/usr/lib/xorg/modules/input/$(MACH64)
 X11_SERVERINP_DIR=$(X11_SERVERMODS_DIR.64)
 
-VBOX_BINDIR= $(BUILD_DIR_64)/out/solaris.$(MACH64)/release/bin/additions/
-VBOX_BINDIR.32= $(BUILD_DIR_32)/out/solaris.x86/release/bin/additions/
+VBOX_BINDIR= $(BUILD_DIR_64)/out/solaris.$(MACH64)/$(FLAVOUR)/bin/additions/
+VBOX_BINDIR.32= $(BUILD_DIR_32)/out/solaris.x86/$(FLAVOUR)/bin/additions/
 VBOX_MODULES= vboxguest vboxms vboxvideo
 VBOX_FS_MODULES= vboxfs
 
@@ -162,17 +170,20 @@ CONFIGURE_OPTIONS+= --disable-docs
 # See: https://www.virtualbox.org/ticket/18544 for more info
 #CONFIGURE_OPTIONS+= --enable-pulse
 CONFIGURE_OPTIONS+= --disable-python
+CONFIGURE_OPTIONS+= --disable-java
 CONFIGURE_OPTIONS+= --disable-sdl-ttf
 CONFIGURE_OPTIONS+= --disable-libvpx
-CONFIGURE_OPTIONS+= --nofatal
+# CONFIGURE_OPTIONS+= --nofatal
 CONFIGURE_OPTIONS+= --enable-webservice
 CONFIGURE_OPTIONS+= --enable-vnc
+CONFIGURE_OPTIONS.debug += --build-debug
 
 CONFIGURE_OPTIONS.32 = --only-additions
 CONFIGURE_OPTIONS.32 += --target-arch=x86
 CONFIGURE_OPTIONS.64 = --enable-qt5
 
 CONFIGURE_OPTIONS += $(CONFIGURE_OPTIONS.$(BITS))
+CONFIGURE_OPTIONS += $(CONFIGURE_OPTIONS.$(FLAVOUR))
 
 VBOX_PREFIX   = /opt/VirtualBox
 VBOX_LIBDIR   = $(VBOX_PREFIX)/$(MACH64)
@@ -183,7 +194,7 @@ VBOX_QT5_RPATH= $(VBOX_LIBDIR):$(GCC_LIBDIR):$(QT5_ROOT)/lib/$(MACH64)
 # https://www.virtualbox.org/manual/UserManual.html#otherextpacks.
 COMPONENT_POST_INSTALL_ACTION = \
 	build/amd64/kBuild/bin/solaris.amd64/kmk -C $(@D)/src/VBox/ExtPacks/VNC packing; \
-	pushd $(@D)/out/solaris.amd64/release/packages/; \
+	pushd $(@D)/out/solaris.amd64/$(FLAVOUR)/packages/; \
 	mkdir -p $(PROTO_DIR)$(VBOX_PREFIX)/ExtensionPacks/; \
 	install -m 644 VNC-*.vbox-extpack $(PROTO_DIR)$(VBOX_PREFIX)/ExtensionPacks/VNC-$(COMPONENT_VERSION).vbox-extpack; \
 	popd; \
@@ -252,6 +263,7 @@ REQUIRED_PACKAGES += developer/object-file
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
+REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += image/library/libpng16
 REQUIRED_PACKAGES += library/gsoap
 REQUIRED_PACKAGES += library/libvncserver
@@ -260,7 +272,6 @@ REQUIRED_PACKAGES += library/qt5
 REQUIRED_PACKAGES += library/sdl
 REQUIRED_PACKAGES += library/security/openssl
 REQUIRED_PACKAGES += shell/ksh93
-REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += web/curl

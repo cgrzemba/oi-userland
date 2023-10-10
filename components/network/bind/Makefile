@@ -24,12 +24,12 @@
 # Copyright (c) 2023, Friedrich Kink
 #
 
-USE_OPENSSL11= yes
+OPENSSL_VERSION= 3.1
 USE_DEFAULT_TEST_TRANSFORMS= yes
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		bind
-COMPONENT_VERSION=	9.18.18
+COMPONENT_VERSION=	9.18.19
 COMPONENT_SUMMARY=	BIND DNS name server and configuration tools.
 COMPONENT_DESCRIPTION=	BIND is open source software that implements the Domain Name System \
                         (DNS) protocols for the Internet.  This package contains the DNS \
@@ -37,7 +37,7 @@ COMPONENT_DESCRIPTION=	BIND is open source software that implements the Domain N
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_PROJECT_URL=	https://www.isc.org/software/bind/
-COMPONENT_ARCHIVE_HASH=	sha256:d735cdc127a6c5709bde475b5bf16fa2133f36fdba202f7c3c37d134e5192160
+COMPONENT_ARCHIVE_HASH=	sha256:115e09c05439bebade1d272eda08fa88eb3b60129edef690588c87a4d27612cc
 COMPONENT_ARCHIVE_URL=	https://ftp.isc.org/isc/bind9/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI=		network/dns/$(COMPONENT_NAME)
 COMPONENT_CLASSIFICATION=	Applications/Internet
@@ -48,10 +48,10 @@ include $(WS_MAKE_RULES)/common.mk
 
 PKG_MACROS += PYVER=$(PYTHON_VERSION)
 
-COMPONENT_PREP_ACTION= (cd $(@D) && autoreconf -fi)
+COMPONENT_PREP_ACTION= ( cd $(@D) && autoreconf -fi )
 
 # Missing files in build dir without this.
-COMPONENT_PRE_CONFIGURE_ACTION= ($(CLONEY) $(SOURCE_DIR) $(@D))
+COMPONENT_PRE_CONFIGURE_ACTION= ( $(CLONEY) $(SOURCE_DIR) $(@D) )
 
 CFLAGS += $(CPP_XPG6MODE)
 
@@ -104,7 +104,7 @@ REQUIRED_PACKAGES += library/libidn2
 REQUIRED_PACKAGES += library/libuv
 REQUIRED_PACKAGES += library/libxml2
 REQUIRED_PACKAGES += library/nghttp2
-REQUIRED_PACKAGES += library/security/openssl-11
+REQUIRED_PACKAGES += library/security/openssl-31
 REQUIRED_PACKAGES += library/zlib
 REQUIRED_PACKAGES += service/security/kerberos-5
 REQUIRED_PACKAGES += shell/ksh93

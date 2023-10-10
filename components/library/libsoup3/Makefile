@@ -17,23 +17,23 @@ BUILD_STYLE = meson
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= libsoup3
-COMPONENT_VERSION= 3.2.2
+COMPONENT_VERSION= 3.4.3
 COMPONENT_SUMMARY= Libsoup is an HTTP client/server library for GNOME
 COMPONENT_SRC= libsoup-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH= sha256:83673c685b910fb7d39f1f28eee5afbefb71c05798fc350ac3bf1b885e1efaa1
-COMPONENT_ARCHIVE_URL= https://download.gnome.org/sources/libsoup/3.2/$(COMPONENT_ARCHIVE)
-COMPONENT_PROJECT_URL = https://wiki.gnome.org/Projects/libsoup
-COMPONENT_FMRI = library/libsoup3
-COMPONENT_CLASSIFICATION = System/Libraries
-COMPONENT_LICENSE = LGPLv2
-COMPONENT_LICENSE_FILE = COPYING
+COMPONENT_ARCHIVE_HASH= sha256:b7f1bbaeeb43f5812daba3ee258a72e1b4b14c2fd91f4a1a75d4eea10dcf288f
+COMPONENT_ARCHIVE_URL= https://download.gnome.org/sources/libsoup/3.4/$(COMPONENT_ARCHIVE)
+COMPONENT_PROJECT_URL= https://wiki.gnome.org/Projects/libsoup
+COMPONENT_FMRI= library/libsoup3
+COMPONENT_CLASSIFICATION= System/Libraries
+COMPONENT_LICENSE= LGPLv2
+COMPONENT_LICENSE_FILE= COPYING
 
 TEST_TARGET = $(NO_TESTS)
 
 include $(WS_MAKE_RULES)/common.mk
 
-PATH=$(PATH.gnu)
+PATH= $(PATH.gnu)
 
 COMPONENT_PRE_CONFIGURE_ACTION = ( \
         $(CP) $(COMPONENT_DIR)/files/krb5-config $(BUILD_DIR) && \
