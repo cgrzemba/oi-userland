@@ -1,0 +1,55 @@
+diff --git a/configure.ac b/configure.ac
+index 92c19c8..c35a8b2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -151,8 +151,7 @@ AC_SUBST(SIMPLE_CHOOSER_LIBS)
+ 
+ PKG_CHECK_MODULES(APPLET,
+         dbus-glib-1 >= $DBUS_GLIB_REQUIRED_VERSION
+-        gtk+-2.0 >= $GTK_REQUIRED_VERSION
+-        libpanelapplet-2.0 >= $GNOME_PANEL_REQUIRED_VERSION)
++        gtk+-2.0 >= $GTK_REQUIRED_VERSION)
+ AC_SUBST(APPLET_CFLAGS)
+ AC_SUBST(APPLET_LIBS)
+ 
+diff --git a/components/desktop/gnome2/gdm/gdm-2.30.7/configure.ac b/components/desktop/gnome2/gdm/gdm-2.30.7/configure.ac
+index c35a8b232a..32179b031f 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -335,12 +335,6 @@ AC_CHECK_FUNC(gethostbyname,,[
+ 			   EXTRA_SLAVE_LIBS="$EXTRA_SLAVE_LIBS -lnsl"
+ 			   EXTRA_CHOOSER_LIBS="$EXTRA_CHOOSER_LIBS -lnsl"
+ 			   EXTRA_TEST_LIBS="$EXTRA_TEST_LIBS -lnsl"])])
+-AC_CHECK_DECL(HOST_NAME_MAX, ,
+-             AC_CHECK_DECL(_POSIX_HOST_NAME_MAX,
+-                           AC_DEFINE(HOST_NAME_MAX, _POSIX_HOST_NAME_MAX, []),
+-                           AC_DEFINE(HOST_NAME_MAX, 256, [Define to 256 if neither have HOST_NAME_MAX nor _POSIX_HOST_NAME_MAX]),
+-                           [[#include <limits.h>]]),
+-             [[#include <limits.h>]])
+ AC_CHECK_FUNC(sched_yield,[
+ 	      AC_DEFINE(HAVE_SCHED_YIELD, 1, [Define if we have sched yield])],[
+ 	      AC_CHECK_LIB(rt,sched_yield, [
+diff --git a/configure.ac b/configure.ac
+index 32179b0..9b60b68 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -335,6 +335,7 @@ AC_CHECK_FUNC(gethostbyname,,[
+ 			   EXTRA_SLAVE_LIBS="$EXTRA_SLAVE_LIBS -lnsl"
+ 			   EXTRA_CHOOSER_LIBS="$EXTRA_CHOOSER_LIBS -lnsl"
+ 			   EXTRA_TEST_LIBS="$EXTRA_TEST_LIBS -lnsl"])])
++AC_DEFINE(HOST_NAME_MAX, _POSIX_HOST_NAME_MAX, [Define hostname length])
+ AC_CHECK_FUNC(sched_yield,[
+ 	      AC_DEFINE(HAVE_SCHED_YIELD, 1, [Define if we have sched yield])],[
+ 	      AC_CHECK_LIB(rt,sched_yield, [
+diff --git a/gui/user-switch-applet/Makefile.am b/gui/user-switch-applet/Makefile.am
+index 2d2cdc0..2fa3fdc 100644
+--- a/gui/user-switch-applet/Makefile.am
++++ b/gui/user-switch-applet/Makefile.am
+@@ -15,6 +15,7 @@ AM_CPPFLAGS = \
+ 	-DGDMCONFDIR=\"$(gdmconfdir)\"			\
+ 	$(GTK_CFLAGS)					\
+ 	$(APPLET_CFLAGS)				\
++	$(GCONF_CFLAGS)					\
+ 	$(NULL)
+ 
+ libexec_PROGRAMS =			\

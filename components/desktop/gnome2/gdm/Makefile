@@ -17,7 +17,7 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= gdm
 COMPONENT_VERSION= 2.30.7
-COMPONENT_REVISION=10
+COMPONENT_REVISION=0
 COMPONENT_SUMMARY= GNOME display manager
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
@@ -45,7 +45,7 @@ COMPONENT_PREP_ACTION =        ( cp $(COMPONENT_DIR)/files/box-openindiana.png $
 					autoheader &&\
 					gnome-doc-prepare --force &&\
 					automake -a -c -f &&\
-					autoconf )
+					autoconf)
 
 # Missing files in build dir for configure without this.
 COMPONENT_PRE_CONFIGURE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D))
@@ -54,9 +54,12 @@ LDFLAGS += -lsecdb
                                         
 CONFIGURE_SCRIPT=       $(@D)/configure
 
+GDMLIBEXECDIR = /usr/lib
+PROTOLIBEXECDIR = $(PROTO_DIR)$(GDMLIBEXECDIR)
+
 CONFIGURE_OPTIONS += --sysconfdir=/etc
 CONFIGURE_OPTIONS += --localstatedir=/var
-CONFIGURE_OPTIONS += --libexecdir=/usr/lib
+CONFIGURE_OPTIONS += --libexecdir=$(GDMLIBEXECDIR)
 CONFIGURE_OPTIONS += --with-pam-prefix=/etc
 CONFIGURE_OPTIONS += --disable-scrollkeeper
 CONFIGURE_OPTIONS += --with-default-path=/usr/bin
@@ -65,26 +68,37 @@ CONFIGURE_OPTIONS += --enable-ipv6
 CONFIGURE_OPTIONS += --with-xauth-dir=/tmp
 CONFIGURE_OPTIONS += --with-incomplete-locales
 CONFIGURE_OPTIONS += --enable-debug
+CONFIGURE_OPTIONS += --disable-silent-rules
+# CONFIGURE_OPTIONS += --with-tcp-wrappers=no
+# CONFIGURE_OPTIONS += --with-xdmcp=no
 
 CONFIGURE_ENV += XGETTEXT=/usr/gnu/bin/xgettext
+# CONFIGURE_ENV += APPLET_CFLAGS=-I/usr/include/gconf/2/gconf
 
-build: $(BUILD_32)
+# we want install 32 and 64bit but determine the architecture to choose by link
+COMPONENT_POST_INSTALL_ACTION += \
+	(cd $(PROTOLIBEXECDIR); \
+	mkdir -p $(PROTOLIBEXECDIR)/$(MACH$(BITS)); \
+	for gdmprog in `find * -type f -maxdepth 0` ; do \
+		mv $${gdmprog} $(MACH$(BITS)); \
+	done ; )
 
-install: $(INSTALL_32)
+build: $(BUILD_32_and_64)
 
+install: $(INSTALL_32_and_64)
+
+# Auto-generated dependencies
 REQUIRED_PACKAGES += SUNWcs
 REQUIRED_PACKAGES += gnome/config/gconf
-REQUIRED_PACKAGES += gnome/gnome-panel
 REQUIRED_PACKAGES += gnome/gnome-session
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
 REQUIRED_PACKAGES += library/desktop/gtk2
-REQUIRED_PACKAGES += library/desktop/libbonoboui
 REQUIRED_PACKAGES += library/desktop/libxklavier
 REQUIRED_PACKAGES += library/desktop/pango
 REQUIRED_PACKAGES += library/desktop/xdg/libcanberra
 REQUIRED_PACKAGES += library/glib2
-REQUIRED_PACKAGES += library/libbonobo
+REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/dbus/dbus-x11
 REQUIRED_PACKAGES += system/library/fontconfig

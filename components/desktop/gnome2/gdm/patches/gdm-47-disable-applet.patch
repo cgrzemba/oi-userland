@@ -1,0 +1,22 @@
+diff --git a/gui/Makefile.am b/gui/Makefile.am
+index 326239f..a040ef9 100644
+--- a/gui/Makefile.am
++++ b/gui/Makefile.am
+@@ -12,5 +12,4 @@ endif
+ DIST_SUBDIRS =			\
+ 	simple-chooser		\
+ 	simple-greeter		\
+-	user-switch-applet	\
+ 	$(NULL)
+diff --git a/gui/Makefile.am b/gui/Makefile.am
+index a040ef9..bda3f7a 100644
+--- a/gui/Makefile.am
++++ b/gui/Makefile.am
+@@ -2,7 +2,6 @@ NULL =
+ 
+ SUBDIRS =			\
+ 	simple-greeter		\
+-	user-switch-applet	\
+ 	$(NULL)
+ 
+ if XDMCP_SUPPORT
