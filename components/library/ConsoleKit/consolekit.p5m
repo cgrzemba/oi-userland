@@ -59,6 +59,9 @@ file path=etc/dbus-1/system.d/ConsoleKit.conf
 file path=usr/bin/ck-history
 file path=usr/bin/ck-launch-session
 file path=usr/bin/ck-list-sessions
+file path=usr/bin/$(MACH64)/ck-history
+file path=usr/bin/$(MACH64)/ck-launch-session
+file path=usr/bin/$(MACH64)/ck-list-sessions
 file path=usr/include/ConsoleKit/ck-connector/ck-connector.h
 link path=usr/lib/$(MACH64)/libck-connector.so target=libck-connector.so.0.0.0
 link path=usr/lib/$(MACH64)/libck-connector.so.0 target=libck-connector.so.0.0.0
@@ -72,6 +75,13 @@ file path=usr/lib/ConsoleKit/scripts/ck-system-suspend mode=0555
 link path=usr/lib/libck-connector.so target=libck-connector.so.0.0.0
 link path=usr/lib/libck-connector.so.0 target=libck-connector.so.0.0.0
 file path=usr/lib/libck-connector.so.0.0.0
+file path=usr/lib/$(MACH64)/ck-collect-session-info mode=0555
+file path=usr/lib/$(MACH64)/ck-get-x11-display-device mode=0555
+file path=usr/lib/$(MACH64)/ck-get-x11-server-pid mode=0555
+link path=usr/lib/$(MACH64)/libck-connector.so target=libck-connector.so.0.0.0
+link path=usr/lib/$(MACH64)/libck-connector.so.0 target=libck-connector.so.0.0.0
+file path=usr/lib/$(MACH64)/libck-connector.so.0.0.0
+file path=usr/lib/$(MACH64)/pkgconfig/ck-connector.pc
 file path=usr/lib/pkgconfig/ck-connector.pc
 file path=usr/libexec/ck-collect-session-info
 file path=usr/libexec/ck-get-x11-display-device
