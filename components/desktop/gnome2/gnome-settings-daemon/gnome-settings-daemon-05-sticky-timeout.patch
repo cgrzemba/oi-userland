@@ -92,20 +92,6 @@
                          }
                  }
          }
-@@ -952,11 +968,12 @@ cb_xkb_event_filter (GdkXEvent          
- {
-         XEvent   *xev   = (XEvent *) xevent;
-         XkbEvent *xkbEv = (XkbEvent *) xevent;
-+        static gboolean key_pressed = FALSE;
- 
-         if (xev->xany.type == (manager->priv->xkbEventBase + XkbEventCode) &&
-             xkbEv->any.xkb_type == XkbControlsNotify) {
-                 d ("XKB state changed");
--                set_gconf_from_server (manager);
-+                set_gconf_from_server (manager, key_pressed);
-         } else if (xev->xany.type == (manager->priv->xkbEventBase + XkbEventCode) &&
-                    xkbEv->any.xkb_type == XkbAccessXNotify) {
-                 if (xkbEv->accessx.detail == XkbAXN_AXKWarning) {
 @@ -967,6 +984,9 @@ cb_xkb_event_filter (GdkXEvent          
                           * set_gconf_from_server().
                           */
