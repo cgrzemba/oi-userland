@@ -16,14 +16,14 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnome-desktop
-COMPONENT_VERSION=	2.91.93
-COMPONENT_REVISION=	6
+COMPONENT_VERSION=	2.32.1
+COMPONENT_REVISION=	0
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	Gnome Desktop Library
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:dfdc43498ceadabe4354248e7f5860f96b76e9defbdb71c67b1126189b8b3155
+    sha256:55cbecf67efe1fa1e57ac966520a7c46d799c8ba3c652a1219f60cafccb3739d
 COMPONENT_ARCHIVE_URL=	http://ftp.gnome.org/pub/GNOME/sources/$(COMPONENT_NAME)/$(basename $(COMPONENT_VERSION))/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI= library/desktop/gnome-desktop
 COMPONENT_CLASSIFICATION= System/Libraries
@@ -68,10 +68,15 @@ install:	$(INSTALL_64)
 test:		$(NO_TESTS)
 
 # Auto-generated dependencies
+PYTHON_REQUIRED_PACKAGES += runtime/python
+REQUIRED_PACKAGES += SUNWcs
+REQUIRED_PACKAGES += gnome/config/gconf
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
-REQUIRED_PACKAGES += library/desktop/gtk3
+REQUIRED_PACKAGES += library/desktop/gtk2
+REQUIRED_PACKAGES += library/desktop/startup-notification
 REQUIRED_PACKAGES += library/glib2
+REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += x11/library/libx11
 REQUIRED_PACKAGES += x11/library/libxrandr
