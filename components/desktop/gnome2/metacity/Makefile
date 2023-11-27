@@ -16,15 +16,19 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		metacity
-COMPONENT_VERSION=	2.30.3
-COMPONENT_REVISION=	4
+COMPONENT_VERSION=	2.34.13
+COMPONENT_REVISION=	0
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	GNOME window manager
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
+COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.xz
 COMPONENT_ARCHIVE_HASH=	\
-    sha256:08f887018fa5e447cf184d03bae3fe2c05fdb7583bed6768e3b4d66392fc18dd
-COMPONENT_ARCHIVE_URL=	http://ftp.gnome.org/pub/GNOME/sources/$(COMPONENT_NAME)/2.30/$(COMPONENT_ARCHIVE)
+	sha256:8cf4dbf0da0a6f36357ce7db7f829ec685908a7792453c662fb8184572b91075    
+COMPONENT_ARCHIVE_URL=	http://ftp.gnome.org/pub/GNOME/sources/$(COMPONENT_NAME)/2.34/$(COMPONENT_ARCHIVE)
+COMPONENT_FMRI= gnome/window-manager/metacity
+COMPONENT_CLASSIFICATION= org.opensolaris.category.2008:Desktop (GNOME)/Window Managers
+COMPONENT_LICENSE_FILE= COPYING
+COMPONENT_LICENSE= GPLv2
 
 include $(WS_MAKE_RULES)/prep.mk
 include $(WS_MAKE_RULES)/configure.mk
@@ -59,14 +63,13 @@ CONFIGURE_OPTIONS+=	--libexecdir=/usr/lib
 COMPONENT_INSTALL_ENV+= GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
 # common targets
-build:		$(BUILD_32)
+build:		$(BUILD_64)
 
-install:	$(INSTALL_32)
+install:	$(INSTALL_64)
 
 test:		$(NO_TESTS)
 
 # Auto-generated dependencies
-REQUIRED_PACKAGES += gnome/config/gconf
 REQUIRED_PACKAGES += library/desktop/atk
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
@@ -75,7 +78,6 @@ REQUIRED_PACKAGES += library/desktop/pango
 REQUIRED_PACKAGES += library/desktop/startup-notification
 REQUIRED_PACKAGES += library/desktop/xdg/libcanberra
 REQUIRED_PACKAGES += library/glib2
-REQUIRED_PACKAGES += library/libgtop
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += x11/library/libice
