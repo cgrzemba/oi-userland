@@ -13,11 +13,13 @@
 # Copyright 2016 Alexander Pyhalov
 #
 
+BUILDSTYLE= configure
+BUILD_BITS=32_and_64
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME= gdm
 COMPONENT_VERSION= 2.30.7
-COMPONENT_REVISION=0
+COMPONENT_REVISION=1
 COMPONENT_SUMMARY= GNOME display manager
 COMPONENT_SRC= $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE= $(COMPONENT_SRC).tar.bz2
@@ -27,9 +29,7 @@ COMPONENT_ARCHIVE_URL= \
   http://download.gnome.org/sources/gdm/2.30/$(COMPONENT_ARCHIVE)
 COMPONENT_PROJECT_URL = https://wiki.gnome.org/Projects/GDM
 
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/configure.mk
-include $(WS_MAKE_RULES)/ips.mk
+include $(WS_MAKE_RULES)/common.mk
 
 # Missing files in build dir for configure without this.
 COMPONENT_PREP_ACTION =        ( cp $(COMPONENT_DIR)/files/box-openindiana.png $(@D)/gui/simple-greeter/box.png &&\
@@ -48,21 +48,30 @@ COMPONENT_PREP_ACTION =        ( cp $(COMPONENT_DIR)/files/box-openindiana.png $
 					autoconf)
 
 # Missing files in build dir for configure without this.
-COMPONENT_PRE_CONFIGURE_ACTION =        ($(CLONEY) $(SOURCE_DIR) $(@D))
+COMPONENT_PRE_CONFIGURE_ACTION_64 = ($(CLONEY) $(SOURCE_DIR) $(@D))
+COMPONENT_PRE_CONFIGURE_ACTION_32 = ($(CLONEY) $(SOURCE_DIR) $(@D) &&\
+					cd $(@D) &&\
+					mv Makefile.am Makefile.am.link &&\
+					cp Makefile.am.link Makefile.am &&\
+					$(GPATCH) -p1 -i $(COMPONENT_DIR)/$(PATCH_DIR)/gdm-build.patch32 &&\
+					automake -a -c -f)	
+COMPONENT_PRE_CONFIGURE_ACTION = $(COMPONENT_PRE_CONFIGURE_ACTION_$(BITS))
+
 
 LDFLAGS += -lsecdb
                                         
 CONFIGURE_SCRIPT=       $(@D)/configure
 
-GDMLIBEXECDIR = /usr/lib
+GDMLIBEXECDIR = /usr/libexec
 PROTOLIBEXECDIR = $(PROTO_DIR)$(GDMLIBEXECDIR)
 
 CONFIGURE_OPTIONS += --sysconfdir=/etc
 CONFIGURE_OPTIONS += --localstatedir=/var
-CONFIGURE_OPTIONS += --libexecdir=$(GDMLIBEXECDIR)
+# CONFIGURE_OPTIONS += --libexecdir=$(GDMLIBEXECDIR)
 CONFIGURE_OPTIONS += --with-pam-prefix=/etc
 CONFIGURE_OPTIONS += --disable-scrollkeeper
 CONFIGURE_OPTIONS += --with-default-path=/usr/bin
+CONFIGURE_OPTIONS += --bindir=/usr/bin
 CONFIGURE_OPTIONS += --enable-rbac-shutdown=solaris.system.shutdown
 CONFIGURE_OPTIONS += --enable-ipv6
 CONFIGURE_OPTIONS += --with-xauth-dir=/tmp
@@ -82,10 +91,6 @@ COMPONENT_POST_INSTALL_ACTION += \
 	for gdmprog in `find * -type f -maxdepth 0` ; do \
 		mv $${gdmprog} $(MACH$(BITS)); \
 	done ; )
-
-build: $(BUILD_32_and_64)
-
-install: $(INSTALL_32_and_64)
 
 # Auto-generated dependencies
 REQUIRED_PACKAGES += SUNWcs

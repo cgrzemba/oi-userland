@@ -59,28 +59,22 @@ file path=etc/gdm/custom.conf preserve=true
 file path=etc/gdm/gdm.schemas preserve=true
 file path=usr/bin/gdm-screenshot mode=0555
 file path=usr/bin/gdmflexiserver mode=0555
-file path=usr/lib/$(MACH32)/gdm-crash-logger mode=0555
-file path=usr/lib/$(MACH32)/gdm-first-time-login-helper mode=0555
-file path=usr/lib/$(MACH32)/gdm-host-chooser mode=0555
-file path=usr/lib/$(MACH32)/gdm-session-worker mode=0555
-file path=usr/lib/$(MACH32)/gdm-simple-chooser mode=0555
-file path=usr/lib/$(MACH32)/gdm-simple-greeter mode=0555
-file path=usr/lib/$(MACH32)/gdm-simple-slave mode=0555
-file path=usr/lib/$(MACH32)/gdm-xdmcp-chooser-slave mode=0555
-file path=usr/lib/$(MACH64)/gdm-crash-logger mode=0555
-file path=usr/lib/$(MACH64)/gdm-first-time-login-helper mode=0555
-file path=usr/lib/$(MACH64)/gdm-host-chooser mode=0555
-file path=usr/lib/$(MACH64)/gdm-session-worker mode=0555
-file path=usr/lib/$(MACH64)/gdm-simple-chooser mode=0555
-file path=usr/lib/$(MACH64)/gdm-simple-greeter mode=0555
-file path=usr/lib/$(MACH64)/gdm-simple-slave mode=0555
-file path=usr/lib/$(MACH64)/gdm-xdmcp-chooser-slave mode=0555
-link path=usr/lib/gdm-session-worker target=i86/gdm-session-worker
-link path=usr/lib/gdm-simple-greeter target=amd64/gdm-simple-greeter
-link path=usr/lib/gdm-simple-slave target=amd64/gdm-simple-slave
+file path=usr/libexec/$(MACH32)/gdm-session-worker mode=0555
+file path=usr/libexec/$(MACH64)/gdm-crash-logger mode=0555
+file path=usr/libexec/$(MACH64)/gdm-first-time-login-helper mode=0555
+file path=usr/libexec/$(MACH64)/gdm-host-chooser mode=0555
+file path=usr/libexec/$(MACH64)/gdm-session-worker mode=0555
+file path=usr/libexec/$(MACH64)/gdm-simple-chooser mode=0555
+file path=usr/libexec/$(MACH64)/gdm-simple-greeter mode=0555
+file path=usr/libexec/$(MACH64)/gdm-simple-slave mode=0555
+file path=usr/libexec/$(MACH64)/gdm-xdmcp-chooser-slave mode=0555
+link path=usr/libexec/gdm-first-time-login-helper target=$(MACH64)/gdm-first-time-login-helper 
+link path=usr/libexec/gdm-simple-chooser target=$(MACH64)/gdm-simple-chooser
+link path=usr/libexec/gdm-simple-greeter target=$(MACH64)/gdm-simple-greeter
+link path=usr/libexec/gdm-simple-slave target=$(MACH64)/gdm-simple-slave
+link path=usr/libexec/gdm-session-worker target=$(MACH32)/gdm-session-worker
 file path=usr/sbin/gdm mode=0555
-file path=usr/sbin/gdm-binary mode=0555
-file path=usr/sbin/i86/gdm-binary mode=0555
+file usr/sbin/amd64/gdm-binary path=usr/sbin/gdm-binary mode=0555
 file path=usr/share/gdm/autostart/LoginWindow/gdm-simple-greeter.desktop
 file path=usr/share/gdm/autostart/LoginWindow/gnome-power-manager.desktop
 file path=usr/share/gdm/autostart/LoginWindow/gnome-settings-daemon.desktop

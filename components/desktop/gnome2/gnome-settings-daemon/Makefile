@@ -16,7 +16,7 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnome-settings-daemon
 COMPONENT_VERSION=	2.32.1
-COMPONENT_REVISION=	0
+COMPONENT_REVISION=	1
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	The GNOME settings daemon
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -51,7 +51,7 @@ CFLAGS += -DDBUS_API_SUBJECT_TO_CHANGE -DGNOME_DESKTOP_USE_UNSTABLE_API -I/usr/X
 LDFLAGS += -L/usr/X11/lib -R/usr/X11/lib -lfreetype -lresolv -lgthread-2.0
 
 CONFIGURE_OPTIONS+=	--sysconfdir=/etc
-CONFIGURE_OPTIONS+=	--libexecdir=/usr/lib
+# CONFIGURE_OPTIONS+=	--libexecdir=/usr/lib
 CONFIGURE_OPTIONS+=	--disable-static
 CONFIGURE_OPTIONS+=	--disable-aboutme
 CONFIGURE_OPTIONS+=	--disable-pulse
