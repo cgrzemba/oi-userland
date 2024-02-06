@@ -2,14 +2,15 @@
     "dependencies": [
         "developer/icu",
         "library/c++/graphite2",
+        "library/c++/harfbuzz",
         "library/glib2",
         "library/icu-74/32",
         "system/library",
-        "system/library/freetype-2-32",
+        "system/library/freetype-2/32",
         "system/library/math"
     ],
     "fmris": [
-        "library/c++/harfbuzz-32"
+        "library/c++/harfbuzz/32"
     ],
     "name": "harfbuzz"
 }

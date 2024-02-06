@@ -31,7 +31,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         harfbuzz
 COMPONENT_VERSION=      8.3.0
-COMPONENT_FMRI=         library/c++/harfbuzz-32
+COMPONENT_FMRI=         library/c++/harfbuzz/32
 COMPONENT_SUMMARY=      HarfBuzz - an OpenType text shaping engine. 
 COMPONENT_CLASSIFICATION=System/Libraries
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -76,7 +76,8 @@ REQUIRED_PACKAGES += developer/icu
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(ICU_LIBRARY_PKG)/32
 REQUIRED_PACKAGES += library/c++/graphite2
+REQUIRED_PACKAGES += library/c++/harfbuzz
 REQUIRED_PACKAGES += library/glib2
 REQUIRED_PACKAGES += system/library
-REQUIRED_PACKAGES += system/library/freetype-2-32
+REQUIRED_PACKAGES += system/library/freetype-2/32
 REQUIRED_PACKAGES += system/library/math
