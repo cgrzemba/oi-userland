@@ -1,0 +1,9 @@
+{
+    "dependencies": [
+        "system/library"
+    ],
+    "fmris": [
+        "library/libffi/32"
+    ],
+    "name": "libffi"
+}
