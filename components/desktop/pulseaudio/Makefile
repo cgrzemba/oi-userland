@@ -66,8 +66,9 @@ CONFIGURE_ENV	+= PYTHON=$(PYTHON)
 CONFIGURE_ENV	+= GLIB_COMPILE_SCHEMAS=/usr/bin/glib-compile-schemas
 
 
-COMPONENT_TEST_TRANSFORMER = $(NAWK)
-COMPONENT_TEST_TRANSFORMS = "'/Ok|Fail:|Skipped|Unexpected Pass|Timeout/'"
+# COMPONENT_TEST_TRANSFORMER = $(NAWK)
+# COMPONENT_TEST_TRANSFORMS = "'/Ok|Fail:|Skipped|Unexpected Pass|Timeout/'"
+USE_DEFAULT_TEST_TRANSFORMS= yes
 
 # to prevent reconfigure before install
 COMPONENT_PRE_INSTALL_ACTION += ( cd $(@D) && touch build.ninja )
