@@ -1,0 +1,12 @@
+diff --git a/src/include/all-keybindings.h b/src/include/all-keybindings.h
+index f1aa02d..e47bb32 100644
+--- a/src/include/all-keybindings.h
++++ b/src/include/all-keybindings.h
+@@ -169,7 +169,6 @@ keybind (toggle-maximized, handle_toggle_maximized, 0, BINDING_PER_WINDOW)
+ keybind (toggle-above, handle_toggle_above, 0, BINDING_PER_WINDOW)
+ keybind (maximize, handle_maximize, 0, BINDING_PER_WINDOW)
+ keybind (unmaximize, handle_unmaximize, 0, BINDING_PER_WINDOW)
+-keybind (toggle-shaded, handle_toggle_shaded, 0, BINDING_PER_WINDOW)
+ keybind (minimize, handle_minimize, 0, BINDING_PER_WINDOW)
+ keybind (close, handle_close, 0, BINDING_PER_WINDOW)
+ keybind (begin-move, handle_begin_move, 0, BINDING_PER_WINDOW)
