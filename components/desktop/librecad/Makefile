@@ -32,7 +32,7 @@ COMPONENT_LICENSE_FILE=	LICENSE
 TEST_TARGET= $(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
 
-PATH=$(GCC_BINDIR):$(QT5_BINDIR):$(PATH.illumos)
+PATH=$(GCC_BINDIR):$(PATH.qt5):$(PATH.illumos)
 
 COMPONENT_NAME_lc = $(shell echo $(COMPONENT_NAME) | tr '[A-Z]' '[a-z]')
 COMPONENT_INSTALL_ACTION = \
