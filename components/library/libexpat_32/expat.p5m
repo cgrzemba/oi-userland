@@ -55,3 +55,5 @@ file path=usr/lib/pkgconfig/expat.pc
 #file path=usr/share/doc/expat/AUTHORS
 #file path=usr/share/doc/expat/changelog
 file path=usr/share/man/man1/xmlwf.1
+
+depend fmri=library/expat@$(IPS_COMPONENT_VERSION) type=require
