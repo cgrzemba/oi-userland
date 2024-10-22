@@ -25,7 +25,6 @@ license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
 # Make sure common at-spi2-core files (for example message catalogs) are always
 # installed
-depend type=require fmri=gnome/accessibility/at-spi2-core
 
 file path=usr/lib/gnome-settings-daemon-3.0/gtk-modules/at-spi2-atk.desktop
 file path=usr/lib/gtk-2.0/modules/libatk-bridge.so
@@ -43,3 +42,5 @@ file path=usr/lib/pkgconfig/atk.pc
 file path=usr/lib/pkgconfig/atspi-2.pc
 file path=usr/libexec/$(MACH32)/at-spi-bus-launcher
 file path=usr/libexec/$(MACH32)/at-spi2-registryd
+
+

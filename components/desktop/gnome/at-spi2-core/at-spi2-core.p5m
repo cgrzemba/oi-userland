@@ -23,9 +23,6 @@ set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
 
 license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
 
-# 32 bit files used to live in this package
-depend type=require fmri=$(COMPONENT_FMRI)/32
-
 file path=etc/xdg/Xwayland-session.d/00-at-spi
 file path=etc/xdg/autostart/at-spi-dbus-bus.desktop
 file path=usr/include/at-spi-2.0/atspi/atspi-accessible.h
