@@ -56,6 +56,9 @@ depend fmri=library/audio/pulseaudio/32 type=require
 depend fmri=audio/mpg123/32 type=require
 depend fmri=library/sdl2/32@2.30.0 type=require
 
+# empty metapackage for SUNWkio-libs
+depend fmri=compatibility/packages/SUNWxwplt type=require
+
 # uttsc-bin (RDP client)
 # if 32bit support removed from the component, then
 # for gdm-session-worker
