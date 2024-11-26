@@ -59,6 +59,9 @@ depend fmri=library/sdl2/32@2.30.0 type=require
 # empty metapackage for SUNWkio-libs
 depend fmri=compatibility/packages/SUNWxwplt type=require
 
+# for Sun JRE
+depend fmri=system/library/c++/sunpro type=require
+
 # uttsc-bin (RDP client)
 # if 32bit support removed from the component, then
 # for gdm-session-worker

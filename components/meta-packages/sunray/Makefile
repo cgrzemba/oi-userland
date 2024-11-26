@@ -18,7 +18,7 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME =		sunray-essential
 COMPONENT_VERSION =		5.4
-COMPONENT_REVISION =		1
+COMPONENT_REVISION =		2
 COMPONENT_SUMMARY =		On OI required packages for Sunray Server Software
 COMPONENT_PROJECT_URL =		https://www.openindiana.org
 COMPONENT_FMRI =		consolidation/srss/$(COMPONENT_NAME)
