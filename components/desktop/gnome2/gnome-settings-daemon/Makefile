@@ -16,7 +16,7 @@ include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		gnome-settings-daemon
 COMPONENT_VERSION=	2.32.1
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	0
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	The GNOME settings daemon
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -89,4 +89,3 @@ REQUIRED_PACKAGES += system/library/math
 REQUIRED_PACKAGES += system/library/mozilla-nss
 REQUIRED_PACKAGES += x11/library/libx11
 REQUIRED_PACKAGES += x11/library/libxi
-REQUIRED_PACKAGES += x11/library/libxxf86misc

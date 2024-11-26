@@ -17,8 +17,7 @@
         "system/library/math",
         "system/library/mozilla-nss",
         "x11/library/libx11",
-        "x11/library/libxi",
-        "x11/library/libxxf86misc"
+        "x11/library/libxi"
     ],
     "fmris": [
         "gnome/gnome-settings-daemon"
