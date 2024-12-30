@@ -1,0 +1,91 @@
+commit f617f61e2e1a728cbc29ec54ef6d17b390805d8d
+Author: Dongxu Li <dongxuli2011@gmail.com>
+Date:   Thu Feb 29 01:53:37 2024 -0500
+
+    qt6 building issues
+
+diff --git a/librecad/src/actions/rs_actiondrawlinetangent2.cpp b/librecad/src/actions/rs_actiondrawlinetangent2.cpp
+index 5b53f43f..b87d70fc 100644
+--- a/librecad/src/actions/rs_actiondrawlinetangent2.cpp
++++ b/librecad/src/actions/rs_actiondrawlinetangent2.cpp
+@@ -175,6 +175,7 @@ void RS_ActionDrawLineTangent2::mouseMoveEvent(QMouseEvent* e) {
+         RS_Entity* en= catchEntity(e, circleType, RS2::ResolveAll);
+         if(en == nullptr || en==m_pPoints->circle1)
+             return;
++	RS_Vector mouse=graphicView->toGraph(e->position());
+         clearHighlighted();
+         m_pPoints->circle2=en;
+         m_pPoints->circle2->setHighlighted(true);
+diff --git a/librecad/src/lib/information/rs_locale.cpp b/librecad/src/lib/information/rs_locale.cpp
+index ac7542ce..bd4fd7cd 100644
+--- a/librecad/src/lib/information/rs_locale.cpp
++++ b/librecad/src/lib/information/rs_locale.cpp
+@@ -64,7 +64,7 @@ QString RS_Locale::getName() const {
+ }
+ 
+ QString RS_Locale::name() const{
+-        return 	languageToString(language())+QString(" (")+countryToString(country())+QString(")");
++        return 	languageToString(language())+QString(" (")+territoryToString(territory())+QString(")");
+ }
+ 
+ //EOF
+diff --git a/librecad/src/ui/forms/qg_dlgoptionsgeneral.cpp b/librecad/src/ui/forms/qg_dlgoptionsgeneral.cpp
+index 84431818..002f8870 100644
+--- a/librecad/src/ui/forms/qg_dlgoptionsgeneral.cpp
++++ b/librecad/src/ui/forms/qg_dlgoptionsgeneral.cpp
+@@ -330,8 +330,7 @@ void QG_DlgOptionsGeneral::on_tabWidget_currentChanged(int index)
+ 
+ void QG_DlgOptionsGeneral::set_color(QComboBox* combo, QColor custom)
+ {
+-    QColor current;
+-    current.setNamedColor(combo->lineEdit()->text());
++    QColor current = QColor::fromString(combo->lineEdit()->text());
+ 
+     QColorDialog dlg;
+ 	dlg.setCustomColor(0, custom.rgb());
+diff --git a/librecad/src/ui/forms/qg_snaptoolbar.cpp b/librecad/src/ui/forms/qg_snaptoolbar.cpp
+index 925997b0..2a3a3ef4 100644
+--- a/librecad/src/ui/forms/qg_snaptoolbar.cpp
++++ b/librecad/src/ui/forms/qg_snaptoolbar.cpp
+@@ -68,13 +68,13 @@ QG_SnapToolBar::QG_SnapToolBar(QWidget* parent, QG_ActionHandler* ah, LC_ActionG
+     action->setObjectName("ExclusiveSnapMode");
+     addAction(action);
+ 
+-    snapMiddleManual = new QAction(QIcon(":/icons/snap_middle_manual.svg"), tr("Snap Middle Manual"), agm->snap);
++    snapMiddleManual = createAction(":/icons/snap_middle_manual.svg", tr("Snap Middle Manual"), agm->snap);
+     snapMiddleManual->setObjectName("SnapMiddleManual");
+     snapMiddleManual->setCheckable(true);
+     connect(snapMiddleManual, &QAction::triggered, actionHandler, &QG_ActionHandler::slotSnapMiddleManual);
+     this->addAction(snapMiddleManual);
+ 
+-    snapFree = new QAction(QIcon(":/icons/snap_free.svg"), tr("Free Snap"), agm->snap_extras);
++    snapFree = createAction(":/icons/snap_free.svg", tr("Free Snap"), agm->snap_extras);
+     snapFree->setObjectName("SnapFree");
+ 
+     snapGrid = createAction(":/icons/snap_grid.svg", tr("Snap on grid"), agm->snap);
+diff --git a/plugins/plugins.pro b/plugins/plugins.pro
+index ca3c8502..ee1a53dd 100644
+--- a/plugins/plugins.pro
++++ b/plugins/plugins.pro
+@@ -7,7 +7,7 @@
+ TEMPLATE = subdirs
+ TARGET = plugins
+ 
+-QT += gui
++QT += widgets
+ 
+ SUBDIRS     = \
+         asciifile \
+diff --git a/plugins/pointstocsv/pointstocsv.pro b/plugins/pointstocsv/pointstocsv.pro
+index ad93f7f8..389c5ad4 100644
+--- a/plugins/pointstocsv/pointstocsv.pro
++++ b/plugins/pointstocsv/pointstocsv.pro
+@@ -4,7 +4,7 @@
+ #
+ #-------------------------------------------------
+ 
+-QT       += gui
++QT       += widgets
+ TEMPLATE = lib
+ CONFIG += plugin
+ VERSION = 1.0.1

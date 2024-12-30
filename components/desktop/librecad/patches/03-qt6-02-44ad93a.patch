@@ -1,0 +1,299 @@
+commit 44ad93acca754ef35c84f5b80c96491dfb152dea
+Author: Dongxu Li <dongxuli2011@gmail.com>
+Date:   Sat Nov 11 22:03:30 2023 -0500
+
+    UI forms: use qt5 connections
+
+diff --git a/librecad/src/src.pro b/librecad/src/src.pro
+index 80affd47..671d3356 100644
+--- a/librecad/src/src.pro
++++ b/librecad/src/src.pro
+@@ -28,6 +28,10 @@ CONFIG += qt \
+ 
+ QT += widgets printsupport
+ CONFIG += c++17
++
++# using qt5 connections for UI forms
++QMAKE_UIC_FLAGS += --connections string
++
+ *-g++ {
+     QMAKE_CXXFLAGS += -fext-numeric-literals
+ }
+diff --git a/librecad/src/ui/forms/qg_blockdialog.cpp b/librecad/src/ui/forms/qg_blockdialog.cpp
+index 96c62abe..ac0b4214 100644
+--- a/librecad/src/ui/forms/qg_blockdialog.cpp
++++ b/librecad/src/ui/forms/qg_blockdialog.cpp
+@@ -41,6 +41,8 @@ QG_BlockDialog::QG_BlockDialog(QWidget* parent, bool modal, Qt::WindowFlags fl)
+ {
+     setModal(modal);
+     setupUi(this);
++    connect(this, &QDialog::accepted, this, &QG_BlockDialog::validate);
++    connect(this, &QDialog::rejected, this, &QG_BlockDialog::cancel);
+ }
+ 
+ /*
+diff --git a/librecad/src/ui/forms/qg_blockdialog.ui b/librecad/src/ui/forms/qg_blockdialog.ui
+index a893f850..abfc5118 100644
+--- a/librecad/src/ui/forms/qg_blockdialog.ui
++++ b/librecad/src/ui/forms/qg_blockdialog.ui
+@@ -26,7 +26,7 @@
+    <property name="spacing">
+     <number>6</number>
+    </property>
+-   <property name="margin">
++   <property name="margin" stdset="0">
+     <number>11</number>
+    </property>
+    <item>
+@@ -83,38 +83,8 @@
+  </widget>
+  <layoutdefault spacing="6" margin="11"/>
+  <resources/>
+- <connections>
+-  <connection>
+-   <sender>buttonBox</sender>
+-   <signal>rejected()</signal>
+-   <receiver>QG_BlockDialog</receiver>
+-   <slot>reject()</slot>
+-   <hints>
+-    <hint type="sourcelabel">
+-     <x>126</x>
+-     <y>60</y>
+-    </hint>
+-    <hint type="destinationlabel">
+-     <x>20</x>
+-     <y>20</y>
+-    </hint>
+-   </hints>
+-  </connection>
+-  <connection>
+-   <sender>buttonBox</sender>
+-   <signal>accepted()</signal>
+-   <receiver>QG_BlockDialog</receiver>
+-   <slot>validate()</slot>
+-   <hints>
+-    <hint type="sourcelabel">
+-     <x>126</x>
+-     <y>60</y>
+-    </hint>
+-    <hint type="destinationlabel">
+-     <x>20</x>
+-     <y>20</y>
+-    </hint>
+-   </hints>
+-  </connection>
+- </connections>
++ <connections/>
++ <slots>
++  <slot>validate()</slot>
++ </slots>
+ </ui>
+diff --git a/librecad/src/ui/forms/qg_snaptoolbar.cpp b/librecad/src/ui/forms/qg_snaptoolbar.cpp
+index 8811baeb..925997b0 100644
+--- a/librecad/src/ui/forms/qg_snaptoolbar.cpp
++++ b/librecad/src/ui/forms/qg_snaptoolbar.cpp
+@@ -37,10 +37,21 @@ QAction* createAction(QWidget* parent, QString img, const QString& text, QAction
+     QAction* action = new QAction(QIcon{img}, text, parent);
+     action->setActionGroup(group);
+     action->setCheckable(true);
++    parent->addAction(action);
+     return action;
+ }
+ 
+ }
++QAction* QG_SnapToolBar::createAction(QString icon, QString tip, QActionGroup* group)
++{
++    QAction* action = new QAction(QIcon{icon}, tip, this);
++    action->setActionGroup(group);
++    action->setCheckable(true);
++    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
++    addAction(action);
++    return action;
++}
++
+ /*
+  *  Constructs a QG_Cadhttps://apps.e-signlive.ca/error?error=eyJjb2RlIjo0MDEsIm1lc3NhZ2VLZXkiOiJlcnJvci51bmF1dGhvcmlzZWQuc2Vzc2lvbkV4cGlyZWQiLCJ0ZWNobmljYWwiOiJTZXNzaW9uIGlzIGV4cGlyZWQifQ%3D%3DToolBarSnap as a child of 'parent', with the
+  *  name 'name' and widget flags set to 'f'.
+@@ -50,7 +61,7 @@ QG_SnapToolBar::QG_SnapToolBar(QWidget* parent, QG_ActionHandler* ah, LC_ActionG
+     , actionHandler(ah)
+ {
+ 
+-    auto action = createAction(this, ":/icons/exclusive.svg", tr("Exclusive Snap Mode"), agm->snap_extras);
++    auto action = ::createAction(this, ":/icons/exclusive.svg", tr("Exclusive Snap Mode"), agm->snap_extras);
+     action->setShortcut(QKeySequence(Qt::ALT | Qt::Key_X));
+     connect(action, SIGNAL(toggled(bool)),
+             agm, SLOT(toggleExclusiveSnapMode(bool)));
+@@ -64,88 +75,58 @@ QG_SnapToolBar::QG_SnapToolBar(QWidget* parent, QG_ActionHandler* ah, LC_ActionG
+     this->addAction(snapMiddleManual);
+ 
+     snapFree = new QAction(QIcon(":/icons/snap_free.svg"), tr("Free Snap"), agm->snap_extras);
+-    snapFree->setCheckable(true);
+     snapFree->setObjectName("SnapFree");
+-    connect(snapFree, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapFree);
+-    snapGrid = createAction(this, ":/icons/snap_grid.svg", tr("Snap on grid"), agm->snap);
++
++    snapGrid = createAction(":/icons/snap_grid.svg", tr("Snap on grid"), agm->snap);
+     snapGrid->setObjectName("SnapGrid");
+-    snapGrid->setCheckable(true);
+-    connect(snapGrid, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapGrid);
+-    snapEnd = createAction(this, ":/icons/snap_endpoints.svg", tr("Snap on Endpoints"), agm->snap);
++
++    snapEnd = createAction(":/icons/snap_endpoints.svg", tr("Snap on Endpoints"), agm->snap);
+     snapEnd->setObjectName("SnapEnd");
+-    snapEnd->setCheckable(true);
+-    connect(snapEnd, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapEnd);
+-    snapOnEntity = createAction(this, ":/icons/snap_entity.svg", tr("Snap on Entity"), agm->snap);
++
++    snapOnEntity = createAction(":/icons/snap_entity.svg", tr("Snap on Entity"), agm->snap);
+     snapOnEntity->setObjectName("SnapEntity");
+-    snapOnEntity->setCheckable(true);
+-    connect(snapOnEntity, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapOnEntity);
+-    snapCenter = createAction(this, ":/icons/snap_center.svg", tr("Snap Center"), agm->snap);
++
++    snapCenter = createAction(":/icons/snap_center.svg", tr("Snap Center"), agm->snap);
+     snapCenter->setObjectName("SnapCenter");
+-    snapCenter->setCheckable(true);
+-    connect(snapCenter, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapCenter);
+-    snapMiddle = createAction(this, ":/icons/snap_middle.svg", tr("Snap Middle"), agm->snap);
++
++    snapMiddle = createAction(":/icons/snap_middle.svg", tr("Snap Middle"), agm->snap);
+     snapMiddle->setObjectName("SnapMiddle");
+-    snapMiddle->setCheckable(true);
+-    connect(snapMiddle, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapMiddle);
+-    snapDistance = createAction(this, ":/icons/snap_distance.svg", tr("Snap Distance"), agm->snap);
++
++    snapDistance = createAction(":/icons/snap_distance.svg", tr("Snap Distance"), agm->snap);
+     snapDistance->setObjectName("SnapDistance");
+-    snapDistance ->setCheckable(true);
+-    connect(snapDistance, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(snapDistance);
+-    snapIntersection = createAction(this, ":/icons/snap_intersection.svg", tr("Snap Intersection"), agm->snap);
++    snapIntersection = createAction(":/icons/snap_intersection.svg", tr("Snap Intersection"), agm->snap);
+     snapIntersection->setObjectName("SnapIntersection");
+-    snapIntersection->setCheckable(true);
+-    connect(snapIntersection, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-	this->addAction(snapIntersection);
+ 
+     this->addSeparator();
+ 
+-    restrictHorizontal = createAction(this, ":/icons/restr_hor.svg",
++    restrictHorizontal = createAction(":/icons/restr_hor.svg",
+                                      tr("Restrict Horizontal"), agm->restriction);
+     restrictHorizontal->setObjectName("RestrictHorizontal");
+-    restrictHorizontal->setCheckable(true);
+-    connect(restrictHorizontal, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(restrictHorizontal);
+-    restrictVertical = createAction(this, ":/icons/restr_ver.svg",
++    restrictVertical = createAction(":/icons/restr_ver.svg",
+                                    tr("Restrict Vertical"), agm->restriction);
+     restrictVertical->setObjectName("RestrictVertical");
+-    restrictVertical->setCheckable(true);
+-    connect(restrictVertical, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+-    this->addAction(restrictVertical);
+ 
+-    restrictOrthogonal = createAction(this, ":/icons/restr_ortho.svg",
++    restrictOrthogonal = ::createAction(this, ":/icons/restr_ortho.svg",
+                                    tr("Restrict Orthogonal"), agm->restriction);
+     restrictOrthogonal->setObjectName("RestrictOrthogonal");
+-    restrictOrthogonal->setCheckable(true);
+     connect(restrictOrthogonal, SIGNAL(triggered(bool)), this,
+             SLOT(slotRestrictOrthogonal(bool)));
+-	this->addAction(restrictOrthogonal);
+ 
+-    restrictNothing = createAction(this, ":/extui/restrictnothing.png",
++    restrictNothing = ::createAction(this, ":/extui/restrictnothing.png",
+                                    tr("Restrict Nothing"), agm->restriction);
+     restrictNothing->setObjectName("RestrictNothing");
+-    restrictNothing->setCheckable(true);
+     connect(restrictNothing, SIGNAL(triggered(bool)), this,
+             SLOT(slotRestrictNothing(bool)));
+ 
+     this->addSeparator();
+-    bRelZero = createAction(this, ":/icons/set_rel_zero.svg", tr("Set relative zero position"), agm->other);
++    bRelZero = ::createAction(this, ":/icons/set_rel_zero.svg", tr("Set relative zero position"), agm->other);
+     bRelZero->setObjectName("SetRelativeZero");
+-    bRelZero->setCheckable(false);
+     connect(bRelZero, SIGNAL(triggered()), actionHandler, SLOT(slotSetRelativeZero()));
+     //connect(bRelZero, SIGNAL(triggered()), this, SLOT(slotSetRelativeZero()));
+-    this->addAction(bRelZero);
+-    bLockRelZero = createAction(this, ":/icons/lock_rel_zero.svg", tr("Lock relative zero position"), agm->other);
++    bLockRelZero = ::createAction(this, ":/icons/lock_rel_zero.svg", tr("Lock relative zero position"), agm->other);
+     bLockRelZero->setObjectName("LockRelativeZero");
+-    bLockRelZero->setCheckable(true);
+     connect(bLockRelZero, SIGNAL(toggled(bool)),actionHandler, SLOT(slotLockRelativeZero(bool)));
+-    this->addAction(bLockRelZero);
++    addAction(bLockRelZero);
+     //restore snapMode from saved preferences
+     RS_SETTINGS->beginGroup("/Snap");
+     setSnaps( RS_SnapMode::fromInt( RS_SETTINGS->readNumEntry( "/SnapMode", 0)));
+diff --git a/librecad/src/ui/forms/qg_snaptoolbar.h b/librecad/src/ui/forms/qg_snaptoolbar.h
+index 684aceee..147c9196 100644
+--- a/librecad/src/ui/forms/qg_snaptoolbar.h
++++ b/librecad/src/ui/forms/qg_snaptoolbar.h
+@@ -63,6 +63,7 @@ private slots:
+     void slotRestrictNothing(bool checked);
+ 
+ private:
++    QAction* createAction(QString icon, QString tip, QActionGroup* group);
+ 
+ 	QG_ActionHandler* actionHandler;
+ 
+diff --git a/scripts/build-osx.sh b/scripts/build-osx.sh
+index 83f75c5c..bb357684 100755
+--- a/scripts/build-osx.sh
++++ b/scripts/build-osx.sh
+@@ -20,14 +20,14 @@
+ 
+ SCRIPTPATH="$(dirname "$0")"
+ 
+-for i in /opt/local/libexec /usr/local/opt /usr/local $(dirname `which qmake`)
++for i in /opt/local/libexec /usr/local/opt /usr/local $(dirname `which qmake6`)
+ do
+-    if [ -x "$i/qt5/bin/qmake" ]
++    if [ -x "$i/qt6/bin/qmake6" ]
+     then
+-        QT_PATH=$i/qt5/bin/
++        QT_PATH=$i/qt6/bin/
+         break
+     fi
+-    if [ -x "$i/qmake" ]; then
++    if [ -x "$i/qmake6" ]; then
+     	QT_PATH="$i"
+ 	break
+     fi
+@@ -69,9 +69,9 @@ esac
+ done
+ 
+ #validate QT_PATH
+-if [[ ! -f ${QT_PATH}qmake ]]
++if [[ ! -f ${QT_PATH}qmake6 ]]
+ then
+-	QT_PATH=$(dirname "$(which qmake)")/
++    QT_PATH=$(dirname "$(which qmake6)")/
+ 	if [[ -z $QT_PATH ]]
+ 	then
+ 		echo "can not locate qmake"
+@@ -79,7 +79,7 @@ then
+ 	fi
+ fi
+ 
+-QMAKE_CMD=${QT_PATH}qmake
++QMAKE_CMD=${QT_PATH}qmake6
+ 
+ # validate QT_VERSION
+ QT_VERSION=$(${QMAKE_CMD} -query QT_VERSION)
+@@ -125,7 +125,7 @@ $QMAKE_CMD $QMAKE_OPTS -r
+ 
+ #to make it auto, use "make -j"
+ #hardcoded to 4 jobs, because "make -j" crashes our mac building box
+-make -j4
++make -j
+ 
+ APP_FILE=LibreCAD
+ OUTPUT_DMG=${APP_FILE}.dmg

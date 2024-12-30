@@ -1,0 +1,13 @@
+diff --git a/plugins/gear/gear.pro b/plugins/gear/gear.pro
+index a2401b5..12c0bee 100644
+--- a/plugins/gear/gear.pro
++++ b/plugins/gear/gear.pro
+@@ -4,7 +4,7 @@
+ #
+ #-------------------------------------------------
+ 
+-QT       += gui
++QT       += widgets
+ TEMPLATE = lib
+ CONFIG += plugin
+ VERSION = 0.0.1

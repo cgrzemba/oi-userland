@@ -1,0 +1,13 @@
+diff --git a/librecad/src/lib/debug/rs_debug.cpp b/librecad/src/lib/debug/rs_debug.cpp
+index b95ff6a..76392b6 100644
+--- a/librecad/src/lib/debug/rs_debug.cpp
++++ b/librecad/src/lib/debug/rs_debug.cpp
+@@ -44,7 +44,7 @@ FILE *s_logStream = nullptr;
+ struct RS_Debug::LogStream::StreamImpl : public QTextStream {
+     StreamImpl(RS_Debug::RS_DebugLevel level) :
+ #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+-        QTextStream{&m_string, QBaseIODevice::WriteOnly}
++        QTextStream{&m_string, QIODeviceBase::WriteOnly}
+ #else
+         QTextStream{&m_string, QIODevice::WriteOnly}
+ #endif
