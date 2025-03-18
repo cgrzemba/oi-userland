@@ -25,14 +25,14 @@ depend fmri=mate_install type=require
 depend fmri=service/network/dhcp/isc-dhcp type=require
 
 # GDM and Gnome greeter, gdm-session-worker has to run in 32bit
-depend fmri=system/display-manager/gdm@2.30.7-2023.0.0.1 type=require
-depend fmri=gnome/gnome-session@2.32.1-2023.0.0.0 type=require
-depend fmri=gnome/window-manager/metacity@2.34.13-2023.0.0.0 type=require
-depend fmri=library/desktop/gnome-desktop@2.32.1-2023.0.0.0 type=require
-depend fmri=gnome/gnome-settings-daemon@2.32.1-2023.0.0.1 type=require
+depend fmri=system/display-manager/gdm@2.30.7 type=require
+depend fmri=gnome/gnome-session@2.32.1 type=require
+depend fmri=gnome/window-manager/metacity@2.34.13 type=require
+depend fmri=library/desktop/gnome-desktop@2.32.1 type=require
+depend fmri=gnome/gnome-settings-daemon@2.32.1 type=require
 depend fmri=library/gnome/libgnomekbd@2.91.92 type=require
 # only for loginGUI
-depend fmri=cde/cde-runtime@0.5.11-2013.0.0.2 type=require
+depend fmri=cde/cde-runtime@0.5.11 type=require
 #
 # 32bit libraries
 depend fmri=system/library/freetype-2/32 type=require
@@ -51,10 +51,16 @@ depend fmri=system/library/fontconfig/32 type=require
 # install requirements rpm2cpio
 depend fmri=package/rpm type=require
 
-# utaudio
+# utaudio 32bit libs
 depend fmri=library/audio/pulseaudio/32 type=require
 depend fmri=audio/mpg123/32 type=require
-depend fmri=library/sdl2/32@2.30.0 type=require
+depend fmri=codec/flac-15 type=require
+depend fmri=library/libsndfile/32 type=require
+# depend fmri=library/sdl2/32@2.30.0 type=require
+# depend fmri=library/libvorbis type=require
+# depend fmri=library/opus type=require
+# depend fmri=library/libogg type=require
+# depend fmri=audio/lame type=require
 
 # empty metapackage for SUNWkio-libs
 depend fmri=compatibility/packages/SUNWxwplt type=require
@@ -88,14 +94,8 @@ depend fmri=system/library/c++/sunpro type=require
 # x11/library/libxrender
 # x11/library/libxrandr
 # system/library/mozilla-nss@3
-# library/libsndfile
 
 # for utaudio
-# codec/flac
-# library/libvorbis
-# library/opus
-# library/libogg
-# audio/lame
 
 # utresexec
 # system/library/security/libsasl 
