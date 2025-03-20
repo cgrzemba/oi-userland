@@ -24,6 +24,13 @@ depend fmri=mate_install type=require
 # DHCP service
 depend fmri=service/network/dhcp/isc-dhcp type=require
 
+# SUNWutkio-libs package dependency
+depend fmri=consolidation/X/X-incorporation@0.5.11,5.11-2024.0.0.9 type=require
+depend fmri=compatibility/packages/SUNWxwplt@0.5.11-2024.0.0.0 type=require
+
+# for Sun JRE
+depend fmri=system/library/c++/sunpro type=require
+
 # GDM and Gnome greeter, gdm-session-worker has to run in 32bit
 depend fmri=system/display-manager/gdm@2.30.7 type=require
 depend fmri=gnome/gnome-session@2.32.1 type=require
@@ -33,6 +40,8 @@ depend fmri=gnome/gnome-settings-daemon@2.32.1 type=require
 depend fmri=library/gnome/libgnomekbd@2.91.92 type=require
 # only for loginGUI
 depend fmri=cde/cde-runtime@0.5.11 type=require
+depend fmri=library/tooltalk@0.5.11-0.151.1.8 type=require
+depend fmri=library/motif@0.5.11-0.151.1.8 type=require
 #
 # 32bit libraries
 depend fmri=system/library/freetype-2/32 type=require
@@ -48,7 +57,7 @@ depend fmri=library/glib2/32 type=require
 depend fmri=library/expat/32 type=require
 depend fmri=system/library/fontconfig/32 type=require
 
-# install requirements rpm2cpio
+# SUNWut configure requirements rpm2cpio, see docs.openindiana.org
 depend fmri=package/rpm type=require
 
 # utaudio 32bit libs
@@ -61,12 +70,6 @@ depend fmri=library/libsndfile/32 type=require
 # depend fmri=library/opus type=require
 # depend fmri=library/libogg type=require
 # depend fmri=audio/lame type=require
-
-# empty metapackage for SUNWkio-libs
-depend fmri=compatibility/packages/SUNWxwplt type=require
-
-# for Sun JRE
-depend fmri=system/library/c++/sunpro type=require
 
 # uttsc-bin (RDP client)
 # if 32bit support removed from the component, then
