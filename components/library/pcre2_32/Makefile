@@ -28,13 +28,13 @@ BUILD_BITS= 32
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		pcre2
-COMPONENT_VERSION=	10.42
-COMPONENT_REVISION=	1
+COMPONENT_VERSION=	10.44
+COMPONENT_REVISION=	0
 COMPONENT_SUMMARY=	Version 2 of Perl-Compatible Regular Expressions
 COMPONENT_PROJECT_URL=  https://pcre.org/
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.bz2
-COMPONENT_ARCHIVE_HASH= sha256:8d36cd8cb6ea2a4c2bb358ff6411b0c788633a2a45dabbf1aeb4b701d1b5e840
+COMPONENT_ARCHIVE_HASH= sha256:d34f02e113cf7193a1ebf2770d3ac527088d485d4e047ed10e5d217c6ef5de96
 COMPONENT_ARCHIVE_URL=  https://github.com/PhilipHazel/pcre2/releases/download/$(COMPONENT_SRC)/$(COMPONENT_ARCHIVE)
 COMPONENT_CLASSIFICATION=Development/C
 COMPONENT_FMRI=		library/pcre2/32
@@ -49,15 +49,12 @@ TEST_TARGET= install $(TEST_32)
 # pick up -std=c99 in CFLAGS
 CFLAGS += -std=c99
 
+CXXFLAGS +=    $(CC_PIC)
+
 # turn on largefile support
 CFLAGS += $(CPP_LARGEFILES)
 
-# Although -norunpath is set for CXXFLAGS, we need to put -norunpath
-# here, otherwise -norunpath doesn't get set when creating the shared
-# libraries (CC -G).
-CXX += $(studio_NORUNPATH)
-
-CXXFLAGS +=	$(CC_PIC)
+CFLAGS += $(XPG6MODE)
 
 # turn on support for large files
 CXXFLAGS +=	$(CPP_LARGEFILES)
@@ -96,14 +93,6 @@ COMPONENT_BUILD_ENV += "MAKE=$(GMAKE)"
 COMPONENT_BUILD_ARGS +=	-e
 
 COMPONENT_INSTALL_ARGS += "INSTALL=$(INSTALL)"
-
-# Needed for "gmake test" to work successfully.
-# If SHELLOPTS is exported (as it is by the userland makefiles),
-# then all shell options get exported to child invocations of bash,
-# which results in test failures due to nounset and xtrace being
-# set unexpectedly, and errors such as "$1: unbound variable" and
-# diffs failing due to script tracing in output files.
-unexport SHELLOPTS
 
 # Get correct libpcre2-8.so.0 from the build area.
 TEST_LIBPATH.32 = $(PROTOUSRLIBDIR)

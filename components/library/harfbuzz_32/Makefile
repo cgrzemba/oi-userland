@@ -30,14 +30,14 @@ BUILD_STYLE= meson
 include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=         harfbuzz
-COMPONENT_VERSION=      8.3.0
+COMPONENT_VERSION=      10.4.0
 COMPONENT_FMRI=         library/c++/harfbuzz/32
 COMPONENT_SUMMARY=      HarfBuzz - an OpenType text shaping engine. 
 COMPONENT_CLASSIFICATION=System/Libraries
 COMPONENT_SRC=          $(COMPONENT_NAME)-$(COMPONENT_VERSION)
 COMPONENT_PROJECT_URL=  https://www.freedesktop.org/wiki/Software/HarfBuzz/
 COMPONENT_ARCHIVE=      $(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH= sha256:109501eaeb8bde3eadb25fab4164e993fbace29c3d775bcaa1c1e58e2f15f847
+COMPONENT_ARCHIVE_HASH= sha256:480b6d25014169300669aa1fc39fb356c142d5028324ea52b3a27648b9beaad8
 COMPONENT_ARCHIVE_URL=  https://github.com/harfbuzz/harfbuzz/releases/download/$(COMPONENT_VERSION)/$(COMPONENT_ARCHIVE)
 COMPONENT_LICENSE=      MIT
 COMPONENT_LICENSE_FILE= COPYING
@@ -56,6 +56,7 @@ CONFIGURE_OPTIONS.32 += -Dintrospection=disabled
 # Building benchmark fails:
 CONFIGURE_OPTIONS.64 += -Dbenchmark=disabled
 
+CXXFLAGS += -std=c++17
 LDFLAGS += -lm
 
 # Workaround for build failures due to pango Makefiles not passing CFLAGS or
@@ -76,8 +77,7 @@ REQUIRED_PACKAGES += developer/icu
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(ICU_LIBRARY_PKG)/32
 REQUIRED_PACKAGES += library/c++/graphite2
-REQUIRED_PACKAGES += library/c++/harfbuzz
-REQUIRED_PACKAGES += library/glib2
+REQUIRED_PACKAGES += library/glib2/32
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/freetype-2/32
 REQUIRED_PACKAGES += system/library/math
