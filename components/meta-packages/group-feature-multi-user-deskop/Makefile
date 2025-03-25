@@ -1,0 +1,28 @@
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"). You may
+# only use this file in accordance with the terms of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source. A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+
+#
+# Copyright 2024 Marcel Telka
+#
+
+BUILD_STYLE = pkg
+
+include ../../../make-rules/shared-macros.mk
+
+COMPONENT_NAME =		multi-user-desktop
+COMPONENT_VERSION =		0.5.11
+COMPONENT_REVISION=		5168
+COMPONENT_SUMMARY =		dummy package to fullfill SunRay software install requirements
+COMPONENT_PROJECT_URL =		
+COMPONENT_FMRI =		group/feature/$(COMPONENT_NAME)
+COMPONENT_CLASSIFICATION =	
+
+include $(WS_MAKE_RULES)/common.mk
+
