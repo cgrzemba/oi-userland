@@ -34,7 +34,6 @@ depend fmri=system/library/c++/sunpro type=require
 # GDM and Gnome greeter, gdm-session-worker has to run in 32bit
 depend fmri=system/display-manager/gdm@2.30.7-2023.0.0.1 type=require
 depend fmri=gnome/gnome-session@2.32.1 type=require
-depend fmri=gnome/window-manager/metacity@2.34.13 type=require
 depend fmri=library/desktop/gnome-desktop@2.32.1 type=require
 depend fmri=gnome/gnome-settings-daemon@2.32.1 type=require
 depend fmri=library/gnome/libgnomekbd@2.91.92 type=require
