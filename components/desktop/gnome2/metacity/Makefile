@@ -13,11 +13,12 @@
 # Copyright (c) 2014 Ken Mays
 #
 
+BUILDSTYLE= configure
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		metacity
 COMPONENT_VERSION=	2.34.13
-COMPONENT_REVISION=	1
+COMPONENT_REVISION=	2
 COMPONENT_PROJECT_URL=	http://www.gnome.org
 COMPONENT_SUMMARY=	GNOME window manager
 COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
@@ -30,9 +31,7 @@ COMPONENT_CLASSIFICATION= org.opensolaris.category.2008:Desktop (GNOME)/Window M
 COMPONENT_LICENSE_FILE= COPYING
 COMPONENT_LICENSE= GPLv2
 
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/configure.mk
-include $(WS_MAKE_RULES)/ips.mk
+include $(WS_MAKE_RULES)/common.mk
 
 PATH=$(PATH.gnu)
 
@@ -63,14 +62,14 @@ CONFIGURE_OPTIONS+=	--libexecdir=/usr/lib
 COMPONENT_INSTALL_ENV+= GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 
 # common targets
-build:		$(BUILD_64)
+# build:		$(BUILD_64)
 
-install:	$(INSTALL_64)
+# install:	$(INSTALL_64)
 
-test:		$(NO_TESTS)
+# test:		$(NO_TESTS)
 
 # Auto-generated dependencies
-REQUIRED_PACKAGES += library/desktop/atk
+REQUIRED_PACKAGES += gnome/accessibility/at-spi2-core
 REQUIRED_PACKAGES += library/desktop/cairo
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
 REQUIRED_PACKAGES += library/desktop/gtk2
