@@ -1,0 +1,13 @@
+diff --git a/src/VBox/Runtime/r3/posix/RTTimeZoneGetCurrent-posix.cpp b/src/VBox/Runtime/r3/posix/RTTimeZoneGetCurrent-posix.cpp
+index 69fe713..e5160f5 100644
+--- a/src/VBox/Runtime/r3/posix/RTTimeZoneGetCurrent-posix.cpp
++++ b/src/VBox/Runtime/r3/posix/RTTimeZoneGetCurrent-posix.cpp
+@@ -51,7 +51,7 @@
+ #include <iprt/symlink.h>
+ #include <iprt/stream.h>
+ 
+-#if defined(RT_OS_DARWIN) || defined(RT_OS_SOLARIS)
++#if defined(RT_OS_DARWIN)
+ # include <tzfile.h>
+ #else
+ # define TZDIR                   "/usr/share/zoneinfo"
