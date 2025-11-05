@@ -14,7 +14,7 @@
 #
 include ../../../make-rules/shared-macros.mk
 
-QT6_VERSION=				6.6
+QT6_VERSION=				6.8
 COMPONENT_NAME=				qt
 COMPONENT_VERSION_MJR=		$(QT6_VERSION)
 COMPONENT_VERSION=			$(COMPONENT_VERSION_MJR).3
@@ -22,7 +22,7 @@ COMPONENT_SUMMARY=			Qt cross-platform application and UI framework
 COMPONENT_PROJECT_URL=		https://www.qt.io/
 COMPONENT_SRC=				$(COMPONENT_NAME)-everywhere-src-$(COMPONENT_VERSION)
 COMPONENT_ARCHIVE=			$(COMPONENT_SRC).tar.xz
-COMPONENT_ARCHIVE_HASH=		sha256:69d0348fef415da98aa890a34651e9cfb232f1bffcee289b7b4e21386bf36104
+COMPONENT_ARCHIVE_HASH=		sha256:cdd3a69967208276bb01af7ace7dba0ba53e679f886a4cbe624225c60fb73f2c
 COMPONENT_ARCHIVE_URL=		https://download.qt.io/official_releases/qt/$(COMPONENT_VERSION_MJR)/$(COMPONENT_VERSION)/single/$(COMPONENT_ARCHIVE)
 COMPONENT_FMRI=				library/qt6
 COMPONENT_CLASSIFICATION= 	Desktop (GNOME)/Libraries
@@ -38,15 +38,20 @@ QT_PREFIX= $(QT6_BASEDIR)
 
 QT_ARCHSUBDIR= $(MACH64)
 QT_PLATFORM= solaris-g++-64
+QTV= $(QT6_VERSION)
+PKG_VARS += QTV
 
 LDFLAGS += -Wl,-rpath,$(QT6_LIBDIR):$(USRLIBDIR)/xorg/$(MACH64)/:$(CLANG_LIBDIR):$(MYSQL_LIBDIR):$(PG_LIBDIR):$(JPEG_LIBDIR)
+
+OPENSSL_VERSION=3
+CONFIGURE_ENV += PKG_CONFIG_PATH="$(PKG_CONFIG_PATH)"
 
 CONFIGURE_OPTIONS = -prefix $(QT_PREFIX)
 CONFIGURE_OPTIONS += -opensource
 CONFIGURE_OPTIONS += -confirm-license
 CONFIGURE_OPTIONS += -nomake examples
 CONFIGURE_OPTIONS += -nomake tests
-CONFIGURE_OPTIONS += -c++std c++11
+CONFIGURE_OPTIONS += -c++std c++17
 CONFIGURE_OPTIONS += -disable-reduce-exports
 CONFIGURE_OPTIONS += -xcb
 CONFIGURE_OPTIONS += -xcb-xlib
@@ -58,9 +63,9 @@ CONFIGURE_OPTIONS += -libdir $(QT_PREFIX)/lib/$(QT_ARCHSUBDIR)
 CONFIGURE_OPTIONS += -plugindir $(QT_PREFIX)/plugins/$(QT_ARCHSUBDIR)
 CONFIGURE_OPTIONS += -qmldir $(QT_PREFIX)/qml/$(QT_ARCHSUBDIR)
 CONFIGURE_OPTIONS += -platform $(QT_PLATFORM)
-CONFIGURE_OPTIONS += -plugin-sql-mysql
-CONFIGURE_OPTIONS += -plugin-sql-psql
-CONFIGURE_OPTIONS += -plugin-sql-sqlite
+CONFIGURE_OPTIONS += -sql-mysql
+CONFIGURE_OPTIONS += -sql-psql
+CONFIGURE_OPTIONS += -sql-sqlite
 CONFIGURE_OPTIONS += -plugin-system-sqlite
 CONFIGURE_OPTIONS += -no-pch
 CONFIGURE_OPTIONS += -skip qtgrpc
@@ -69,6 +74,8 @@ CONFIGURE_OPTIONS += MySQL_LIBRARY=$(MYSQL_LIBDIR)/libmysqlclient.so
 CONFIGURE_OPTIONS += MySQL_INCLUDE_DIR=$(MYSQL_INCDIR)
 CONFIGURE_OPTIONS += PostgreSQL_LIBRARY=$(PG_LIBDIR)/libpq.so
 CONFIGURE_OPTIONS += PostgreSQL_INCLUDE_DIR=$(PG_INCDIR)
+# 3rdparty/open62541
+CONFIGURE_OPTIONS += -D__EXTENSIONS__
 
 COMPONENT_POST_CONFIGURE_ACTION= mkdir -p $(BUILD_DIR)/amd64/qtbase/translations ;
 COMPONENT_POST_CONFIGURE_ACTION += $(GSED) -i 's;LINK_LIBRARIES =;LINK_LIBRARIES = -lgcc ;' $(@D)/build.ninja ;
@@ -111,7 +118,6 @@ REQUIRED_PACKAGES += x11/keyboard/data-xkb
 REQUIRED_PACKAGES += x11/library/libpthread-stubs
 
 # Auto-generated dependencies
-PYTHON_REQUIRED_PACKAGES += runtime/python
 REQUIRED_PACKAGES += $(CLANG_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
@@ -123,9 +129,12 @@ REQUIRED_PACKAGES += $(PG_LIBRARY_PKG)
 REQUIRED_PACKAGES += codec/jasper
 REQUIRED_PACKAGES += compress/zstd
 REQUIRED_PACKAGES += database/sqlite-3
-REQUIRED_PACKAGES += image/library/libjpeg-turbo
+REQUIRED_PACKAGES += developer/icu
 REQUIRED_PACKAGES += image/library/libpng16
 REQUIRED_PACKAGES += image/library/libtiff
+REQUIRED_PACKAGES += library/audio/gstreamer
+REQUIRED_PACKAGES += library/audio/gstreamer/plugin/base
+REQUIRED_PACKAGES += library/audio/pulseaudio
 REQUIRED_PACKAGES += library/brotli
 REQUIRED_PACKAGES += library/c++/harfbuzz
 REQUIRED_PACKAGES += library/desktop/gdk-pixbuf
@@ -140,7 +149,6 @@ REQUIRED_PACKAGES += library/pcre2
 REQUIRED_PACKAGES += library/print/cups-libs
 REQUIRED_PACKAGES += library/unixodbc
 REQUIRED_PACKAGES += library/zlib
-REQUIRED_PACKAGES += shell/bash
 REQUIRED_PACKAGES += shell/ksh93
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/fontconfig
@@ -161,3 +169,4 @@ REQUIRED_PACKAGES += x11/library/xcb-util-image
 REQUIRED_PACKAGES += x11/library/xcb-util-keysyms
 REQUIRED_PACKAGES += x11/library/xcb-util-renderutil
 REQUIRED_PACKAGES += x11/library/xcb-util-wm
+REQUIRED_PACKAGES.python += runtime/python

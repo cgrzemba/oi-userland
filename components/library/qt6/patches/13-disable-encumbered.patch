@@ -10,11 +10,11 @@ diff -Nru qt-everywhere-src-6.4.2.orig/qtmultimedia/src/multimedia/configure.cma
  )
  qt_feature("alsa" PUBLIC PRIVATE
      LABEL "ALSA (experimental)"
-@@ -111,7 +111,7 @@
+@@ -178,7 +178,7 @@ qt_feature("gstreamer" PRIVATE
  )
  qt_feature("gstreamer_photography" PRIVATE
      LABEL "GStreamer Photography"
--    CONDITION ( QT_FEATURE_gstreamer_1_0 AND GStreamer_Photography_FOUND )
+-    CONDITION QT_FEATURE_gstreamer AND TARGET GStreamer::Photography
 +    CONDITION false
  )
  qt_feature("gstreamer_gl" PRIVATE
