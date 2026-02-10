@@ -1,0 +1,117 @@
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+
+#
+# Copyright 2026 Carsten Grzemba^
+#
+
+set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.human-version value=$(HUMAN_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+
+license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
+
+link path=libqscintilla2_qt5.so target=libqscintilla2_qt5.so.15.2.1
+link path=libqscintilla2_qt5.so.15 target=libqscintilla2_qt5.so.15.2.1
+link path=libqscintilla2_qt5.so.15.2 target=libqscintilla2_qt5.so.15.2.1
+file path=libqscintilla2_qt5.so.15.2.1 pkg.linted.userland.action001.2=true
+file path=usr/lib/qt/5.15/include/Qsci/qsciabstractapis.h
+file path=usr/lib/qt/5.15/include/Qsci/qsciapis.h
+file path=usr/lib/qt/5.15/include/Qsci/qscicommand.h
+file path=usr/lib/qt/5.15/include/Qsci/qscicommandset.h
+file path=usr/lib/qt/5.15/include/Qsci/qscidocument.h
+file path=usr/lib/qt/5.15/include/Qsci/qsciglobal.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexer.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerasm.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexeravs.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerbash.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerbatch.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexercmake.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexercoffeescript.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexercpp.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexercsharp.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexercss.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexercustom.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerd.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerdiff.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexeredifact.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerfortran.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerfortran77.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerhex.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerhtml.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexeridl.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerintelhex.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerjava.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerjavascript.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerjson.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerlua.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexermakefile.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexermarkdown.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexermasm.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexermatlab.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexernasm.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexeroctave.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerpascal.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerperl.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerpo.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerpostscript.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerpov.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerproperties.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerpython.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerruby.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerspice.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexersql.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexersrec.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexertcl.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexertekhex.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexertex.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerverilog.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexervhdl.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexerxml.h
+file path=usr/lib/qt/5.15/include/Qsci/qscilexeryaml.h
+file path=usr/lib/qt/5.15/include/Qsci/qscimacro.h
+file path=usr/lib/qt/5.15/include/Qsci/qsciprinter.h
+file path=usr/lib/qt/5.15/include/Qsci/qsciscintilla.h
+file path=usr/lib/qt/5.15/include/Qsci/qsciscintillabase.h
+file path=usr/lib/qt/5.15/include/Qsci/qscistyle.h
+file path=usr/lib/qt/5.15/include/Qsci/qscistyledtext.h
+link path=usr/lib/qt/5.15/lib/$(MACH64)/libqscintilla2_qt5.so \
+    target=libqscintilla2_qt5.so.15.2.1
+link path=usr/lib/qt/5.15/lib/$(MACH64)/libqscintilla2_qt5.so.15 \
+    target=libqscintilla2_qt5.so.15.2.1
+link path=usr/lib/qt/5.15/lib/$(MACH64)/libqscintilla2_qt5.so.15.2 \
+    target=libqscintilla2_qt5.so.15.2.1
+file path=usr/lib/qt/5.15/lib/$(MACH64)/libqscintilla2_qt5.so.15.2.1
+file path=usr/lib/qt/5.15/mkspecs/features/qscintilla2.prf
+file path=usr/lib/qt/5.15/qsci/api/python/Python-2.4.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-2.5.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-2.6.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-2.7.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.1.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.10.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.11.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.2.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.3.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.4.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.5.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.6.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.7.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.8.api
+file path=usr/lib/qt/5.15/qsci/api/python/Python-3.9.api
+file path=usr/lib/qt/5.15/translations/qscintilla_cs.qm
+file path=usr/lib/qt/5.15/translations/qscintilla_de.qm
+file path=usr/lib/qt/5.15/translations/qscintilla_es.qm
+file path=usr/lib/qt/5.15/translations/qscintilla_fr.qm
+file path=usr/lib/qt/5.15/translations/qscintilla_pt_br.qm
