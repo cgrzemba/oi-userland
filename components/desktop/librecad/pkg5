@@ -1,6 +1,6 @@
 {
     "dependencies": [
-        "library/qt5",
+        "library/qt6",
         "system/library",
         "system/library/boost",
         "system/library/freetype-2",

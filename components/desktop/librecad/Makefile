@@ -1,4 +1,4 @@
-#
+
 # This file and its contents are supplied under the terms of the
 # Common Development and Distribution License ("CDDL"). You may
 # only use this file in accordance with the terms of the CDDL.
@@ -18,21 +18,31 @@ include ../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		LibreCAD
 COMPONENT_VERSION=	2.2.1.5
+COMPONENT_GIT_REV=	d6837ad
 COMPONENT_SUMMARY=	LibreCAD is a 2D CAD drawing tool based on the community edition of QCAD.
 COMPONENT_PROJECT_URL=	https://github.com/LibreCAD
-COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
+# COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_VERSION)
+COMPONENT_SRC=		$(COMPONENT_NAME)-$(COMPONENT_GIT_REV)
 COMPONENT_ARCHIVE=	$(COMPONENT_SRC).tar.gz
-COMPONENT_ARCHIVE_HASH= sha256:703f6e6701b7ee47769b6def271fa025ef32e31ee193e2ba69a2c47fff8da459
-COMPONENT_ARCHIVE_URL=	$(COMPONENT_PROJECT_URL)/LibreCAD/archive/refs/tags/v$(COMPONENT_VERSION).tar.gz
+# COMPONENT_ARCHIVE_HASH= sha256:703f6e6701b7ee47769b6def271fa025ef32e31ee193e2ba69a2c47fff8da459
+COMPONENT_ARCHIVE_HASH= sha256:ff73e4ca7959de4b676f0a7da3f7300ef730579397ca235b4eeeb6565d909ee1
+# COMPONENT_ARCHIVE_URL=	$(COMPONENT_PROJECT_URL)/LibreCAD/archive/refs/tags/v$(COMPONENT_VERSION).tar.gz
+COMPONENT_ARCHIVE_URL=	https://codeload.github.com/LibreCAD/$(COMPONENT_NAME)/tar.gz/$(COMPONENT_GIT_REV)
+
 COMPONENT_FMRI=		desktop/librecad
 COMPONENT_CLASSIFICATION= Applications/Graphics and Imaging
 COMPONENT_LICENSE=	GPLv2
 COMPONENT_LICENSE_FILE=	LICENSE
 
+#  error: expected ',' or '...' before numeric constant
+#  bool writeSun(const DRW_Sun& sun);
+CXXFLAGS= -Usun
+
 TEST_TARGET= $(NO_TESTS)
 include $(WS_MAKE_RULES)/common.mk
 
-PATH=$(GCC_BINDIR):$(PATH.qt5):$(PATH.illumos)
+QT_MAJORV=6
+PATH=$(GCC_BINDIR):$(QT$(QT_MAJORV)_BINDIR):$(PATH.illumos)
 
 COMPONENT_NAME_lc = $(shell echo $(COMPONENT_NAME) | tr '[A-Z]' '[a-z]')
 COMPONENT_INSTALL_ACTION = \
@@ -63,7 +73,7 @@ REQUIRED_PACKAGES += system/library/boost
 # Auto-generated dependencies
 REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
 REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
-REQUIRED_PACKAGES += library/qt5
+REQUIRED_PACKAGES += library/qt6
 REQUIRED_PACKAGES += system/library
 REQUIRED_PACKAGES += system/library/freetype-2
 REQUIRED_PACKAGES += system/library/math

@@ -1,0 +1,28 @@
+error: expected ',' or '...' before numeric constant
+	bool writeSun(const DRW_Sun& sun);
+
+diff --git a/libraries/libdxfrw/libdxfrw.pro b/libraries/libdxfrw/libdxfrw.pro
+index 916bc81..114bb26 100644
+--- a/libraries/libdxfrw/libdxfrw.pro
++++ b/libraries/libdxfrw/libdxfrw.pro
+@@ -23,6 +23,8 @@ include(../../common.pri)
+ # svg support
+ QT -= svg
+ 
++QMAKE_CXXFLAGS += -Usun
++
+ # DEFINES += DRW_DBG
+ 
+ SOURCES += \
+diff --git a/librecad/src/src.pro b/librecad/src/src.pro
+index 0ba62dc..d1c68a5 100644
+--- a/librecad/src/src.pro
++++ b/librecad/src/src.pro
+@@ -38,6 +38,7 @@ greaterThan(QT_MAJOR_VERSION, 5): QMAKE_UIC_FLAGS += --connections string
+ *-g++ {
+     # QMAKE_CXXFLAGS += -fext-numeric-literals
+ }
++QMAKE_CXXFLAGS += -Usun
+ 
+ GEN_LIB_DIR = ../../generated/lib
+ msvc {
