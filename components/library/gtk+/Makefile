@@ -33,6 +33,7 @@ PATH= $(PATH.gnu)
 
 gcc_OPT = -O2
 CFLAGS += -I/usr/X11/include
+CFLAGS += -Wno-incompatible-pointer-types
 
 COMPONENT_PREP_ACTION = \
           ( cd $(@D) && PATH="$(PATH)" libtoolize --force && \

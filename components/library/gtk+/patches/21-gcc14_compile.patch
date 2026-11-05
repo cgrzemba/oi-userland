@@ -1,0 +1,36 @@
+diff --git a/tests/testmenubars.c b/tests/testmenubars.c
+index 416a939..e2f8ff4 100644
+--- a/tests/testmenubars.c
++++ b/tests/testmenubars.c
+@@ -21,7 +21,7 @@
+ #include <gtk/gtk.h>
+ 
+ static GtkWidget *
+-create_menu (depth)
++create_menu (int depth, int boolval)
+ {
+     GtkWidget *menu;
+     GtkWidget *menuitem;
+@@ -35,19 +35,19 @@ create_menu (depth)
+     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+     gtk_widget_show (menuitem);
+     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+-			       create_menu (depth - 1));
++			       create_menu (depth - 1, TRUE));
+ 
+     menuitem = gtk_menu_item_new_with_mnemonic ("Two");
+     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+     gtk_widget_show (menuitem);
+     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+-			       create_menu (depth - 1));
++			       create_menu (depth - 1, TRUE));
+ 
+     menuitem = gtk_menu_item_new_with_mnemonic ("Three");
+     gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
+     gtk_widget_show (menuitem);
+     gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+-			       create_menu (depth - 1));
++			       create_menu (depth - 1, TRUE));
+ 
+     return menu;
+ }
