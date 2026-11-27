@@ -26,66 +26,82 @@
 include ../../../../make-rules/shared-macros.mk
 
 COMPONENT_NAME=		389-ds-base
-COMPONENT_VERSION=	1.3.5.17
-COMPONENT_SRC = $(COMPONENT_NAME)-$(COMPONENT_VERSION)
-COMPONENT_PROJECT_URL=	http://directory.fedoraproject.org
+COMPONENT_VERSION=	3.2.3
+COMPONENT_GIT_TAG=      $(COMPONENT_NAME)-$(COMPONENT_VERSION)
+COMPONENT_SUMMARY=	389 Directory Server
+COMPONENT_CLASSIFICATION= org.opensolaris.category.2008:System/Enterprise Management
+COMPONENT_SRC = $(COMPONENT_NAME)-$(COMPONENT_GIT_TAG)
+COMPONENT_PROJECT_URL=	https://port389.org
 COMPONENT_ARCHIVE_HASH= \
-    sha256:522420b6decc162ed5d57ca913753b48e4bd7137fa0eb1bbc3e21e45923b1819
-COMPONENT_ARCHIVE = $(COMPONENT_NAME)-$(COMPONENT_VERSION).tar.bz2
-COMPONENT_ARCHIVE_URL=	http://directory.fedoraproject.org/binaries/$(COMPONENT_ARCHIVE)
-COMPONENT_BUGDB=	
+    sha256:3a22d0448840f1e5ffcd88582aa1d2a12ed408f9dabf2e0e2645daf4cc991fd7
+COMPONENT_ARCHIVE = $(COMPONENT_NAME)-$(COMPONENT_VERSION).tar.gz
+COMPONENT_ARCHIVE_URL=          https://github.com/389ds/$(COMPONENT_NAME)/archive/refs/tags/$(COMPONENT_GIT_TAG).tar.gz
+COMPONENT_FMRI=		service/389-ds
+COMPONENT_LICENSE=	GPLv3+
+COMPONENT_LICENSE_FILE=	LICENSE
 
-BUILD_BITS= 64
-
-include $(WS_MAKE_RULES)/prep.mk
-include $(WS_MAKE_RULES)/configure.mk
-include $(WS_MAKE_RULES)/ips.mk
+include $(WS_MAKE_RULES)/common.mk
 
 # uses  __atomic_add_fetch_8
-COMPILER = gcc
+# unset LD_Z_IGNORE
+LD_Z_IGNORE =
 
 CONFIGURE_ENV +=	PYTHONPROG=$(PYTHON.$(BITS))
+COMPONENT_BUILD_ENV += PKG_CONFIG_PATH=$(OPENSSL_PKG_CONFIG_PATH)
+COMPONENT_BUILD_ENV += OPENSSL_DIR=$(OPENSSL_PREFIX)
+COMPONENT_BUILD_ENV += OPENSSL_LIB_DIR=$(OPENSSL_LIBDIR)
+COMPONENT_BUILD_ENV += OPENSSL_INCLUDE_DIR=$(OPENSSL_INCDIR)
 
-CONFIGURE_OPTIONS += --sysconfdir=/etc
-CONFIGURE_OPTIONS += --localstatedir=/var
+CONFIGURE_OPTIONS += --with-localrundir=/var/run
 CONFIGURE_OPTIONS += --with-openldap-inc=$(USRINCDIR)/openldap
-CONFIGURE_OPTIONS += --with-openldap-lib=$(USRLIBDIR)/$(MACH64)
-CONFIGURE_OPTIONS += --with-openldap-bin=$(USRLIBDIR)/openldap/bin
-CONFIGURE_OPTIONS += --with-sasl-inc=$(USRINCDIR)/sasl2 
-CONFIGURE_OPTIONS += --with-sasl-lib=$(USRLIBDIR)/sasl2/$(MACH64)
-CONFIGURE_OPTIONS += --with-nss-lib=$(USRLIBDIR)/mps/$(MACH64)
-CONFIGURE_OPTIONS += --with-nss-inc=$(USRINCDIR)/mps
-CONFIGURE_OPTIONS += --with-nspr-lib=$(USRLIBDIR)/mps/$(MACH64)
-CONFIGURE_OPTIONS += --with-nspr-inc=$(USRINCDIR)/mps
+CONFIGURE_OPTIONS += --with-openldap-lib=$(USRLIBDIR)/mps
+CONFIGURE_OPTIONS += --with-openldap-bin=$(USRBINDIR)
+# CONFIGURE_OPTIONS += --with-sasl-inc=$(USRINCDIR)/sasl2 
+# CONFIGURE_OPTIONS += --with-sasl-lib=$(USRLIBDIR)/sasl2/$(MACH64)
+# CONFIGURE_OPTIONS += --with-nss-lib=$(USRLIBDIR)/mps/$(MACH64)
+# CONFIGURE_OPTIONS += --with-nss-inc=$(USRINCDIR)/mps
+# CONFIGURE_OPTIONS += --with-nspr-lib=$(USRLIBDIR)/mps/$(MACH64)
+# CONFIGURE_OPTIONS += --with-nspr-inc=$(USRINCDIR)/mps
 # to satisfy pkgsend resolve
-CONFIGURE_OPTIONS += --with-pythonexec=/usr/bin/python2.7
+CONFIGURE_OPTIONS += --with-pythonexec=/usr/bin/python3
 CONFIGURE_OPTIONS += --enable-debug
+CONFIGURE_OPTIONS += --disable-dependency-tracking
 
-COMPONENT_PRE_CONFIGURE_ACTION = \
-	($(CLONEY) $(SOURCE_DIR) $(@D))
+# COMPONENT_PRE_CONFIGURE_ACTION = \
+# 	($(CLONEY) $(SOURCE_DIR) $(@D))
 
 COMPONENT_PREP_ACTION = ( \
 	cd $(@D); \
-		libtoolize --copy --force; \
-		aclocal --force; \
-		autoheader --force ; \
-		automake --add-missing --copy --force-missing; \
-		autoconf; \
+		./autogen.sh; \
 	)
 
-build: $(BUILD_64)
+PYTHON_SCRIPTS += usr/bin/ds-logpipe.py
+PYTHON_SCRIPTS += usr/bin/logconv.py
+PYTHON_SCRIPTS += usr/lib/$(MACH64)/dirsrv/python/failedbinds.py 
+PYTHON_SCRIPTS += usr/lib/$(MACH64)/dirsrv/python/logregex.py
+PYTHON_SCRIPTS += usr/share/gdb/auto-load/usr/sbin/ns-slapd-gdb.py
+PYTHON_SCRIPTS += usr/bin/ds-replcheck
 
-install: $(INSTALL_64)
-
-REQUIRED_PACKAGES += library/security/openssl
-REQUIRED_PACKAGES += $(PERL_PKG)
-REQUIRED_PACKAGES += library/icu
-REQUIRED_PACKAGES += library/security/nss
+# Auto-generated dependencies
+REQUIRED_PACKAGES += $(GCC_RUNTIME_PKG)
+REQUIRED_PACKAGES += $(GXX_RUNTIME_PKG)
+REQUIRED_PACKAGES += $(ICU_LIBRARY_PKG)
+REQUIRED_PACKAGES += $(OPENSSL_PKG)
+REQUIRED_PACKAGES += database/lmdb
+REQUIRED_PACKAGES += developer/icu
+REQUIRED_PACKAGES += library/json-c
 REQUIRED_PACKAGES += library/nspr
-REQUIRED_PACKAGES += library/svrcore
-REQUIRED_PACKAGES += system/management/snmp/net-snmp
-REQUIRED_PACKAGES += system/library/security/libsasl2
 REQUIRED_PACKAGES += library/openldap
-REQUIRED_PACKAGES += database/berkeleydb-5
+REQUIRED_PACKAGES += library/pcre2
+REQUIRED_PACKAGES += library/security/cracklib
+REQUIRED_PACKAGES += library/security/openssl
+REQUIRED_PACKAGES += library/zlib
+REQUIRED_PACKAGES += runtime/perl
+REQUIRED_PACKAGES += service/picl
 REQUIRED_PACKAGES += service/security/kerberos-5
-REQUIRED_PACKAGES += library/pcre
+REQUIRED_PACKAGES += system/library
+REQUIRED_PACKAGES += system/library/math
+REQUIRED_PACKAGES += system/library/mozilla-nss
+REQUIRED_PACKAGES += system/library/security/libsasl2
+REQUIRED_PACKAGES += system/management/snmp/net-snmp
+REQUIRED_PACKAGES.python += runtime/python

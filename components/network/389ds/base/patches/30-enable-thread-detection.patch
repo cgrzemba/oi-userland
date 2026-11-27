@@ -1,0 +1,25 @@
+diff --git a/ldap/servers/slapd/util.c b/ldap/servers/slapd/util.c
+index 6a2d5cba7..d29f73f58 100644
+--- a/ldap/servers/slapd/util.c
++++ b/ldap/servers/slapd/util.c
+@@ -28,6 +28,7 @@
+ #include <sys/resource.h>
+ #include <ifaddrs.h>
+ #include <errno.h>
++#include <sys/pset.h>
+ 
+ #define UTIL_ESCAPE_NONE 0
+ #define UTIL_ESCAPE_HEX 1
+@@ -1585,6 +1586,12 @@ util_get_capped_hardware_threads(long min, long max)
+     if (threads == 0) {
+         threads = sysconf(_SC_NPROCESSORS_ONLN);
+     }
++#elif defined(SOLARIS)
++    if (pset_info(PS_MYID, NULL, (uint_t*)&threads, NULL) != 0 || threads == 0) {
++        threads = sysconf(_SC_NPROCESSORS_ONLN);
++    }
++#endif
++#if defined(LINUX) || defined(SOLARIS)
+     slapi_log_err(SLAPI_LOG_TRACE, "util_get_hardware_threads",
+              "Detected %ld hardware threads\n", threads);
+ 

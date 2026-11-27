@@ -1,0 +1,17 @@
+diff --git a/ldap/servers/slapd/ldaputil.c b/ldap/servers/slapd/ldaputil.c
+index df3ee4520..1cd52e244 100644
+--- a/ldap/servers/slapd/ldaputil.c
++++ b/ldap/servers/slapd/ldaputil.c
+@@ -860,8 +860,12 @@ ldaputil_get_saslpath()
+             saslpath = "/usr/lib/x86_64-linux-gnu";
+ #endif
+         }
++#else
++#if defined(__LP64__)
++        saslpath = "/usr/lib/sasl2/amd64";
+ #else
+         saslpath = "/usr/lib/sasl2";
++#endif
+         if (PR_SUCCESS != PR_Access(saslpath, PR_ACCESS_EXISTS)) {
+ #ifdef CPU_arm
+             /* the latest 32 bit ARM architecture using the hard-float version of EABI. */

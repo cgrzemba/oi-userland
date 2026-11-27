@@ -1,0 +1,55 @@
+diff --git a/configure.ac b/configure.ac
+index a15c0f703..fe39633db 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -12,7 +12,7 @@ AC_MSG_NOTICE(This is configure for $PACKAGE_TARNAME $PACKAGE_VERSION)
+ AC_MSG_CHECKING([lib389 version sync])
+ lib389_pyproject="$srcdir/src/lib389/pyproject.toml"
+ if test -f "$lib389_pyproject"; then
+-    lib389_version=$(grep -E '^version\s*=' "$lib389_pyproject" | sed 's/.*"\(.*\)".*/\1/')
++    lib389_version=$(ggrep -E '^version\s*=' "$lib389_pyproject" | sed 's/.*"\(.*\)".*/\1/')
+     if test "x$lib389_version" != "x$RPM_VERSION"; then
+         AC_MSG_RESULT([MISMATCH])
+         AC_MSG_ERROR([
+@@ -795,15 +795,10 @@ dnl socket nsl and dl are required to link several programs and libdb
+     AC_SUBST([LIBNSL], [$LIBNSL])
+     LIBDL=-ldl
+     AC_SUBST([LIBDL], [$LIBDL])
+-dnl Cstd and Crun are required to link any C++ related code
+-    LIBCSTD=
+-    AC_SUBST([LIBCSTD], [$LIBCSTD])
+-    LIBCRUN=
+-    AC_SUBST([LIBCRUN], [$LIBCRUN])
+     platform="solaris"
+     initdir='$(sysconfdir)/init.d'
+     case $host in
+-      i?86-*-solaris2.1[[0-9]]*)
++      x86_64-*-solaris2.1[[0-9]]*)
+         dnl I dont know why i386 need this explicit
+         AC_DEFINE([HAVE_GETPEERUCRED], [1], [have getpeerucred])
+         ;;
+@@ -810,6 +805,7 @@ dnl Cstd and Crun are required to link any C++ related code
+         TARGET='SPARC'
+         ;;
+     esac
++    AC_DEFINE([USE_POSIX_RWLOCKS], [1], [POSIX rwlocks])
+     ;;
+   *)
+     platform=""
+@@ -916,16 +912,6 @@ PKG_CHECK_MODULES([ICU], [icu-i18n >= 60.2 icu-uc >= 60.2])
+ 
+ m4_include(m4/netsnmp.m4)
+ 
+-PKG_CHECK_MODULES([KERBEROS], [krb5])
+-krb5_vendor=`$PKG_CONFIG --variable=vendor krb5`
+-if test "$krb5_vendor" = "MIT"; then
+-    AC_DEFINE(HAVE_KRB5, 1, [Define if you have Kerberos V])
+-    save_LIBS="$LIBS"
+-    LIBS="$KERBEROS_LIBS"
+-    AC_CHECK_FUNCS([krb5_cc_new_unique])
+-    LIBS="$save_LIBS"
+-fi
+-
+ PKG_CHECK_MODULES(
+     [PCRE],
+     [libpcre2-8],

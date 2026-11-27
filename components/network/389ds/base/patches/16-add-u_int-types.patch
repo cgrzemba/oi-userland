@@ -1,0 +1,55 @@
+diff --git a/ldap/include/portable.h b/ldap/include/portable.h
+index fddc9c80e..015cd4cd2 100644
+--- a/ldap/include/portable.h
++++ b/ldap/include/portable.h
+@@ -331,6 +331,38 @@ extern char *strdup();
+ #define MAXPATHLEN _MAX_PATH
+ #endif
+ 
++#endif /* _WINDOWS */
++
++#ifdef SOLARIS
++#include <stdint.h>
++typedef uint8_t  u_int8_t;
++typedef uint16_t u_int16_t;
++typedef uint32_t u_int32_t;
++typedef uint64_t u_int64_t;
++#include <pthread.h>
++
++#include <syslog.h>
++
++typedef struct _code {
++    const char *c_name;
++    int c_val;
++} CODE;
++
++static CODE prioritynames[] = {
++    {"alert",   LOG_ALERT},
++    {"crit",    LOG_CRIT},
++    {"debug",   LOG_DEBUG},
++    {"emerg",   LOG_EMERG},
++    {"err",     LOG_ERR},
++    {"error",   LOG_ERR},
++    {"info",    LOG_INFO},
++    {"notice",  LOG_NOTICE},
++    {"panic",   LOG_EMERG},
++    {"warn",    LOG_WARNING},
++    {"warning", LOG_WARNING},
++    {NULL,      -1}
++};
++
+ #endif
+ 
+ #endif /* _PORTABLE_H */
+diff --git a/ldap/servers/slapd/slapi-plugin.h b/ldap/servers/slapd/slapi-plugin.h
+index 5a0f1458e..e3f5245df 100644
+--- a/ldap/servers/slapd/slapi-plugin.h
++++ b/ldap/servers/slapd/slapi-plugin.h
+@@ -36,6 +36,7 @@ extern "C" {
+ #include <syslog.h>
+ #include <plhash.h>
+ #include <stdbool.h>
++#include "ldap/include/portable.h"
+ 
+ #ifdef __GNUC__
+     #define __ATTRIBUTE__(x) __attribute__(x)

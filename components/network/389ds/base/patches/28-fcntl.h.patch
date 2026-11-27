@@ -1,0 +1,12 @@
+diff --git a/ldap/servers/slapd/slapi_pal.c b/ldap/servers/slapd/slapi_pal.c
+index 4d76ee75c..6b2e4383f 100644
+--- a/ldap/servers/slapd/slapi_pal.c
++++ b/ldap/servers/slapd/slapi_pal.c
+@@ -32,6 +32,7 @@
+ 
+ #ifdef OS_solaris
+ #include <sys/procfs.h>
++#include <fcntl.h>
+ #endif
+ 
+ #if defined(hpux)

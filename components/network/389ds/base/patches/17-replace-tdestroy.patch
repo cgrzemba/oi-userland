@@ -1,0 +1,42 @@
+diff --git a/ldap/servers/slapd/back-ldbm/db-mdb/mdb_instance.c b/ldap/servers/slapd/back-ldbm/db-mdb/mdb_instance.c
+index f2a9e4848..f7e09390f 100644
+--- a/ldap/servers/slapd/back-ldbm/db-mdb/mdb_instance.c
++++ b/ldap/servers/slapd/back-ldbm/db-mdb/mdb_instance.c
+@@ -14,6 +14,8 @@
+ #include <search.h>
+ #include <dlfcn.h>
+ #include "mdb_dbicmp.h"
++#include <pthread.h>
++#include <strings.h>
+ 
+ 
+ /* Info file used to check version and get parameters needed to open the db in dbscan case */
+@@ -513,7 +513,13 @@ error:
+     }
+     if (rc) {
+         /* Roll back invalid slots and rebuild dbis tree */
+-        tdestroy(ctx->dbis_treeroot, free_dbi_node);
++        /* replace tdestroy(root, free_node) */
++        while (ctx->dbis_treeroot != NULL) {
++            void *key = *(void **)ctx->dbis_treeroot;
++            tdelete(key, &ctx->dbis_treeroot, cmp_dbi_names);
++            free_dbi_node(key);
++        }
++
+         ctx->dbis_treeroot = NULL;
+         for (i=0; i < ctx->startcfg.max_dbs; i++) {
+             if (ctx->dbi_slots[i].dbname) {
+@@ -799,7 +805,12 @@ void dbmdb_ctx_close(dbmdb_ctx_t *ctx)
+         ctx->env = NULL;
+     }
+     if (ctx->dbi_slots) {
+-        tdestroy(ctx->dbis_treeroot, free_dbi_node);
++        /* replace tdestroy(root, free_node) */
++        while (ctx->dbis_treeroot != NULL) {
++            void *key = *(void **)ctx->dbis_treeroot;
++            tdelete(key, &ctx->dbis_treeroot, cmp_dbi_names);
++            free_dbi_node(key);
++        }
+         ctx->dbis_treeroot = NULL;
+         for (i=0; i<ctx->startcfg.max_dbs; i++)
+             slapi_ch_free((void**)&ctx->dbi_slots[i].dbname);

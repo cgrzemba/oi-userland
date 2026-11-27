@@ -15,9 +15,9 @@
             <service_fmri value="svc:/milestone/multi-user"/>
         </dependency>
         <exec_method timeout_seconds="60" type="method" name="start"
-            exec="/usr/bin/start-dirsrv"/>
+            exec="/usr/bin/dsctl %i %m"/>
         <exec_method timeout_seconds="60" type="method" name="stop"
-            exec="/usr/bin/stop-dirsrv"/>
+            exec="/usr/bin/dsctl %i %m"/>
         <!--
             The exec attribute below can be changed to a command that SMF
             should execute when the service is refreshed.  Services are
@@ -38,18 +38,12 @@
         <template>
             <common_name>
                 <loctext xml:lang="C">
-                    <!--
-                        Replace this comment with a short name for the
-                        service.
-                    -->
+			389 Directory Server
                 </loctext>
             </common_name>
             <description>
                 <loctext xml:lang="C">
-                    <!--
-                        Replace this comment with a brief description of
-                        the service
-                    -->
+			The enterprise-class Open Source LDAP server
                 </loctext>
             </description>
         </template>

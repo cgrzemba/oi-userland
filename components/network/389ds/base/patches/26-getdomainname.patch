@@ -1,0 +1,13 @@
+diff --git a/ldap/servers/slapd/localhost.c b/ldap/servers/slapd/localhost.c
+index 993143cbd..0c4839944 100644
+--- a/ldap/servers/slapd/localhost.c
++++ b/ldap/servers/slapd/localhost.c
+@@ -43,6 +43,8 @@
+ #endif
+ #endif
+ 
++extern int getdomainname(char *name, int namelen);
++
+ static char *
+ find_localhost_DNS(void)
+ {

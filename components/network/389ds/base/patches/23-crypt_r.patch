@@ -1,0 +1,87 @@
+diff --git a/ldap/servers/plugins/pwdstorage/crypt_pwd.c b/ldap/servers/plugins/pwdstorage/crypt_pwd.c
+index 3eb8bc2a5..184c0ed73 100644
+--- a/ldap/servers/plugins/pwdstorage/crypt_pwd.c
++++ b/ldap/servers/plugins/pwdstorage/crypt_pwd.c
+@@ -39,6 +39,8 @@
+ static unsigned char itoa64[] = /* 0 ... 63 => ascii - 64 */
+     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+ 
++static pthread_mutex_t crypt_lock = PTHREAD_MUTEX_INITIALIZER;
++
+ /* Standard Crypt Algorithms identifiers (with usual options when needed) */
+ #define CRYPT_ALGO_ID_UNIX ""
+ #define CRYPT_ALGO_ID_MD5 "$1$"
+@@ -54,22 +56,35 @@ static unsigned char itoa64[] = /* 0 ... 63 => ascii - 64 */
+ 
+ #define CRYPT_SALT_STRING_MAXLEN CRYPT_YESCRYPT_SALT_LENGTH + 1
+ 
++#if 0
++char*
++crypt_r(const char *key, const char *salt, pthread_mutex_t *crypt_lock)
++{
++    pthread_mutex_lock(&crypt_lock);
++    static char *res = crypt(pw, salt);
++    if (res) {
++        strncpy(out, res, outlen - 1);
++        out[outlen - 1] = '\0';
++    }
++    pthread_mutex_unlock(&crypt_lock);
++}
++#endif
++
+ int
+ crypt_pw_cmp(const char *userpwd, const char *dbpwd)
+ {
+     int rc = -1;
+     char *cp = NULL;
+     size_t dbpwd_len = strlen(dbpwd);
+-    struct crypt_data data;
+-    data.initialized = 0;
+ 
+     /*
+      * there MUST be at least 2 chars of salt and some pw bytes, else this is INVALID and will
+      * allow any password to bind as we then only compare SALTS.
+      */
++    pthread_mutex_lock(&crypt_lock);
+     if (dbpwd_len >= 3) {
+         /* we use salt (first 2 chars) of encoded password in call to crypt_r() */
+-        cp = crypt_r(userpwd, dbpwd, &data);
++        cp = crypt(userpwd, dbpwd);
+     }
+     /* If these are not the same length, we can not proceed safely with memcmp. */
+     if (cp && dbpwd_len == strlen(cp)) {
+@@ -77,6 +92,7 @@ crypt_pw_cmp(const char *userpwd, const char *dbpwd)
+     } else {
+         rc = -1;
+     }
++    pthread_mutex_unlock(&crypt_lock);
+     return rc;
+ }
+ 
+@@ -85,11 +101,9 @@ crypt_pw_enc_by_hash(const char *pwd, int salt_len, const char *algo_id)
+ {
+     char salt[CRYPT_SALT_STRING_MAXLEN];
+     char *algo_salt = NULL;
+-    char *cry;
++    char *cry = NULL;
+     char *enc = NULL;
+     int i;
+-    struct crypt_data data;
+-    data.initialized = 0;
+ 
+     /* Fill salt with salt_len random chars */
+     slapi_rand_array(salt, salt_len);
+@@ -102,10 +116,12 @@ crypt_pw_enc_by_hash(const char *pwd, int salt_len, const char *algo_id)
+ 
+     algo_salt = slapi_ch_smprintf("%s%s", algo_id, salt);
+ 
+-    cry = crypt_r(pwd, algo_salt, &data);
++    pthread_mutex_lock(&crypt_lock);
++    cry = crypt(pwd, algo_salt);
+     if (cry != NULL) {
+         enc = slapi_ch_smprintf("%c%s%c%s", PWD_HASH_PREFIX_START, CRYPT_SCHEME_NAME, PWD_HASH_PREFIX_END, cry);
+     }
++    pthread_mutex_unlock(&crypt_lock);
+     slapi_ch_free_string(&algo_salt);
+ 
+     return (enc);

@@ -1,0 +1,30 @@
+{
+    "dependencies": [
+        "database/lmdb",
+        "developer/icu",
+        "library/icu-79",
+        "library/json-c",
+        "library/nspr",
+        "library/openldap",
+        "library/pcre2",
+        "library/security/cracklib",
+        "library/security/openssl",
+        "library/security/openssl-3",
+        "library/zlib",
+        "runtime/perl",
+        "runtime/python-39",
+        "service/picl",
+        "service/security/kerberos-5",
+        "system/library",
+        "system/library/g++-14-runtime",
+        "system/library/gcc-14-runtime",
+        "system/library/math",
+        "system/library/mozilla-nss",
+        "system/library/security/libsasl2",
+        "system/management/snmp/net-snmp"
+    ],
+    "fmris": [
+        "service/389-ds"
+    ],
+    "name": "389-ds-base"
+}

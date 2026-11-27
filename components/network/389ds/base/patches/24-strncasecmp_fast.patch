@@ -1,0 +1,13 @@
+diff --git a/ldap/servers/slapd/intrinsics.h b/ldap/servers/slapd/intrinsics.h
+index 1f47b14fe..592634c53 100644
+--- a/ldap/servers/slapd/intrinsics.h
++++ b/ldap/servers/slapd/intrinsics.h
+@@ -68,7 +68,7 @@ toupper_fast(int c)
+ #define toupper(x) toupper_fast(x)
+ 
+ __attribute__((nonnull (1, 2))) INLINE_DIRECTIVE static int
+-strncasecmp_fast(const char *dst, const char *src, int n)
++strncasecmp_fast(const char *dst, const char *src, size_t n)
+ {
+     int f, l, x = 0;
+     do {

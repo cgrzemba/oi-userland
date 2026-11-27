@@ -1,0 +1,64 @@
+diff --git a/ldap/servers/slapd/daemon.c b/ldap/servers/slapd/daemon.c
+index 288ccf6db..ac721706e 100644
+--- a/ldap/servers/slapd/daemon.c
++++ b/ldap/servers/slapd/daemon.c
+@@ -33,7 +33,9 @@
+ #include <signal.h>
+ #include <fcntl.h>
+ #include <dlfcn.h>
++#if defined(LINUX)
+ #include <sys/ptrace.h>
++#endif
+ #include <sys/wait.h>
+ #define TCPLEN_T int
+ #ifdef NEED_FILIO
+@@ -312,6 +314,34 @@ disk_mon_get_mount_point(char *dir)
+ 
+     return slapi_ch_strdup(sb.f_mntonname);
+ }
++#elif SOLARIS
++char *
++disk_mon_get_mount_point(char *dir)
++{
++    struct mnttab mnt;
++    struct stat s;
++    dev_t dev_id;
++    FILE *fp;
++
++    fp = fopen("/etc/mnttab", "r");
++
++    if (fp == NULL || stat(dir, &s) != 0) {
++        return NULL;
++    }
++
++    dev_id = s.st_dev;
++
++    while((0 == getmntent(fp, &mnt))){
++        if (stat(mnt.mnt_mountp, &s) != 0) {
++            continue;
++        }
++        if (s.st_dev == dev_id) {
++            return (slapi_ch_strdup(mnt.mnt_mountp));
++        }
++    }
++
++    return NULL;
++}
+ #endif
+ 
+ /*
+@@ -2625,12 +2655,14 @@ lsan_ptrace_available(void)
+         signal(SIGHUP, SIG_DFL);
+ 
+         /* Child: try to ptrace the parent */
++#if defined(LNUX)
+         if (ptrace(PTRACE_ATTACH, getppid(), NULL, NULL) == 0) {
+             /* Attached - detach and exit success */
+             waitpid(getppid(), NULL, 0);
+             ptrace(PTRACE_DETACH, getppid(), NULL, NULL);
+             _exit(0);
+         }
++#endif
+         _exit(1);
+     }
+ 

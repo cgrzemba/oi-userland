@@ -1,0 +1,196 @@
+#
+# This file and its contents are supplied under the terms of the
+# Common Development and Distribution License ("CDDL"), version 1.0.
+# You may only use this file in accordance with the terms of version
+# 1.0 of the CDDL.
+#
+# A full copy of the text of the CDDL should have accompanied this
+# source.  A copy of the CDDL is also available via the Internet at
+# http://www.illumos.org/license/CDDL.
+#
+
+#
+# Copyright 2026 <contributor>
+#
+
+set name=pkg.fmri value=pkg:/$(COMPONENT_FMRI)@$(IPS_COMPONENT_VERSION),$(BUILD_VERSION)
+set name=pkg.human-version value=$(HUMAN_VERSION)
+set name=pkg.summary value="$(COMPONENT_SUMMARY)"
+set name=info.classification value="$(COMPONENT_CLASSIFICATION)"
+set name=info.upstream-url value=$(COMPONENT_PROJECT_URL)
+set name=info.source-url value=$(COMPONENT_ARCHIVE_URL)
+set name=org.opensolaris.consolidation value=$(CONSOLIDATION)
+
+license $(COMPONENT_LICENSE_FILE) license='$(COMPONENT_LICENSE)'
+
+file path=etc/dirsrv/config/certmap.conf
+file path=etc/dirsrv/config/ldap-agent.conf
+file path=etc/dirsrv/config/slapd-collations.conf
+file path=etc/dirsrv/schema/99user.ldif
+file path=usr/bin/dbscan
+file path=usr/bin/ds-logpipe.py
+file path=usr/bin/ds-replcheck
+file path=usr/bin/ldclt
+file path=usr/bin/logconv.pl
+file path=usr/bin/logconv.py
+file path=usr/bin/pwdhash
+file path=usr/include/dirsrv/repl-session-plugin.h
+file path=usr/include/dirsrv/slapi-plugin.h
+file path=usr/include/dirsrv/slapi_pal.h
+file path=usr/include/dirsrv/winsync-plugin.h
+file path=usr/include/svrcore.h
+link path=usr/lib/$(MACH64)/dirsrv/libldaputil.so target=libldaputil.so.0.0.0
+link path=usr/lib/$(MACH64)/dirsrv/libldaputil.so.0 target=libldaputil.so.0.0.0
+file path=usr/lib/$(MACH64)/dirsrv/libldaputil.so.0.0.0
+link path=usr/lib/$(MACH64)/dirsrv/libns-dshttpd.so \
+    target=libns-dshttpd.so.0.0.0
+link path=usr/lib/$(MACH64)/dirsrv/libns-dshttpd.so.0 \
+    target=libns-dshttpd.so.0.0.0
+file path=usr/lib/$(MACH64)/dirsrv/libns-dshttpd.so.0.0.0
+link path=usr/lib/$(MACH64)/dirsrv/librewriters.so target=librewriters.so.0.0.0
+link path=usr/lib/$(MACH64)/dirsrv/librewriters.so.0 \
+    target=librewriters.so.0.0.0
+file path=usr/lib/$(MACH64)/dirsrv/librewriters.so.0.0.0
+file path=usr/lib/$(MACH64)/dirsrv/librobdb.so
+link path=usr/lib/$(MACH64)/dirsrv/libslapd.so target=libslapd.so.0.1.0
+link path=usr/lib/$(MACH64)/dirsrv/libslapd.so.0 target=libslapd.so.0.1.0
+file path=usr/lib/$(MACH64)/dirsrv/libslapd.so.0.1.0
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libacctpolicy-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libacctusability-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libacl-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libaddn-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libalias-entries-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libattr-unique-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libautomember-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libback-ldbm.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libbitwise-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libchainingdb-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libcollation-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libcontentsync-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libcos-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libderef-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libdistrib-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libdna-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libentryuuid-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libentryuuid-syntax-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/liblinkedattrs-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libmanagedentries-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libmemberof-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libpam-passthru-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libpassthru-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libpbe-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libposix-winsync-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libpwdchan-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libpwdstorage-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libreferint-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libreplication-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libretrocl-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libroles-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/librootdn-access-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libschemareload-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libstatechange-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libsyntax-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libusn-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libviews-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/plugins/libwhoami-plugin.so
+file path=usr/lib/$(MACH64)/dirsrv/python/failedbinds.py
+file path=usr/lib/$(MACH64)/dirsrv/python/logregex.py
+link path=usr/lib/$(MACH64)/libsvrcore.so target=libsvrcore.so.0.0.0
+link path=usr/lib/$(MACH64)/libsvrcore.so.0 target=libsvrcore.so.0.0.0
+file path=usr/lib/$(MACH64)/libsvrcore.so.0.0.0
+file path=usr/lib/$(MACH64)/pkgconfig/dirsrv.pc
+file path=usr/lib/$(MACH64)/pkgconfig/svrcore.pc
+file path=usr/sbin/ldap-agent
+file path=usr/sbin/ns-slapd
+file path=usr/share/dirsrv/data/10rfc2307bis.ldif
+file path=usr/share/dirsrv/data/10rfc2307compat.ldif
+file path=usr/share/dirsrv/data/60changelog.ldif
+file path=usr/share/dirsrv/data/60inetmail.ldif
+file path=usr/share/dirsrv/data/60kerberos.ldif
+file path=usr/share/dirsrv/data/60krb5kdc.ldif
+file path=usr/share/dirsrv/data/60nis.ldif
+file path=usr/share/dirsrv/data/60qmail.ldif
+file path=usr/share/dirsrv/data/60radius.ldif
+file path=usr/share/dirsrv/data/60rfc4876.ldif
+file path=usr/share/dirsrv/data/60samba.ldif
+file path=usr/share/dirsrv/data/60sendmail.ldif
+file path=usr/share/dirsrv/data/Ace.ldif
+file path=usr/share/dirsrv/data/European.ldif
+file path=usr/share/dirsrv/data/Eurosuffix.ldif
+file path=usr/share/dirsrv/data/Example-roles.ldif
+file path=usr/share/dirsrv/data/Example-views.ldif
+file path=usr/share/dirsrv/data/Example.ldif
+file path=usr/share/dirsrv/data/dbgen-FamilyNames
+file path=usr/share/dirsrv/data/dbgen-GivenNames
+file path=usr/share/dirsrv/data/dbgen-OrgUnits
+file path=usr/share/dirsrv/data/dsee.schema
+file path=usr/share/dirsrv/data/template-baseacis.ldif
+file path=usr/share/dirsrv/data/template-country.ldif
+file path=usr/share/dirsrv/data/template-domain.ldif
+file path=usr/share/dirsrv/data/template-dse-minimal.ldif
+file path=usr/share/dirsrv/data/template-dse.ldif
+file path=usr/share/dirsrv/data/template-ldapi-autobind.ldif
+file path=usr/share/dirsrv/data/template-ldapi-default.ldif
+file path=usr/share/dirsrv/data/template-ldapi.ldif
+file path=usr/share/dirsrv/data/template-locality.ldif
+file path=usr/share/dirsrv/data/template-org.ldif
+file path=usr/share/dirsrv/data/template-orgunit.ldif
+file path=usr/share/dirsrv/data/template-sasl.ldif
+file path=usr/share/dirsrv/data/template-state.ldif
+file path=usr/share/dirsrv/data/template-suffix-db.ldif
+file path=usr/share/dirsrv/data/template.ldif
+file path=usr/share/dirsrv/inf/defaults.inf
+file path=usr/share/dirsrv/inf/slapd.inf
+file path=usr/share/dirsrv/mibs/redhat-directory.mib
+file path=usr/share/dirsrv/schema/00core.ldif
+file path=usr/share/dirsrv/schema/01core389.ldif
+file path=usr/share/dirsrv/schema/02common.ldif
+file path=usr/share/dirsrv/schema/03entryuuid.ldif
+file path=usr/share/dirsrv/schema/05rfc2927.ldif
+file path=usr/share/dirsrv/schema/05rfc4523.ldif
+file path=usr/share/dirsrv/schema/05rfc4524.ldif
+file path=usr/share/dirsrv/schema/06inetorgperson.ldif
+file path=usr/share/dirsrv/schema/10automember-plugin.ldif
+file path=usr/share/dirsrv/schema/10dna-plugin.ldif
+file path=usr/share/dirsrv/schema/10mep-plugin.ldif
+file path=usr/share/dirsrv/schema/10rfc2307compat.ldif
+file path=usr/share/dirsrv/schema/20subscriber.ldif
+file path=usr/share/dirsrv/schema/25java-object.ldif
+file path=usr/share/dirsrv/schema/28pilot.ldif
+file path=usr/share/dirsrv/schema/30ns-common.ldif
+file path=usr/share/dirsrv/schema/50ns-admin.ldif
+file path=usr/share/dirsrv/schema/50ns-certificate.ldif
+file path=usr/share/dirsrv/schema/50ns-directory.ldif
+file path=usr/share/dirsrv/schema/50ns-mail.ldif
+file path=usr/share/dirsrv/schema/50ns-value.ldif
+file path=usr/share/dirsrv/schema/50ns-web.ldif
+file path=usr/share/dirsrv/schema/60acctpolicy.ldif
+file path=usr/share/dirsrv/schema/60autofs.ldif
+file path=usr/share/dirsrv/schema/60eduperson.ldif
+file path=usr/share/dirsrv/schema/60mozilla.ldif
+file path=usr/share/dirsrv/schema/60nss-ldap.ldif
+file path=usr/share/dirsrv/schema/60pam-plugin.ldif
+file path=usr/share/dirsrv/schema/60posix-winsync-plugin.ldif
+file path=usr/share/dirsrv/schema/60pureftpd.ldif
+file path=usr/share/dirsrv/schema/60rfc2739.ldif
+file path=usr/share/dirsrv/schema/60rfc3712.ldif
+file path=usr/share/dirsrv/schema/60sabayon.ldif
+file path=usr/share/dirsrv/schema/60samba3.ldif
+file path=usr/share/dirsrv/schema/60sudo.ldif
+file path=usr/share/dirsrv/schema/60trust.ldif
+file path=usr/share/gdb/auto-load/usr/sbin/ns-slapd-gdb.py
+file path=usr/share/man/man1/dbscan.1
+file path=usr/share/man/man1/ds-logpipe.py.1
+file path=usr/share/man/man1/ds-replcheck.1
+file path=usr/share/man/man1/ldap-agent.1
+file path=usr/share/man/man1/ldclt.1
+file path=usr/share/man/man1/logconv.pl.1
+file path=usr/share/man/man1/logconv.py.1
+file path=usr/share/man/man1/pwdhash.1
+file path=usr/share/man/man5/99user.ldif.5
+file path=usr/share/man/man5/certmap.conf.5
+file path=usr/share/man/man5/dirsrv.5
+file path=usr/share/man/man5/dirsrv.systemd.5
+file path=usr/share/man/man5/slapd-collations.conf.5
+file path=usr/share/man/man8/ns-slapd.8
+file path=usr/share/metainfo/389-console/org.port389.cockpit_console.metainfo.xml

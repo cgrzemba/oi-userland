@@ -1,0 +1,12 @@
+diff --git a/ldap/servers/slapd/back-ldbm/db-mdb/mdb_debug.c b/ldap/servers/slapd/back-ldbm/db-mdb/mdb_debug.c
+index 33e71f1a8..27354eba3 100644
+--- a/ldap/servers/slapd/back-ldbm/db-mdb/mdb_debug.c
++++ b/ldap/servers/slapd/back-ldbm/db-mdb/mdb_debug.c
+@@ -16,7 +16,6 @@
+ #include <string.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+-#include <syscall.h>
+ #include <dlfcn.h>
+ 
+ 

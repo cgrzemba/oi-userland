@@ -1,0 +1,60 @@
+diff --git a/ldap/servers/slapd/back-ldbm/db-mdb/mdb_layer.c b/ldap/servers/slapd/back-ldbm/db-mdb/mdb_layer.c
+index 1e1d824a3..ebd3e9879 100644
+--- a/ldap/servers/slapd/back-ldbm/db-mdb/mdb_layer.c
++++ b/ldap/servers/slapd/back-ldbm/db-mdb/mdb_layer.c
+@@ -18,6 +18,7 @@
+ #include <assert.h>
+ #include <prclist.h>
+ #include <glob.h>
++#include <pthread.h>
+ 
+ Slapi_ComponentId *dbmdb_componentid = NULL;
+ 
+@@ -574,7 +575,11 @@ dbmdb_txn_begin(struct ldbminfo *li, back_txnid parent_txn, back_txn *txn, PRBoo
+         dbi_txn_t *new_txn_back_txn_txn = NULL;
+ 
+         if (use_lock)
++#ifndef USE_POSIX_RWLOCKS
++            slapi_rwlock_rdlock((Slapi_RWLock *) &conf->dbmdb_env_lock);
++#else
+             slapi_rwlock_rdlock(&conf->dbmdb_env_lock);
++#endif
+         if (!parent_txn) {
+             /* see if we have a stored parent txn */
+             back_txn *par_txn_txn = dblayer_get_pvt_txn();
+@@ -586,7 +591,11 @@ dbmdb_txn_begin(struct ldbminfo *li, back_txnid parent_txn, back_txn *txn, PRBoo
+         return_value = dbmdb_map_error(__FUNCTION__, return_value);
+         if (0 != return_value) {
+             if (use_lock)
++#ifndef USE_POSIX_RWLOCKS
++                slapi_rwlock_unlock((Slapi_RWLock *) &conf->dbmdb_env_lock);
++#else
+                 slapi_rwlock_unlock(&conf->dbmdb_env_lock);
++#endif
+         } else {
+             new_txn.back_txn_txn = new_txn_back_txn_txn;
+             /* this txn is now our current transaction for current operations
+@@ -645,7 +654,11 @@ dbmdb_txn_commit(struct ldbminfo *li, back_txn *txn, PRBool use_lock)
+             txn->back_txn_txn = NULL;
+         }
+         if (use_lock)
++#ifndef USE_POSIX_RWLOCKS
++            slapi_rwlock_unlock((Slapi_RWLock *) &conf->dbmdb_env_lock);
++#else
+             slapi_rwlock_unlock(&conf->dbmdb_env_lock);
++#endif
+     } else {
+         return_value = 0;
+     }
+@@ -700,7 +713,11 @@ dbmdb_txn_abort(struct ldbminfo *li, back_txn *txn, PRBool use_lock)
+             txn->back_txn_txn = NULL;
+         }
+         if (use_lock)
++#ifndef USE_POSIX_RWLOCKS
++            slapi_rwlock_unlock((Slapi_RWLock *) &conf->dbmdb_env_lock);
++#else
+             slapi_rwlock_unlock(&conf->dbmdb_env_lock);
++#endif
+     } else {
+         return_value = 0;
+     }

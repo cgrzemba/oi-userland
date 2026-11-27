@@ -1,0 +1,25 @@
+diff --git a/ldap/servers/slapd/libglobs.c b/ldap/servers/slapd/libglobs.c
+index 1a8b44add..d3d1fa05e 100644
+--- a/ldap/servers/slapd/libglobs.c
++++ b/ldap/servers/slapd/libglobs.c
+@@ -10519,6 +10519,9 @@ config_get_malloc_mmap_threshold()
+     return retVal;
+ }
+ 
++#endif
++#endif
++
+ static struct {
+     const char *name;
+     fgot_id_t id;
+@@ -10681,10 +10684,6 @@ config_is_control_criticality_ignored(const char *oid)
+     return res;
+ }
+ 
+-
+-#endif
+-#endif
+-
+ char *
+ slapi_err2string(int result)
+ {

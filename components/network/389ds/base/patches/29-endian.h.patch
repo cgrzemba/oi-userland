@@ -1,0 +1,12 @@
+diff --git a/src/rewriters/adfilter.c b/src/rewriters/adfilter.c
+index bd77e54e4..d00f62578 100644
+--- a/src/rewriters/adfilter.c
++++ b/src/rewriters/adfilter.c
+@@ -17,6 +17,7 @@
+  */
+ 
+ #include "slap.h"
++#include <endian.h>
+ 
+ static char *rewriter_name = "filter rewriter adfilter";
+ 

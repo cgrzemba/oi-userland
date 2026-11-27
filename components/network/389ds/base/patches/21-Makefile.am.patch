@@ -1,0 +1,87 @@
+diff --git a/Makefile.am b/Makefile.am
+index 3f0719b91..4128a6bf5 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -66,7 +66,7 @@ else
+ RUSTC_FLAGS = @asan_rust_defs@ @msan_rust_defs@ @tsan_rust_defs@ @debug_rust_defs@
+ RUSTC_LINK_FLAGS = -Clink-arg=-fuse-ld=ld
+ # This avoids issues with stderr being double provided with clang + asan.
+-RUST_LDFLAGS = -ldl -lpthread -lgcc_s -lc -lm -lrt -lutil
++RUST_LDFLAGS = -ldl -lpthread -lgcc_s -lc -lm -lrt
+ endif
+ RUST_DEFINES = -DRUST_ENABLE
+ if RUST_ENABLE_OFFLINE
+@@ -180,9 +180,9 @@ NSS_LINK = $(NSS_LIBS)
+ # OpenLDAP 2.5 and newer versions don't have libldap_r shared library (only libldap)
+ # For the older versions we should compile with libldap_r
+ if WITH_LIBLDAP_R
+-LDAPSDK_LINK = @openldap_lib@ -lldap_r@ol_libver@ @ldap_lib_ldif@ -llber@ol_libver@
++LDAPSDK_LINK = -lldap_r@ol_libver@ @ldap_lib_ldif@ -llber@ol_libver@
+ else
+-LDAPSDK_LINK = @openldap_lib@ -lldap@ol_libver@ @ldap_lib_ldif@ -llber@ol_libver@
++LDAPSDK_LINK = -lldap@ol_libver@ @ldap_lib_ldif@ -llber@ol_libver@
+ endif
+ ldaplib = @ldaplib@
+ ldaplib_defs = @ldaplib_defs@
+@@ -209,8 +209,8 @@ JSON_C_LINK = -ljson-c
+ LIBSOCKET=@LIBSOCKET@
+ LIBNSL=@LIBNSL@
+ LIBDL=@LIBDL@
+-LIBCSTD=@LIBCSTD@
+-LIBCRUN=@LIBCRUN@
++LIBCSTD=
++LIBCRUN=
+ THREADLIB=@THREADLIB@
+ LIBCRYPT=@LIBCRYPT@
+ 
+@@ -1482,7 +1482,7 @@ libattr_unique_plugin_la_LDFLAGS = -avoid-version
+ libbitwise_plugin_la_SOURCES = ldap/servers/plugins/bitwise/bitwise.c
+ 
+ libbitwise_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) $(DSPLUGIN_CPPFLAGS)
+-libbitwise_plugin_la_LIBADD = libslapd.la
++libbitwise_plugin_la_LIBADD = libslapd.la $(NSPR_LINK)
+ libbitwise_plugin_la_DEPENDENCIES = libslapd.la
+ libbitwise_plugin_la_LDFLAGS = -avoid-version
+ 
+@@ -1594,7 +1594,7 @@ libpbe_plugin_la_LDFLAGS = -avoid-version
+ libdistrib_plugin_la_SOURCES = ldap/servers/plugins/distrib/distrib.c
+ 
+ libdistrib_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) $(DSPLUGIN_CPPFLAGS)
+-libdistrib_plugin_la_LIBADD = libslapd.la
++libdistrib_plugin_la_LIBADD = libslapd.la $(NSPR_LINK)
+ libdistrib_plugin_la_DEPENDENCIES = libslapd.la
+ libdistrib_plugin_la_LDFLAGS = -avoid-version
+ 
+@@ -1821,7 +1821,7 @@ libschemareload_plugin_la_LDFLAGS = -avoid-version
+ libstatechange_plugin_la_SOURCES = ldap/servers/plugins/statechange/statechange.c
+ 
+ libstatechange_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) $(DSPLUGIN_CPPFLAGS)
+-libstatechange_plugin_la_LIBADD = libslapd.la
++libstatechange_plugin_la_LIBADD = libslapd.la $(NSPR_LINK)
+ libstatechange_plugin_la_DEPENDENCIES = libslapd.la
+ libstatechange_plugin_la_LDFLAGS = -avoid-version
+ 
+@@ -1899,7 +1899,7 @@ libwhoami_plugin_la_LDFLAGS = -avoid-version
+ #------------------------
+ dbscan_SOURCES = ldap/servers/slapd/tools/dbscan.c
+ 
+-dbscan_CPPFLAGS = $(NSPR_INCLUDES) $(AM_CPPFLAGS)
++dbscan_CPPFLAGS = $(NSPR_INCLUDES) @openldap_inc@ $(AM_CPPFLAGS)
+ dbscan_LDADD = $(NSPR_LINK) $(DB_IMPL) libslapd.la
+ 
+ #------------------------
+@@ -1929,7 +1929,11 @@ ldclt_SOURCES = ldap/servers/slapd/tools/ldaptool-sasl.c \
+ 	ldap/servers/slapd/tools/ldclt/version.c \
+ 	ldap/servers/slapd/tools/ldclt/workarounds.c
+ 
+-ldclt_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/ldap/servers/slapd/tools $(DSPLUGIN_CPPFLAGS) $(SASL_CFLAGS)
++if SOLARIS
++ldclt_SOURCES += ldap/servers/slapd/tools/ldclt/opCheck.c
++endif
++
++ldclt_CPPFLAGS = $(AM_CPPFLAGS) -I$(srcdir)/ldap/servers/slapd/tools $(DSPLUGIN_CPPFLAGS) $(SASL_CFLAGS) -DLDCLT_CAST_SIGACTION
+ ldclt_LDADD = $(NSPR_LINK) $(NSS_LINK) $(LDAPSDK_LINK) $(SASL_LINK) $(LIBNSL) $(LIBSOCKET) $(LIBDL) $(THREADLIB)
+
+ 
+ #------------------------
+ 
